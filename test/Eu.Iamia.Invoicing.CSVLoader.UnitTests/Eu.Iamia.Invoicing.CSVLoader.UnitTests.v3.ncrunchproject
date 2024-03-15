@@ -1,0 +1,30 @@
+﻿<ProjectConfiguration>
+  <Settings>
+    <IgnoredTests>
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Invoicing.CSVLoader.UnitTests.StrategyByProductShould.VerifyStrategy("LejeErhvervsareal")</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Invoicing.CSVLoader.UnitTests.StrategyByProductShould.VerifyStrategy("LejeJordkælder")</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Invoicing.CSVLoader.UnitTests.StrategyByProductShould.VerifyStrategy("LejeMarkskur")</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Invoicing.CSVLoader.UnitTests.StrategyByProductShould.VerifyStrategy("LejeNyttehave")</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Invoicing.CSVLoader.UnitTests.StrategyByProductShould.VerifyStrategy("MedlemsKontingent")</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Invoicing.CSVLoader.UnitTests.StrategyByProductShould.VerifyStrategy("Vandafledning")</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Invoicing.CSVLoader.UnitTests.StrategyByProductShould.VerifyStrategy("VideresalgElektricitet")</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Invoicing.CSVLoader.UnitTests.StrategyByProductShould.VerifyStrategy("VideresalgVand")</TestName>
+      </NamedTestSelector>
+    </IgnoredTests>
+  </Settings>
+</ProjectConfiguration>
