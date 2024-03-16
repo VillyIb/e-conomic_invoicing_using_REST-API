@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Product.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Eu.Iamia.Invoicing.E-Conomic.Gateway.Contract\Eu.Iamia.Invoicing.E-Conomic.Gateway.Contract.csproj" />
   </ItemGroup>
 

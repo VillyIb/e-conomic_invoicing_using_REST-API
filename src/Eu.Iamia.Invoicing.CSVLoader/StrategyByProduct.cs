@@ -38,7 +38,7 @@ public  class StrategyByProduct
                 ProductName = $"Jordvarme driftsbidrag ({invoiceYear:yyyy})";
                 Product = Products.Jordvarme;
                 Units = Units.kW;
-                UnitNetPrice = 24.00;
+                UnitNetPrice = 240.00;
                 break;
             case Products.Vandafledning:
                 ProductName = $"Vandafledning ({referenceYear:yyyy})";

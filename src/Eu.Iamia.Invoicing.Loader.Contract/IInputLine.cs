@@ -2,13 +2,15 @@
 
 public interface IInputLine
 {
-    Units?    UnitNumber    { get; set; }
+    string? UnitText { get; set; }
 
-    Products? ProductNumber { get; set; }
+    string? ProductNumber { get; set; }
 
-    double? Quantity      { get; set; }
+    int UnitNumber { get; set; }
 
-    double? UnitNetPrice  { get; set; }
+    double? Quantity { get; set; }
 
-    string? Description   { get; set; }
+    double? UnitNetPrice { get; set; }
+
+    string? Description { get; set; }
 }

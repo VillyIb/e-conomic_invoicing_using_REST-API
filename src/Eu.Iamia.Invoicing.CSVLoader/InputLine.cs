@@ -4,9 +4,11 @@ namespace Eu.Iamia.Invoicing.CSVLoader;
 
 public class InputLine : IInputLine
 {
-    public Units? UnitNumber { get; set; }
+    public string? UnitText { get; set; }
 
-    public Products? ProductNumber { get; set; }
+    public int UnitNumber { get; set; }
+
+    public string? ProductNumber { get; set; }
 
     public double? Quantity { get; set; }
 

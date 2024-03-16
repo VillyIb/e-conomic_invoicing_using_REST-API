@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="StrategyByProduct.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="LineParser" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Eu.Iamia.Invoicing.Loader.Contract\Eu.Iamia.Invoicing.Loader.Contract.csproj" />
   </ItemGroup>
 

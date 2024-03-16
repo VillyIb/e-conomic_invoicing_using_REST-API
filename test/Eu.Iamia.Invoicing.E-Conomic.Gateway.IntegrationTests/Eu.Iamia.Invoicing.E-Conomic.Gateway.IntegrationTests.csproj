@@ -2,17 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="LineParserShould.cs" />
-    <Compile Remove="StrategyByProductShould.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
@@ -29,7 +25,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Eu.Iamia.Invoicing.CSVLoader\Eu.Iamia.Invoicing.CSVLoader.csproj" />
-    <ProjectReference Include="..\..\src\Eu.Iamia.Invoicing.Loader.Contract\Eu.Iamia.Invoicing.Loader.Contract.csproj" />
+    <ProjectReference Include="..\..\src\Eu.Iamia.Invoicing.E-Conomic.Gateway.Contract\Eu.Iamia.Invoicing.E-Conomic.Gateway.Contract.csproj" />
+    <ProjectReference Include="..\..\src\Eu.Iamia.Invoicing.E-Conomic.Gateway\Eu.Iamia.Invoicing.E-Conomic.Gateway.csproj" />
   </ItemGroup>
 
 </Project>

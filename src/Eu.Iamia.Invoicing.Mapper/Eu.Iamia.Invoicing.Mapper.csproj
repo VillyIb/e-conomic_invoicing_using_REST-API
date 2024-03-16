@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="IMapProducts.cs" />
+    <Compile Remove="MapProducts.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Eu.Iamia.Invoicing.CSVLoader\Eu.Iamia.Invoicing.CSVLoader.csproj" />
     <ProjectReference Include="..\Eu.Iamia.Invoicing.E-Conomic.Gateway.Contract\Eu.Iamia.Invoicing.E-Conomic.Gateway.Contract.csproj" />
     <ProjectReference Include="..\Eu.Iamia.Invoicing.E-Conomic.Gateway\Eu.Iamia.Invoicing.E-Conomic.Gateway.csproj" />
     <ProjectReference Include="..\Eu.Iamia.Invoicing.Loader.Contract\Eu.Iamia.Invoicing.Loader.Contract.csproj" />
