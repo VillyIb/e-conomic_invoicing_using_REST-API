@@ -2,9 +2,9 @@
 
 public interface IInputInvoice
 {
-    DateTime? InvoiceDate        { get; set; }
+    DateTime InvoiceDate { get; set; }
 
-    int?      CustomerNumber     { get; set; }
+    int CustomerNumber { get; set; }
 
-    IList<IInputLine> InvoiceLines       { get; set; }
+    IList<IInputLine> InvoiceLines { get; set; }
 }

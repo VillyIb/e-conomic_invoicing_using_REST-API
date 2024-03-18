@@ -4,9 +4,9 @@ namespace Eu.Iamia.Invoicing.CSVLoader;
 
 public class InputInvoice : IInputInvoice
 {
-    public DateTime? InvoiceDate { get; set; }
+    public DateTime InvoiceDate { get; set; }
 
-    public int? CustomerNumber { get; set; }
+    public int CustomerNumber { get; set; }
 
 
     private IList<IInputLine>? _invoiceLines;

@@ -18,18 +18,12 @@ public class Mapping
 
     public Invoice? From(IInputInvoice inputInvoice)
     {
-        if (!inputInvoice.CustomerNumber.HasValue)
-        {
-            return null;
-        }
-
-        var inputInvoiceCustomerNumber = inputInvoice.CustomerNumber!.Value;
+        var inputInvoiceCustomerNumber = inputInvoice.CustomerNumber;
         InputCustomer? customer = _customerCache.GetInputCustomer(inputInvoiceCustomerNumber)!;
 
         if (customer == null) return null;
 
-        var inputInvoicePaymentTermsNumber = 1;
-        var inputInvoiceInvoiceDate = inputInvoice.InvoiceDate!.Value;
+        var inputInvoiceInvoiceDate = inputInvoice.InvoiceDate;
 
         var invoice = new Invoice
         {
@@ -73,7 +67,7 @@ public class Mapping
             {
                 //DaysOfCredit = 14
                 //,
-                PaymentTermsNumber = inputInvoicePaymentTermsNumber,
+                PaymentTermsNumber = customer.PaymentTerms,
                 //,
                 //Name = "Lb. md. 14 dage"
                 //,

@@ -30,7 +30,6 @@ public class CustomerCache
             Name = customer.name,
             PaymentTerms = customer.paymentTerms.paymentTermsNumber,
             Zip = customer.zip
-
         };
 
         return result;
@@ -43,8 +42,7 @@ public class CustomerCache
         foreach (var customer in customersHandle.collection)
         {
             var inputCustomer = Map(customer);
-            if (inputCustomer.Group == 99) continue;
-            //if (inputCustomer.Group == 3) continue;
+            if (customer.IsClosed() || customer.IsDismissed()) continue;
             _inputCustomers.Add(inputCustomer);
         }
 
@@ -65,7 +63,8 @@ public class CustomerCache
     }
 }
 
-public class InputCustomer
+// TODO rename not "Input..."
+public class InputCustomer : IInputCustomer
 {
     public int CustomerNumber { get; set; }
 

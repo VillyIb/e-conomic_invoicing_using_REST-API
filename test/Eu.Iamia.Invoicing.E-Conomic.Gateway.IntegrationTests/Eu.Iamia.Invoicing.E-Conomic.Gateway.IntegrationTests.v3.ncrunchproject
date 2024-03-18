@@ -1,7 +1,9 @@
 ﻿<ProjectConfiguration>
   <Settings>
     <IgnoredTests>
-      <AllTestsSelector />
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests.GatewayCustomerShould.ReadProductsPaged("0", "20")</TestName>
+      </NamedTestSelector>
     </IgnoredTests>
   </Settings>
 </ProjectConfiguration>

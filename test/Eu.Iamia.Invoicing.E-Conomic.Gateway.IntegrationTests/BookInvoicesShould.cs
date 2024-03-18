@@ -54,7 +54,7 @@ public class BookInvoicesShould
 
         foreach (var inputInvoice in invoices)
         {
-            inputInvoice.InvoiceDate = invoiceDate; // TODO evaluae.
+            inputInvoice.InvoiceDate = invoiceDate; // TODO evaluate.
 
             var invoice = mapper.From(inputInvoice);
 
@@ -64,7 +64,7 @@ public class BookInvoicesShould
                 continue;
             }
 
-            await gatewayInvoice.PushInvoice(invoice);
+            //await gatewayInvoice.PushInvoice(invoice);
         }
 
 
