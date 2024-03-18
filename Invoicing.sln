@@ -23,7 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eu.Iamia.Invoicing.Loader.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eu.Iamia.Invoicing.CSVLoader.UnitTests", "test\Eu.Iamia.Invoicing.CSVLoader.UnitTests\Eu.Iamia.Invoicing.CSVLoader.UnitTests.csproj", "{2BA3E3A0-B44F-4E12-BBBC-22F763C93147}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eu.Iamia.Invoicing.E-Conomic.Gateway.IntegrationTests", "test\Eu.Iamia.Invoicing.E-Conomic.Gateway.IntegrationTests\Eu.Iamia.Invoicing.E-Conomic.Gateway.IntegrationTests.csproj", "{3A92BB2D-6385-47F3-BBE6-FB026DAB7BAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eu.Iamia.Invoicing.E-Conomic.Gateway.IntegrationTests", "test\Eu.Iamia.Invoicing.E-Conomic.Gateway.IntegrationTests\Eu.Iamia.Invoicing.E-Conomic.Gateway.IntegrationTests.csproj", "{3A92BB2D-6385-47F3-BBE6-FB026DAB7BAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eu.Iamia.Invoicing.E-ConomicGateway.UnitTests", "test\Eu.Iamia.Invoicing.E-ConomicGateway.UnitTests\Eu.Iamia.Invoicing.E-ConomicGateway.UnitTests.csproj", "{C3AFBE2D-7735-42D8-95C8-18603E74D3A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,10 @@ Global
 		{3A92BB2D-6385-47F3-BBE6-FB026DAB7BAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A92BB2D-6385-47F3-BBE6-FB026DAB7BAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A92BB2D-6385-47F3-BBE6-FB026DAB7BAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3AFBE2D-7735-42D8-95C8-18603E74D3A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3AFBE2D-7735-42D8-95C8-18603E74D3A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3AFBE2D-7735-42D8-95C8-18603E74D3A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3AFBE2D-7735-42D8-95C8-18603E74D3A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +87,7 @@ Global
 		{53C74054-6E36-44EB-9060-7A122C341CF8} = {2DAF952C-CA92-4F32-9401-2B75DF2CEAE0}
 		{2BA3E3A0-B44F-4E12-BBBC-22F763C93147} = {5DA775E7-8B00-4C4F-A9F1-51CB654ACB44}
 		{3A92BB2D-6385-47F3-BBE6-FB026DAB7BAA} = {5DA775E7-8B00-4C4F-A9F1-51CB654ACB44}
+		{C3AFBE2D-7735-42D8-95C8-18603E74D3A2} = {5DA775E7-8B00-4C4F-A9F1-51CB654ACB44}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8DFD028F-A269-4D03-AC4E-9C9305496793}

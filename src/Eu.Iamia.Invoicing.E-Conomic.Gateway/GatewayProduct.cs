@@ -2,15 +2,13 @@
 
 public partial class GatewayBase
 {
-    // https://restapi.e-conomic.com/customers?skippages=0&pagesize=20
-
-    public async Task<string> ReadCustomersPaged(int page, int pageSize)
+    public async Task<string> ReadProductsPaged(int page, int pageSize)
     {
         try
         {
             Set1660273AuthenticationHeaders();
 
-            var response = await _httpClient.GetAsync($"https://restapi.e-conomic.com/customers?skippages={page}&pagesize={pageSize}");
+            var response = await _httpClient.GetAsync($"https://restapi.e-conomic.com/products?skippages={page}&pagesize={pageSize}");
             response.EnsureSuccessStatusCode();
             var htmlBody = await GetHtmlBody(response);
             return htmlBody;

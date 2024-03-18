@@ -19,8 +19,20 @@ public class GatewayCustomerShould
     //[InlineData(14, 20)]
     public async Task ReadCustomersPaged(int page, int pageSize)
     {
-        var sut = new GatewayBase();
+        var sut = new GatewayBase(new HttpClientHandler());
         var result = await sut.ReadCustomersPaged(page, pageSize);
+
+        Assert.NotEmpty(result);
+
+    }
+
+    [Theory]
+    [InlineData(0, 20)]
+    //[InlineData(1, 20)]
+    public async Task ReadProductsPaged(int page, int pageSize)
+    {
+        var sut = new GatewayBase(new HttpClientHandler());
+        var result = await sut.ReadProductsPaged(page, pageSize);
 
         Assert.NotEmpty(result);
 

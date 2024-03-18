@@ -1,8 +1,6 @@
 ﻿#tags;#CustomerNumber;;;;#Product;;;#Product;;;;#Product;;#Product;;#Product;;;
-#Product;;;Varenummer i e-conomic;;3;;;2;;;;4;;24;;25;;;
-#Text;;;Varelinje tekst;;Grundejerforening (2024);;;Medlemskontingent (2024);;;;Vandafledning (2023);;Jordvarme driftsbidrag (2024);;Leje nyttehave (2024);;;
-#Unittext;;;Vare-enhed (mdr/stk/m2/m3/kW/kWh/år/...);;m2;;;år;;;;m3;;kW;;m2;;;
-#UnitNumber;;;Vare-nummer;;3,00;;;1,00;;;;5,00;;7,00;;3,00;;;
+#Product;;;Varenummer i e-conomic;;3;;;27;;;;4;;24;;25;;;
+#Text;;;Varelinje tekst;;Grundejerforening. (2024);;;Medlemskontingent. (2024);;;;Vandafledning. (2023);;Jordvarme driftsbidrag. (2024);;Leje nyttehave. (2024);;;
 #UnitPrice;;;Varepris pr. enhed;;6,00;;;3.000,00;;;;56,13;;240,00;;1,00;;;
 ;;;Benyt: Gem Som: CSV UTF-8 (kommasepareret);;;47.604,00;;;375.000,00;;;;252.472,74;;17.760,00;;2.073,00;694.909,74;
 ;;;;;;;;;;;;;;;;;;;

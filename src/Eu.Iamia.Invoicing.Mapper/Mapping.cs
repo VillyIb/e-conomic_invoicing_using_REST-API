@@ -6,19 +6,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Eu.Iamia.Invoicing.CSVLoader;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
+using Eu.Iamia.Invoicing.Loader.Contract;
 
 namespace Eu.Iamia.Invoicing.Mapper;
 
 public class Mapping
 {
     private readonly CustomerCache _customerCache;
+    private readonly ProductCache _productCache;
 
-    public Mapping(CustomerCache customerCache)
+    public Mapping(CustomerCache customerCache, ProductCache productCache)
     {
         _customerCache = customerCache;
+        _productCache = productCache;
     }
 
-    public Invoice? From(InputInvoice inputInvoice)
+    public Invoice? From(IInputInvoice inputInvoice)
     {
         if (!inputInvoice.CustomerNumber.HasValue)
         {
@@ -92,32 +96,29 @@ public class Mapping
             var inputLineUnitNumber = inputLine.UnitNumber;
             var _ = inputLine.UnitText;
 
+            var inputProduct = _productCache.GetInputProduct(inputLine.ProductNumber);
+
+            E_Conomic.Gateway.DTO.Invoice.Unit? unit = inputProduct.Unit is null ? null : new E_Conomic.Gateway.DTO.Invoice.Unit
+                {
+                    Name = inputProduct.Unit.Name,
+                    UnitNumber = inputProduct.Unit.UnitNumber
+                };
+            
 
             var line = new Line()
             {
+                Description = inputLine.Description,
                 LineNumber = lineNumber,
                 Product = new()
                 {
                     ProductNumber = inputLine.ProductNumber
                 },
                 Quantity = inputLineQuantity,
-                UnitNetPrice = inputLineUnitNetPrice
-                //, TotalNetAmount = 1068.0
-                //, DiscountPercentage = 0.0
-                //, UnitCostPrice = 0.0
-                //, MarginInBaseCurrency = 1068.0
-                //, MarginPercentage = 100.0
-                ,
                 SortKey = lineNumber,
-                Unit = new()
-                {
-                    //Name = "m2" 
-                    //, 
-                    UnitNumber = inputLineUnitNumber
-                },
-                Description = inputLine.Description
-
+                Unit = unit,
+                UnitNetPrice = inputLineUnitNetPrice,
             };
+
             invoice.Lines.Add(line);
 
         }
