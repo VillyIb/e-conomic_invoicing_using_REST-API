@@ -1,12 +1,4 @@
-﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.PortableExecutable;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
+﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
 
 public class ProductCache
 {

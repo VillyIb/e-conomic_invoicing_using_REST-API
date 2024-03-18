@@ -44,4 +44,3 @@ public partial class GatewayBase : IDisposable
         _httpClient.Dispose();
     }
 }
-

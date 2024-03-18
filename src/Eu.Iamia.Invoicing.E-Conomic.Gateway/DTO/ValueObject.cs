@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO;
+﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO;
 
 public abstract class ValueObject<T> where T : ValueObject<T>
 {
