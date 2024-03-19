@@ -23,10 +23,7 @@ public class CustomerCache
         {
             Address = customer.address,
             City = customer.city,
-            Country = customer.country,
             CustomerNumber = customer.customerNumber,
-            Email = customer.email,
-            Group = customer.customerGroup.customerGroupNumber,
             Name = customer.name,
             PaymentTerms = customer.paymentTerms.paymentTermsNumber,
             Zip = customer.zip
@@ -64,7 +61,7 @@ public class CustomerCache
 }
 
 // TODO rename not "Input..."
-public class InputCustomer : IInputCustomer
+public class InputCustomer //: IInputCustomer
 {
     public int CustomerNumber { get; set; }
 
@@ -74,13 +71,7 @@ public class InputCustomer : IInputCustomer
 
     public string City { get; set; }
 
-    public string Country { get; set; }
-
-    public string Email { get; set; }
-
     public string Name { get; set; }
 
     public string Zip { get; set; }
-
-    public int Group { get; set; }
 }

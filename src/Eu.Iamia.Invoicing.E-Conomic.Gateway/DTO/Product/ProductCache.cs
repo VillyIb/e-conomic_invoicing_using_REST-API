@@ -12,7 +12,7 @@ public class ProductCache
 
     private readonly IList<InputProduct> _inputProducts;
 
-    public InputProduct? GetInputProduct(string productNumber)
+    public InputProduct? GetInputProduct(string? productNumber)
     {
         return _inputProducts.FirstOrDefault(cus => cus.ProductNumber.Equals(productNumber, StringComparison.InvariantCultureIgnoreCase));
     }

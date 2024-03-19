@@ -46,7 +46,6 @@ public class Mapping
             },
             Recipient = new()
             {
-                // to be taken from Customer table.
                 Address = $"{customer.Address}",
                 City = $"{customer.City}",
                 Zip = $"{customer.Zip}",
@@ -86,7 +85,14 @@ public class Mapping
 
             var inputProduct = _productCache.GetInputProduct(inputLine.ProductNumber);
 
-            E_Conomic.Gateway.DTO.Invoice.Unit? unit = inputProduct.Unit is null ? null : new E_Conomic.Gateway.DTO.Invoice.Unit
+            if (inputProduct is null)
+            {
+                throw new ApplicationException($"Product: '{inputLine.ProductNumber}' not found in e-conomic.");
+            }
+
+            E_Conomic.Gateway.DTO.Invoice.Unit? unit = inputProduct!.Unit is null 
+                ? null 
+                : new E_Conomic.Gateway.DTO.Invoice.Unit
                 {
                     Name = inputProduct.Unit.Name,
                     UnitNumber = inputProduct.Unit.UnitNumber
@@ -108,7 +114,6 @@ public class Mapping
             };
 
             invoice.Lines.Add(line);
-
         }
 
         return invoice;

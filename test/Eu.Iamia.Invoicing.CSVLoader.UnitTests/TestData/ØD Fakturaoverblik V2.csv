@@ -1,6 +1,7 @@
 ﻿#tags;#CustomerNumber;;;;#Product;;;#Product;;;;#Product;;#Product;;#Product;;;
-#Product;;;Varenummer i e-conomic;;3;;;27;;;;4;;24;;25;;;
-#Text;;;Varelinje tekst;;Grundejerforening. (2024);;;Medlemskontingent. (2024);;;;Vandafledning. (2023);;Jordvarme driftsbidrag. (2024);;Leje nyttehave. (2024);;;
+#Kundegrupper;1,2,4,5,6,11;;;;;;;;;;;;;;;;;;
+#Product;;;Varenummer i e-conomic NB! string prefix with ';;3;;;27;;;;4;;24;;25;;;
+#Text;;;Varelinje tekst;;Grundejerforening (2024);;;Medlemskontingent (2024);;;;Vandafledning (2023);;Jordvarme driftsbidrag (2024);;Leje nyttehave (2024);;;
 #UnitPrice;;;Varepris pr. enhed;;6,00;;;3.000,00;;;;56,13;;240,00;;1,00;;;
 ;;;Benyt: Gem Som: CSV UTF-8 (kommasepareret);;;47.604,00;;;375.000,00;;;;252.472,74;;17.760,00;;2.073,00;694.909,74;
 ;;;;;;;;;;;;;;;;;;;
