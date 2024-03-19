@@ -3,10 +3,12 @@
 public class CustomerCache
 {
     private readonly GatewayBase _gateway;
+    private readonly IList<int> _customerGroupsToAccept;
 
-    public CustomerCache(GatewayBase gateway)
+    public CustomerCache(GatewayBase gateway, IList<int> customerGroupsToAccept)
     {
         _gateway = gateway;
+        _customerGroupsToAccept = customerGroupsToAccept;
         _inputCustomers = new List<InputCustomer>();
     }
 
@@ -32,6 +34,11 @@ public class CustomerCache
         return result;
     }
 
+    private bool AcceptCustomer(Collection customer)
+    {
+        return _customerGroupsToAccept.Any(cg => cg.Equals(customer.customerGroup.customerGroupNumber));
+    }
+
     public bool AddCustomers(CustomersHandle? customersHandle)
     {
         if (customersHandle is null) return false;
@@ -39,7 +46,7 @@ public class CustomerCache
         foreach (var customer in customersHandle.collection)
         {
             var inputCustomer = Map(customer);
-            if (customer.IsClosed() || customer.IsDismissed()) continue;
+            if (!AcceptCustomer(customer)) continue;
             _inputCustomers.Add(inputCustomer);
         }
 

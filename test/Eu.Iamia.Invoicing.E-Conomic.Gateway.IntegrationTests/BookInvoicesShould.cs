@@ -1,4 +1,6 @@
-﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
+﻿using System.Collections.Generic;
+using System.Runtime.ExceptionServices;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
 using Eu.Iamia.Invoicing.Loader.Contract;
 using Eu.Iamia.Invoicing.Mapper;
@@ -7,23 +9,24 @@ namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests;
 public class BookInvoicesShould
 {
 
-    private IList<IInputInvoice> LoadAllInvoices()
+    // ReSharper disable once MemberCanBeMadeStatic.Local
+    private (IList<IInputInvoice> Invoices, IList<int> CustomerGroupsToAccept) LoadCSV()
     {
         // Fakturering udeboende.csv
         // ØD Fakturaoverblik V2.csv
-        var fi = new FileInfo("C:\\Development\\e-conomic_invoicing_using_REST-API\\test\\Eu.Iamia.Invoicing.CSVLoader.UnitTests\\TestData\\Fakturering udeboende.csv");
+        var fi = new FileInfo("C:\\Development\\e-conomic_invoicing_using_REST-API\\test\\Eu.Iamia.Invoicing.CSVLoader.UnitTests\\TestData\\ØD Fakturaoverblik V2.csv");
+        //var fi = new FileInfo("C:\\Development\\e-conomic_invoicing_using_REST-API\\test\\Eu.Iamia.Invoicing.CSVLoader.UnitTests\\TestData\\Fakturering udeboende.csv");
 
         var loader = new CSVLoader.Loader(fi);
 
         loader.ParseInvoiceFile();
 
-        return loader.Invoices;
+        return (loader.Invoices, loader.CustomerGroupToAccept);
     }
 
-    public async Task<CustomerCache> GetCustomerCache(GatewayBase gatewayInvoice)
+    public async Task<CustomerCache> GetCustomerCache(GatewayBase gatewayInvoice, IList<int> customerGroupsToAccept)
     {
-
-        var customerCache = new CustomerCache(gatewayInvoice);
+        var customerCache = new CustomerCache(gatewayInvoice, customerGroupsToAccept);
         await customerCache.LoadAllCustomers();
 
         return customerCache;
@@ -42,12 +45,14 @@ public class BookInvoicesShould
     {
         var invoiceDate = DateTime.Today;
 
-        var invoices = LoadAllInvoices();
+        var csv = LoadCSV();
+        var invoices = csv.Invoices;
+        var customerGroupsToAccept = csv.CustomerGroupsToAccept;
         Assert.NotNull(invoices);
         Assert.True(invoices.Any());
 
         var gatewayInvoice = new GatewayBase(new HttpClientHandler());
-        var customerCache = await GetCustomerCache(gatewayInvoice);
+        var customerCache = await GetCustomerCache(gatewayInvoice, customerGroupsToAccept);
         var productCache = await GetProductCache(gatewayInvoice);
 
         var mapper = new Mapping(customerCache, productCache);

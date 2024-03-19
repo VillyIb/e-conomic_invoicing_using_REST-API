@@ -21,6 +21,8 @@ public class Loader
 
     public IList<IInputInvoice> Invoices => _invoices ??= new List<IInputInvoice>();
 
+    public IList<int> CustomerGroupToAccept => Metadata.CustomerGroupToAccept;
+
     internal void ParseTagsRow(IList<string> columns)
     {
         Metadata = new Metadata();
@@ -87,7 +89,6 @@ public class Loader
         }
     }
 
-
     internal void ParseInvoiceRow(IList<string> columns)
     {
         if (!int.TryParse(columns[Metadata.CustomerNumberColumn], out var customerNumber) || customerNumber <= 0) return;
@@ -117,6 +118,17 @@ public class Loader
         Invoices.Add(invoice);
     }
 
+    // ParseCustomerGroupeRow
+    internal void ParseCustomerGroupeRow(IList<string> columns)
+    {
+        var customerGroups = columns[1];
+        var cc = customerGroups.Split(',', StringSplitOptions.RemoveEmptyEntries);
+
+        foreach (var customerGroup in cc)
+        {
+            Metadata.CustomerGroupToAccept.Add(int.Parse(customerGroup));
+        }
+    }
 
     public int ParseInvoiceFile()
     {
@@ -164,12 +176,15 @@ public class Loader
                     // parse for invoice and products 'Faktura og faktura linjer'
                     ParseInvoiceRow(columns);
                     break;
+                case "#Kundegrupper":
+                    // parse for invoice and products 'Faktura og faktura linjer'
+                    ParseCustomerGroupeRow(columns);
+                    break;
             }
         }
 
         return Invoices.Count;
     }
-
 }
 
 public class Metadata
@@ -179,6 +194,10 @@ public class Metadata
     private IList<ProductMetadata>? _productMetadata;
 
     public IList<ProductMetadata> ProductMetadata => _productMetadata ??= new List<ProductMetadata>();
+
+    private List<int>? _customerGroupToAccept;
+
+    public IList<int> CustomerGroupToAccept => _customerGroupToAccept ??= new List<int>();
 }
 
 public class ProductMetadata
