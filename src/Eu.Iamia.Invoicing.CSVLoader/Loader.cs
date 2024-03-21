@@ -130,7 +130,7 @@ public class Loader
         }
     }
 
-    public int ParseInvoiceFile()
+    public int ParseCSV()
     {
         using var fs = _file.OpenRead();
         using var sr = new System.IO.StreamReader(fs);
@@ -151,34 +151,50 @@ public class Loader
                     // parse tags row
                     ParseTagsRow(columns);
                     break;
+
+                case "#customergroup":
+                case "#customergroups":
+                case "#kundegruppe":
+                case "#kundegrupper":
+                    // parse for customer groups to accept on customers
+                    ParseCustomerGroupeRow(columns);
+                    break;
+                
                 case "#product":
                 case "#products":
-                    // parse metadata for product number 'e-conomic varenummer' 
+                case "#produkt":
+                case "#produkter":
+                    // parse metadata for product number 'e-conomic varenummer' (alpha-numeric value)
                     ParseProductsRow(columns);
                     break;
+                
                 case "#text":
-                    // parse metadata for product description 'varelinje text (text on invoice)
+                    // parse metadata for product description (text on invoice)
                     ParseTextRow(columns);
                     break;
+                
                 case "#unittext":
+                case "#enhedstekst":
                     // parse metadata for product unit text 'enheds betegnelse (m2|m3|mdr|år|kW|kWh|stk|...)' 
                     ParseUnitTextRow(columns);
                     break;
+                
                 case "#unitnumber":
+                case "#enhedsnummer":
                     // parse metadata for product unit number 
                     ParseUnitNumberRow(columns);
                     break;
+                
                 case "#unitprice":
+                case "#enhedspris":
                     // parse metadata for product unit price 'enheds pris'
                     ParseUnitPriceRow(columns);
                     break;
+                
                 case "#invoice":
+                case "#faktura":
                     // parse for invoice and products 'Faktura og faktura linjer'
                     ParseInvoiceRow(columns);
-                    break;
-                case "#Kundegrupper":
-                    // parse for invoice and products 'Faktura og faktura linjer'
-                    ParseCustomerGroupeRow(columns);
                     break;
             }
         }

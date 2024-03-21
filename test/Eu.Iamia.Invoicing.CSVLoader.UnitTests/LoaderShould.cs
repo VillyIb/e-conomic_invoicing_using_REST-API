@@ -9,7 +9,7 @@ public class LoaderShould
 
         var loader = new Loader(fi);
 
-        loader.ParseInvoiceFile();
+        loader.ParseCSV();
 
         Assert.True(loader.Invoices.Any());
 

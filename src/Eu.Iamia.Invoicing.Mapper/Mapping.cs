@@ -97,7 +97,6 @@ public class Mapping
                     Name = inputProduct.Unit.Name,
                     UnitNumber = inputProduct.Unit.UnitNumber
                 };
-            
 
             var line = new Line()
             {

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Runtime.ExceptionServices;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
+﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
 using Eu.Iamia.Invoicing.Loader.Contract;
 using Eu.Iamia.Invoicing.Mapper;
@@ -12,14 +10,13 @@ public class BookInvoicesShould
     // ReSharper disable once MemberCanBeMadeStatic.Local
     private (IList<IInputInvoice> Invoices, IList<int> CustomerGroupsToAccept) LoadCSV()
     {
-        // Fakturering udeboende.csv
-        // ØD Fakturaoverblik V2.csv
-        var fi = new FileInfo("C:\\Development\\e-conomic_invoicing_using_REST-API\\test\\Eu.Iamia.Invoicing.CSVLoader.UnitTests\\TestData\\ØD Fakturaoverblik V2.csv");
-        //var fi = new FileInfo("C:\\Development\\e-conomic_invoicing_using_REST-API\\test\\Eu.Iamia.Invoicing.CSVLoader.UnitTests\\TestData\\Fakturering udeboende.csv");
+        var fi = new FileInfo("C:\\Development\\e-conomic_invoicing_using_REST-API\\test\\Eu.Iamia.Invoicing.CSVLoader.UnitTests\\TestData\\G1.csv");
+        //var fi = new FileInfo("C:\\Development\\e-conomic_invoicing_using_REST-API\\test\\Eu.Iamia.Invoicing.CSVLoader.UnitTests\\TestData\\G2.csv");
+        //var fi = new FileInfo("C:\\Development\\e-conomic_invoicing_using_REST-API\\test\\Eu.Iamia.Invoicing.CSVLoader.UnitTests\\TestData\\G6.csv");
 
         var loader = new CSVLoader.Loader(fi);
 
-        loader.ParseInvoiceFile();
+        var _ = loader.ParseCSV();
 
         return (loader.Invoices, loader.CustomerGroupToAccept);
     }
@@ -69,7 +66,7 @@ public class BookInvoicesShould
                 continue;
             }
 
-            //await gatewayInvoice.PushInvoice(invoice);
+            await gatewayInvoice.PushInvoice(invoice);
         }
 
 
