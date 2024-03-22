@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Eu.Iamia.Invoicing.ConsoleApp": {
+      "commandName": "Project",
+      "commandLineArgs": "-d 2024-03-24"
+    }
+  }
+}
