@@ -1,17 +1,54 @@
-﻿using System.Runtime.InteropServices.JavaScript;
+﻿using Eu.Iamia.Invoicing.Application.Configuration;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
+using Eu.Iamia.Invoicing.Loader.Contract;
+using Microsoft.Extensions.Options;
 
 namespace Eu.Iamia.Invoicing.Application;
 
 public interface IInvoicingHandler
 {
-    ExecutionStatus LoadInvoices(DateTime invoiceDate );
+    Task<ExecutionStatus> LoadInvoices(DateTime invoiceDate);
 }
 
 public class InvoicingHandler : IInvoicingHandler
 {
-    public ExecutionStatus LoadInvoices(DateTime invoiceDate)
+    private readonly IEconomicGateway _economicGateway;
+    private readonly ILoader _loader;
+    private readonly SettingsForInvoicingApplication _settings;
+
+    public InvoicingHandler(
+        IOptions<SettingsForInvoicingApplication> settings
+        // csv reader
+        , IEconomicGateway economicGateway
+        , ILoader loader
+    )
     {
-        return new ExecutionStatus{ Report = $"Report status {invoiceDate:G}", status = -1};
+        _economicGateway = economicGateway;
+        _loader = loader;
+        _settings = settings.Value;
+    }
+    
+    public async Task<ExecutionStatus> LoadInvoices(DateTime invoiceDate)
+    {
+        var csvFile = new FileInfo(_settings.CsvFileFullName);
+        if (!csvFile.Exists)
+
+        {
+            throw new ArgumentException($"File '{csvFile.FullName}' does not exists", nameof(_settings.CsvFileFullName));
+        }
+
+        _loader.ParseCSV(csvFile);
+        await _economicGateway.LoadCustomerCache(_loader.CustomerGroupToAccept);
+        await _economicGateway.LoadProcuctCache();
+
+        foreach (var inputInvoice in _loader.Invoices)
+        {
+            inputInvoice.InvoiceDate = invoiceDate;
+            inputInvoice.Text1 = _loader.Text1;
+            await  _economicGateway.PushInvoice(inputInvoice);
+        }
+
+        return new ExecutionStatus{ Report = $"Report status {invoiceDate:yyyy-MM-dd}, {Environment.NewLine}Number of invoices: {_loader.Invoices.Count}", status = 0};
     }
 }
 

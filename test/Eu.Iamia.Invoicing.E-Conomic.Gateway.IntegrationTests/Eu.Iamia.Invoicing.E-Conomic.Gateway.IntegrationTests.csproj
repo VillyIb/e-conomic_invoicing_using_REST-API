@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Eu.Iamia.Invoicing.CSVLoader\Eu.Iamia.Invoicing.CSVLoader.csproj" />
     <ProjectReference Include="..\..\src\Eu.Iamia.Invoicing.E-Conomic.Gateway\Eu.Iamia.Invoicing.E-Conomic.Gateway.csproj" />
   </ItemGroup>
 

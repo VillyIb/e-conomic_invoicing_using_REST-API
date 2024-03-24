@@ -6,18 +6,13 @@ namespace Eu.Iamia.Invoicing.CSVLoader;
 /// Loads invoices from .csv file.
 /// One line is One invoice with multiple lines.
 /// </summary>
-public class Loader
+public class Loader : ILoader
 {
-    private readonly FileInfo _file;
-
-    public Loader(FileInfo file)
-    {
-        _file = file;
-    }
-
     private List<IInputInvoice>? _invoices;
 
     private Metadata Metadata { get; set; }
+
+    public string Text1 => Metadata.Text1;
 
     public IList<IInputInvoice> Invoices => _invoices ??= new List<IInputInvoice>();
 
@@ -30,7 +25,6 @@ public class Loader
         var columnIndex = 1;
         foreach (var column in columns.Skip(1))
         {
-
             switch (column.ToLowerInvariant())
             {
                 case "#customernumber":
@@ -130,9 +124,18 @@ public class Loader
         }
     }
 
-    public int ParseCSV()
+    internal void ParseText1Row(IList<string> columns)
     {
-        using var fs = _file.OpenRead();
+        var value = columns[1];
+        if (string.IsNullOrWhiteSpace(value)) return;
+
+        var text1 = Metadata.Text1;
+        Metadata.Text1 = text1.Length > 0 ? $"{text1}\n{value.Trim()}" : value.Trim();
+    }
+
+    public int ParseCSV(FileInfo file)
+    {
+        using var fs = file.OpenRead();
         using var sr = new System.IO.StreamReader(fs);
 
         while (true)
@@ -159,7 +162,13 @@ public class Loader
                     // parse for customer groups to accept on customers
                     ParseCustomerGroupeRow(columns);
                     break;
-                
+
+                case "#tekst1":
+                case "#text1":
+                    // parse for text1 multiple lines wil be concatenated
+                    ParseText1Row(columns);
+                    break;
+
                 case "#product":
                 case "#products":
                 case "#produkt":
@@ -214,6 +223,8 @@ public class Metadata
     private List<int>? _customerGroupToAccept;
 
     public IList<int> CustomerGroupToAccept => _customerGroupToAccept ??= new List<int>();
+
+    public string Text1 { get; set; } = string.Empty;
 }
 
 public class ProductMetadata

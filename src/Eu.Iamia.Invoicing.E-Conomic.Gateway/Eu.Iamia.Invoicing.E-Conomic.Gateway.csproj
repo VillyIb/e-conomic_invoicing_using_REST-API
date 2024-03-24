@@ -8,11 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Gateway1660273Authentication.cs" />
     <Compile Remove="Product.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Eu.Iamia.ConfigBase\Eu.Iamia.ConfigBase.csproj" />
+    <ProjectReference Include="..\Eu.Iamia.Invoicing.E-Conomic.Gateway.Contract\Eu.Iamia.Invoicing.E-Conomic.Gateway.Contract.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,11 +5,11 @@ public class LoaderShould
     [Fact]
     public void LoadFileOk()
     {
-        var fi = new FileInfo("C:\\Development\\e-conomic_invoicing_using_REST-API\\test\\Eu.Iamia.Invoicing.CSVLoader.UnitTests\\TestData\\ØD Fakturaoverblik V2.csv");
+        var fi = new FileInfo("C:\\Development\\e-conomic_invoicing_using_REST-API\\test\\Eu.Iamia.Invoicing.CSVLoader.UnitTests\\TestData\\G2.csv");
 
-        var loader = new Loader(fi);
+        var loader = new Loader();
 
-        loader.ParseCSV();
+        loader.ParseCSV(fi);
 
         Assert.True(loader.Invoices.Any());
 

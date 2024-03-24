@@ -1,5 +1,7 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
+using Eu.Iamia.Invoicing.Loader.Contract;
 using System.Text;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;
 
@@ -11,7 +13,7 @@ public partial class GatewayBase
     {
         try
         {
-            Set1660273AuthenticationHeaders();
+            SetAuthenticationHeaders();
 
             var response = await _httpClient.GetAsync("https://restapi.e-conomic.com/invoices/drafts/49");
             response.EnsureSuccessStatusCode();
@@ -28,7 +30,7 @@ public partial class GatewayBase
     {
         try
         {
-            Set1660273AuthenticationHeaders();
+            SetAuthenticationHeaders();
 
             var json = invoice.ToJson();
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -43,4 +45,24 @@ public partial class GatewayBase
             return ex.ToString();
         }
     }
+
+    private Mapper? _mapper;
+
+    private Mapper Mapper => _mapper ??=  new Mapper(CustomerCache, ProductCache);
+
+    public async Task<string> PushInvoice(IInputInvoice invoice)
+    {
+
+        var economicInvoice = Mapper.From(invoice);
+
+        if (economicInvoice == null)
+        {
+            throw new ArgumentException($"Unable to map invoice {invoice.CustomerNumber}");
+        }
+
+        var status = await PushInvoice(economicInvoice);
+        return status;
+    }
+
+   
 }

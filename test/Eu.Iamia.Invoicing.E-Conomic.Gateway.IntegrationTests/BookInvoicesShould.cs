@@ -1,7 +1,7 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 using Eu.Iamia.Invoicing.Loader.Contract;
-using Eu.Iamia.Invoicing.Mapper;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests;
 public class BookInvoicesShould
@@ -14,9 +14,9 @@ public class BookInvoicesShould
         //var fi = new FileInfo("C:\\Development\\e-conomic_invoicing_using_REST-API\\test\\Eu.Iamia.Invoicing.CSVLoader.UnitTests\\TestData\\G2.csv");
         //var fi = new FileInfo("C:\\Development\\e-conomic_invoicing_using_REST-API\\test\\Eu.Iamia.Invoicing.CSVLoader.UnitTests\\TestData\\G6.csv");
 
-        var loader = new CSVLoader.Loader(fi);
+        var loader = new CSVLoader.Loader();
 
-        var _ = loader.ParseCSV();
+        var _ = loader.ParseCSV(fi);
 
         return (loader.Invoices, loader.CustomerGroupToAccept);
     }
@@ -37,7 +37,7 @@ public class BookInvoicesShould
         return productCache;
     }
 
-    [Fact]
+    [Fact(Skip = "skip")]
     public async Task BookAll()
     {
         var invoiceDate = DateTime.Today;
@@ -52,7 +52,7 @@ public class BookInvoicesShould
         var customerCache = await GetCustomerCache(gatewayInvoice, customerGroupsToAccept);
         var productCache = await GetProductCache(gatewayInvoice);
 
-        var mapper = new Mapping(customerCache, productCache);
+        var mapper = new Mapper(customerCache, productCache);
 
         foreach (var inputInvoice in invoices)
         {

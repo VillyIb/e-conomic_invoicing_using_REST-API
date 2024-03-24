@@ -9,19 +9,19 @@ public class CustomerCache
     {
         _gateway = gateway;
         _customerGroupsToAccept = customerGroupsToAccept;
-        _inputCustomers = new List<InputCustomer>();
+        _inputCustomers = new List<CachedCustomer>();
     }
 
-    private readonly IList<InputCustomer> _inputCustomers;
+    private readonly IList<CachedCustomer> _inputCustomers;
 
-    public InputCustomer? GetInputCustomer(int customerNumber)
+    public CachedCustomer? GetInputCustomer(int customerNumber)
     {
         return _inputCustomers.FirstOrDefault(cus => cus.CustomerNumber == customerNumber);
     }
 
-    public InputCustomer Map(Collection customer)
+    public CachedCustomer Map(Collection customer)
     {
-        var result = new InputCustomer
+        var result = new CachedCustomer
         {
             Address = customer.address,
             City = customer.city,
@@ -68,12 +68,12 @@ public class CustomerCache
 }
 
 // TODO rename not "Input..."
-public class InputCustomer //: IInputCustomer
+public class CachedCustomer
 {
     public int CustomerNumber { get; set; }
 
     public int PaymentTerms { get; set; }
-
+    
     public string Address { get; set; }
 
     public string City { get; set; }

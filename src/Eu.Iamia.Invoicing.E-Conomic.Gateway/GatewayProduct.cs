@@ -6,7 +6,7 @@ public partial class GatewayBase
     {
         try
         {
-            Set1660273AuthenticationHeaders();
+            SetAuthenticationHeaders();
 
             var response = await _httpClient.GetAsync($"https://restapi.e-conomic.com/products?skippages={page}&pagesize={pageSize}");
             response.EnsureSuccessStatusCode();

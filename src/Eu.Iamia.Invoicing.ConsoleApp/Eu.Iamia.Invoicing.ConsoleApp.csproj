@@ -15,7 +15,17 @@
   <ItemGroup>
     <ProjectReference Include="..\Eu.Iamia.ConfigBase\Eu.Iamia.ConfigBase.csproj" />
     <ProjectReference Include="..\Eu.Iamia.Invoicing.Application\Eu.Iamia.Invoicing.Application.csproj" />
+    <ProjectReference Include="..\Eu.Iamia.Invoicing.CSVLoader\Eu.Iamia.Invoicing.CSVLoader.csproj" />
     <ProjectReference Include="..\Eu.Iamia.Invoicing.E-Conomic.Gateway\Eu.Iamia.Invoicing.E-Conomic.Gateway.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.GIGABYTE-AORUS.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

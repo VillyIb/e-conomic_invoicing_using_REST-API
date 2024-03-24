@@ -1,9 +1,11 @@
 ﻿#tags;#CustomerNumber;;;;;#Product;;;#Product;;;#Product;;;#Product;;;#Product;;;;
 #Kundegrupper;1,3;;;;;;;;;;;;;;;;;;;;;
+#Tekst1;ØD fakturering for 2024;;;;;;;;;;;;;;;;;;;;;
+#Tekst1;Gruppe 1, 3;;;;;;;;;;;;;;;;;;;;;
 #Product;;;Varenummer i e-conomic NB! string prefix with ';;;3;;;27;;;4;;;24;;;25;;;;
-#Text;;;Varelinje tekst;;;Grundejerforening (2024);;;Medlemskontingent (2024);;;Vandafledning (2023);;;Jordvarme driftsbidrag (2024);;;Leje nyttehave (2024);;;;
+#Text;;;Varelinje tekst;;;Grundejerforening;;;Medlemskontingent;;;Vandafledning (2023);;;Jordvarme driftsbidrag;;;Leje nyttehave;;;;
 #UnitPrice;;;Varepris pr. enhed;;;6,00;;;3.000,00;;;56,13;;;240,00;;;1,00;;;;
-;;;Benyt: Gem Som: CSV UTF-8 (kommasepareret);;;;49.020,00;;;363.000,00;;;248.319,12;;;17.760,00;;;2.474,00;;680.573,12;
+;;;Benyt: Gem Som: CSV UTF-8 (kommasepareret);;;;49.020,00;;;363.000,00;;;247.028,13;;;17.760,00;;;2.474,00;;679.282,13;
 ;;;;;;;;;;;;;;;;;;;;;;
 ;Nr.;;Navn;Adresse;;M2;Grundejer;;Antal;Kontingent;;Vand m3;Vand pris;;Jordvarme kwh;Jordvarme pris;;Nytteh m2;Nytteh pris;;Total;
 #invoice;69; ;Marianne Tholstrup;Månen  01;;68;408,00;;1;3.000,00;;45;2.525,85;;;0,00;;110;110,00;;6.043,85;
@@ -29,7 +31,7 @@
 #invoice;144; ;Martin Egholm Andersen;Nordstjernen 05;;;0,00;;1;3.000,00;;;0,00;;;0,00;;60;60,00;;3.060,00;
 #invoice;202; ;Georg Stiefenhofer & Elisabeth Stielow;Nordstjernen 05;;161;966,00;;2;6.000,00;;109;6.118,17;;;0,00;;;0,00;;13.084,17;
 #invoice;240; ;Mikkel og Ida Marie Harder Palmbo;Nordstjernen 06;;130;780,00;;2;6.000,00;;125;7.016,25;;;0,00;;190;190,00;;13.986,25;
-#invoice;93; ;Villy Jørgensen og Kirsten Bjerritsgaard;Nordstjernen 09;;178;1.068,00;;2;6.000,00;;75;4.209,75;;6;1.440,00;;188;188,00;;12.905,75;
+#invoice;93; ;Villy Jørgensen og Kirsten Bjerritsgaard;Nordstjernen 09;;178;1.068,00;;2;6.000,00;;52;2.918,76;;6;1.440,00;;188;188,00;;11.614,76;
 #invoice;82; ;Ole Beck;Nordstjernen 08;;130;780,00;;1;3.000,00;;42;2.357,46;;;0,00;;;0,00;;6.137,46;
 #invoice;242; ;Claus Frederiksen og Louise Jacobsen;Nordstjernen 10;;154;924,00;;2;6.000,00;;87;4.883,31;;6;1.440,00;;170;170,00;;13.417,31;
 #invoice;295; ;Anette Wingård;Nordstjernen 12;;79;474,00;;1;3.000,00;;29;1.627,77;;;0,00;;93;93,00;;5.194,77;
@@ -99,7 +101,7 @@
 #invoice;189; ;Christoph Lindemann & Sarah Ulrik-Petersen;;;;0,00;;2;6.000,00;;;0,00;;;0,00;;;0,00;;6.000,00;
 ;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;
-;;;Sum;;;;49.020,00;;;363.000,00;;;248.319,12;;;17.760,00;;;2.474,00;;680.573,12;
+;;;Sum;;;;49.020,00;;;363.000,00;;;247.028,13;;;17.760,00;;;2.474,00;;679.282,13;
 ;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;

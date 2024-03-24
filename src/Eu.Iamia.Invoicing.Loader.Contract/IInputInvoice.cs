@@ -6,5 +6,7 @@ public interface IInputInvoice
 
     int CustomerNumber { get; set; }
 
+    string Text1 { get; set; }
+
     IList<IInputLine> InvoiceLines { get; set; }
 }

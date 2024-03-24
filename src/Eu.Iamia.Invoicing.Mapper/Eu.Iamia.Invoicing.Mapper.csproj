@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Eu.Iamia.Invoicing.E-Conomic.Gateway\Eu.Iamia.Invoicing.E-Conomic.Gateway.csproj" />
     <ProjectReference Include="..\Eu.Iamia.Invoicing.Loader.Contract\Eu.Iamia.Invoicing.Loader.Contract.csproj" />
   </ItemGroup>
 

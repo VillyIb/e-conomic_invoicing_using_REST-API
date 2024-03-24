@@ -3,14 +3,14 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
 using Eu.Iamia.Invoicing.Loader.Contract;
 
-namespace Eu.Iamia.Invoicing.Mapper;
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 
-public class Mapping
+public class Mapper
 {
     private readonly CustomerCache _customerCache;
     private readonly ProductCache _productCache;
 
-    public Mapping(CustomerCache customerCache, ProductCache productCache)
+    public Mapper(CustomerCache customerCache, ProductCache productCache)
     {
         _customerCache = customerCache;
         _productCache = productCache;
@@ -19,7 +19,7 @@ public class Mapping
     public Invoice? From(IInputInvoice inputInvoice)
     {
         var inputInvoiceCustomerNumber = inputInvoice.CustomerNumber;
-        InputCustomer? customer = _customerCache.GetInputCustomer(inputInvoiceCustomerNumber)!;
+        CachedCustomer? customer = _customerCache.GetInputCustomer(inputInvoiceCustomerNumber)!;
 
         if (customer == null) return null;
 
@@ -41,7 +41,7 @@ public class Mapping
             Notes = new()
             {
                 Heading = $"#{customer.CustomerNumber} {customer.Name}",
-                TextLine1 = "Årlig ØD fakturering \n2024",
+                TextLine1 = inputInvoice.Text1,
                 //TextLine2 = "Text2.1\nText2.2\nText2.3"
             },
             Recipient = new()

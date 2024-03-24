@@ -1,11 +1,12 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Eu.Iamia.ConfigBase;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
+using Eu.Iamia.Invoicing.Loader.Contract;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Configuration;
-public  class Setup : IHandlerSetup
+namespace Eu.Iamia.Invoicing.CSVLoader;
+
+public class Setup : IHandlerSetup
 {
     private readonly IConfiguration _configuration;
 
@@ -16,14 +17,14 @@ public  class Setup : IHandlerSetup
 
     private static void AddHandlers(IServiceCollection services)
     {
-        services.AddTransient<IEconomicGateway, GatewayBase>();
+        services.AddTransient<ILoader, Loader>();
     }
 
-    private void AddSettings(Microsoft.Extensions.DependencyInjection.IServiceCollection services)
+    private void AddSettings(IServiceCollection services)
     {
         // see:https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-7.0
         // Binds Settings to the dependency injection container.
-        services.Configure<SettingsForEConomicGateway>(_configuration.GetSection(SettingsForEConomicGateway.SectionName));
+        //services.Configure<SettingsFor...>(_configuration.GetSection(SettingsFor...));
     }
 
     public void Register(IServiceCollection services)
@@ -34,5 +35,7 @@ public  class Setup : IHandlerSetup
 
     [ExcludeFromCodeCoverage(Justification = "Unable to verify")]
     public void UnRegister()
-    { }
+    {
+
+    }
 }

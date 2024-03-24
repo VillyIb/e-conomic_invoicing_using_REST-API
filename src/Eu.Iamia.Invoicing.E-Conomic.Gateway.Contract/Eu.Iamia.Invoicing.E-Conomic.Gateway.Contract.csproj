@@ -11,4 +11,8 @@
     <Compile Remove="IProduct.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Eu.Iamia.Invoicing.Loader.Contract\Eu.Iamia.Invoicing.Loader.Contract.csproj" />
+  </ItemGroup>
+
 </Project>

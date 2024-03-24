@@ -4,7 +4,6 @@ using System.Globalization;
 using Eu.Iamia.ConfigBase;
 using Eu.Iamia.Invoicing.Application;
 using JetBrains.Annotations;
-using Microsoft.VisualBasic.FileIO;
 
 namespace Eu.Iamia.Invoicing.ConsoleApp;
 
@@ -112,48 +111,53 @@ public class Program
         return option.Aliases.Any(alias => parserTokens.Any(token => token.Equals(new Token(alias, TokenType.Option, option))));
     }
 
-    private static  ExecutionStatus DefaultHandler([InstantHandle] SetupBase setup, Func<SetupBase, IInvoicingHandler> getService, string bookingDate)
-    {
-        try
-        {
-            if (string.IsNullOrWhiteSpace(bookingDate))
-            {
-                return new ExecutionStatus
-                {
-                    Report = "Missing booking date",
-                    status = -1
-                };
-            }
+    //private static  ExecutionStatus DefaultHandler([InstantHandle] SetupBase setup, Func<SetupBase, IInvoicingHandler> getService, string bookingDate)
+    //{
+    //    try
+    //    {
+    //        if (string.IsNullOrWhiteSpace(bookingDate))
+    //        {
+    //            return new ExecutionStatus
+    //            {
+    //                Report = "Missing booking date",
+    //                status = -1
+    //            };
+    //        }
 
-            if (DateTime.TryParseExact(bookingDate, "yyyy-MM-dd", CultureInfo.InvariantCulture,
-                    DateTimeStyles.AssumeLocal, out DateTime date))
+    //        if (DateTime.TryParseExact(bookingDate, "yyyy-MM-dd", CultureInfo.InvariantCulture,
+    //                DateTimeStyles.AssumeLocal, out DateTime date))
 
-            {
-                var reportDate = date;
-                var invoicingHandler = getService.Invoke(setup);
-                var status = invoicingHandler.LoadInvoices(reportDate);
-                return status;
-            }
+    //        {
+    //            var reportDate = date;
+    //            var invoicingHandler = getService.Invoke(setup);
+    //            var status = await invoicingHandler.LoadInvoices(reportDate);
+    //            return status;
+    //        }
 
-            return new ExecutionStatus
-            {
-                Report = $"Unable to parse booking date '{bookingDate}' please specify as YYYY-MM-DD",
-                status = -1
-            };
-        }
-        catch (OperationCanceledException)
-        {
-            Console.Error.WriteLineAsync("The operation was aborted");
+    //        return new ExecutionStatus
+    //        {
+    //            Report = $"Unable to parse booking date '{bookingDate}' please specify as YYYY-MM-DD",
+    //            status = -1
+    //        };
+    //    }
+    //    catch (OperationCanceledException)
+    //    {
+    //        Console.Error.WriteLineAsync("The operation was aborted");
             
-            return new ExecutionStatus
-            {
-                Report = "The operation was aborted",
-                status = -1
-            }; 
-        }
-    }
+    //        return new ExecutionStatus
+    //        {
+    //            Report = "The operation was aborted",
+    //            status = -1
+    //        }; 
+    //    }
+    //}
 
-    private static async Task<ExecutionStatus> DefaultHandler([InstantHandle] SetupBase setup, Func<SetupBase, IInvoicingHandler> getService, string? bookingDate, CancellationToken cancellationToken)
+    private static async Task<ExecutionStatus> DefaultHandler(
+        [InstantHandle] SetupBase setup, 
+        Func<SetupBase, IInvoicingHandler> getService, 
+        string? bookingDate, 
+        CancellationToken cancellationToken
+    )
     {
         try
         {
@@ -172,14 +176,14 @@ public class Program
             {
                 var reportDate = date;
                 var invoicingHandler = getService.Invoke(setup);
-                var status = invoicingHandler.LoadInvoices(reportDate);
+                var status = await invoicingHandler.LoadInvoices(reportDate);
                 return status;
             }
 
             return new ExecutionStatus
             {
                 Report = $"Unable to parse booking date '{bookingDate}' please specify as YYYY-MM-DD",
-                status = -1
+                status = -2
             };
         }
         catch (OperationCanceledException)
@@ -189,7 +193,7 @@ public class Program
             return new ExecutionStatus
             {
                 Report = "The operation was aborted",
-                status = -1
+                status = -3
             };
         }
     }
