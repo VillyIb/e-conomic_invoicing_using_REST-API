@@ -6,7 +6,9 @@ public class InputInvoice : IInputInvoice
 {
     public DateTime InvoiceDate { get; set; }
 
-    public int    CustomerNumber { get; set; }
+    public int CustomerNumber { get; set; }
+
+    public int PaymentTerm    { get; set; }
 
     public string Text1 { get; set; } = string.Empty;
 

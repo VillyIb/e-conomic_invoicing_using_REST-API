@@ -37,7 +37,7 @@ public class Mapper
             //, "delivery-country"
             //, DateTime.Today
             //),
-            Layout = new() { LayoutNumber = 21 },
+            Layout = new() { LayoutNumber = 21 }, // TODO get from configuration
             Notes = new()
             {
                 Heading = $"#{customer.CustomerNumber} {customer.Name}",
@@ -55,7 +55,7 @@ public class Mapper
                     EnabledForCustomer = true,
                     EnabledForSupplier = true,
                     Name = "Domestic",
-                    VatZoneNumber = 1
+                    VatZoneNumber = 1 // Hardcoded value
                 }
             },
             References = new()
@@ -66,7 +66,8 @@ public class Mapper
             {
                 //DaysOfCredit = 14
                 //,
-                PaymentTermsNumber = customer.PaymentTerms,
+                //PaymentTermsNumber = customer.PaymentTerms,
+                PaymentTermsNumber = inputInvoice.PaymentTerm,
                 //,
                 //Name = "Lb. md. 14 dage"
                 //,

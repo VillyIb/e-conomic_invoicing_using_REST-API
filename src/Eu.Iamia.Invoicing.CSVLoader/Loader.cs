@@ -1,4 +1,5 @@
-﻿using Eu.Iamia.Invoicing.Loader.Contract;
+﻿using System.Globalization;
+using Eu.Iamia.Invoicing.Loader.Contract;
 
 namespace Eu.Iamia.Invoicing.CSVLoader;
 
@@ -10,13 +11,17 @@ public class Loader : ILoader
 {
     private List<IInputInvoice>? _invoices;
 
-    private Metadata Metadata { get; set; }
+    private Metadata? Metadata { get; set; }
 
-    public string Text1 => Metadata.Text1;
+    public string? Text1 => Metadata?.Text1;
+
+    public DateTime? InvoiceDate => Metadata?.InvoiceDate;
+
+    public int? PaymentTerm => Metadata.PaymentTerm;
 
     public IList<IInputInvoice> Invoices => _invoices ??= new List<IInputInvoice>();
 
-    public IList<int> CustomerGroupToAccept => Metadata.CustomerGroupToAccept;
+    public IList<int>? CustomerGroupToAccept => Metadata?.CustomerGroupToAccept ;
 
     internal void ParseTagsRow(IList<string> columns)
     {
@@ -27,9 +32,11 @@ public class Loader : ILoader
         {
             switch (column.ToLowerInvariant())
             {
+                case "#debitornummer":
                 case "#customernumber":
                     Metadata.CustomerNumberColumn = columnIndex;
                     break;
+                case "#produkt":
                 case "#product":
                     {
                         Metadata.ProductMetadata.Add(new ProductMetadata
@@ -43,6 +50,37 @@ public class Loader : ILoader
         }
     }
 
+    internal void ParseText1Row(IList<string> columns)
+    {
+        var value = columns[1];
+        if (string.IsNullOrWhiteSpace(value)) return;
+
+        var text1 = Metadata.Text1;
+        Metadata.Text1 = text1.Length > 0 ? $"{text1}\n{value.Trim()}" : value.Trim();
+    }
+
+    internal void ParseInvoiceDateRow(IList<string> columns)
+    {
+        var value = columns[1];
+
+        if (!DateTime.TryParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime date))
+        {
+            throw new ArgumentException($"Unable to parse #Bilagsdato/#InvoiceDate '{value}'");
+        }
+        Metadata.InvoiceDate = date;
+    }
+
+    internal void ParsePaymentTerm(IList<string> columns)
+    {
+        var value = columns[1];
+
+        if (!int.TryParse(value, out  int  paymentTerm))
+        {
+            throw new ArgumentException($"Unable to parse #BetalingsBetingelse/ #PaymentTerm '{value}'");
+        }
+        Metadata.PaymentTerm = paymentTerm;
+    }
+
     internal void ParseProductsRow(IList<string> columns)
     {
         foreach (var productMetadata in Metadata.ProductMetadata)
@@ -51,7 +89,7 @@ public class Loader : ILoader
         }
     }
 
-    internal void ParseTextRow(IList<string> columns)
+    internal void ParseInvoiceTextRow(IList<string> columns)
     {
         foreach (var productMetadata in Metadata.ProductMetadata)
         {
@@ -123,20 +161,11 @@ public class Loader : ILoader
             Metadata.CustomerGroupToAccept.Add(int.Parse(customerGroup));
         }
     }
-
-    internal void ParseText1Row(IList<string> columns)
-    {
-        var value = columns[1];
-        if (string.IsNullOrWhiteSpace(value)) return;
-
-        var text1 = Metadata.Text1;
-        Metadata.Text1 = text1.Length > 0 ? $"{text1}\n{value.Trim()}" : value.Trim();
-    }
-
+    
     public int ParseCSV(FileInfo file)
     {
         using var fs = file.OpenRead();
-        using var sr = new System.IO.StreamReader(fs);
+        using var sr = new StreamReader(fs);
 
         while (true)
         {
@@ -169,6 +198,18 @@ public class Loader : ILoader
                     ParseText1Row(columns);
                     break;
 
+                case "#bilagsdato":
+                case "#invoicedate":
+                    // parse metadata for invoice date 
+                    ParseInvoiceDateRow(columns);
+                    break;
+
+                case "#betalingsbetingelse":
+                case "#paymentterm":
+                    // parse payment terms
+                    ParsePaymentTerm(columns);
+                    break;
+
                 case "#product":
                 case "#products":
                 case "#produkt":
@@ -176,10 +217,11 @@ public class Loader : ILoader
                     // parse metadata for product number 'e-conomic varenummer' (alpha-numeric value)
                     ParseProductsRow(columns);
                     break;
-                
+
+                case "#tekst":
                 case "#text":
                     // parse metadata for product description (text on invoice)
-                    ParseTextRow(columns);
+                    ParseInvoiceTextRow(columns);
                     break;
                 
                 case "#unittext":
@@ -210,6 +252,7 @@ public class Loader : ILoader
 
         return Invoices.Count;
     }
+
 }
 
 public class Metadata
@@ -225,6 +268,10 @@ public class Metadata
     public IList<int> CustomerGroupToAccept => _customerGroupToAccept ??= new List<int>();
 
     public string Text1 { get; set; } = string.Empty;
+
+    public DateTime? InvoiceDate { get; set; }
+
+    public int? PaymentTerm { get; set; }
 }
 
 public class ProductMetadata

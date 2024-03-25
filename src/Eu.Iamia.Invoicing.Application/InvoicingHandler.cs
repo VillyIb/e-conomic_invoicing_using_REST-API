@@ -7,7 +7,7 @@ namespace Eu.Iamia.Invoicing.Application;
 
 public interface IInvoicingHandler
 {
-    Task<ExecutionStatus> LoadInvoices(DateTime invoiceDate);
+    Task<ExecutionStatus> LoadInvoices();
 }
 
 public class InvoicingHandler : IInvoicingHandler
@@ -27,8 +27,8 @@ public class InvoicingHandler : IInvoicingHandler
         _loader = loader;
         _settings = settings.Value;
     }
-    
-    public async Task<ExecutionStatus> LoadInvoices(DateTime invoiceDate)
+
+    public async Task<ExecutionStatus> LoadInvoices()
     {
         var csvFile = new FileInfo(_settings.CsvFileFullName);
         if (!csvFile.Exists)
@@ -38,17 +38,42 @@ public class InvoicingHandler : IInvoicingHandler
         }
 
         _loader.ParseCSV(csvFile);
-        await _economicGateway.LoadCustomerCache(_loader.CustomerGroupToAccept);
+
+        if (!_loader.InvoiceDate.HasValue)
+        {
+            throw new ApplicationException($"#Invoicedate/#Bilagsdato not specified");
+        }
+        var invoiceDate = _loader.InvoiceDate.Value;
+
+        if (!_loader.PaymentTerm.HasValue)
+        {
+            throw new ApplicationException($"#Betalingsbetingelse/#PaymentTerm not specified");
+        }
+        var paymetTerm = _loader.PaymentTerm.Value;
+
+        if (_loader.CustomerGroupToAccept is null)
+        {
+            throw new ApplicationException($"#Kundegrupper/#CustomerGroups not specified");
+        }
+
+        var customerGroupsToAccept = _loader.CustomerGroupToAccept;
+
+        await _economicGateway.LoadCustomerCache(customerGroupsToAccept);
         await _economicGateway.LoadProcuctCache();
 
+        Console.WriteLine("");
+        
         foreach (var inputInvoice in _loader.Invoices)
         {
             inputInvoice.InvoiceDate = invoiceDate;
-            inputInvoice.Text1 = _loader.Text1;
-            await  _economicGateway.PushInvoice(inputInvoice);
+            inputInvoice.Text1 = _loader.Text1!;
+            inputInvoice.InvoiceDate = invoiceDate;
+            inputInvoice.PaymentTerm = paymetTerm;
+            await _economicGateway.PushInvoice(inputInvoice);
+            Console.Write('.');
         }
 
-        return new ExecutionStatus{ Report = $"Report status {invoiceDate:yyyy-MM-dd}, {Environment.NewLine}Number of invoices: {_loader.Invoices.Count}", status = 0};
+        return new ExecutionStatus { Report = $"Report status {invoiceDate:yyyy-MM-dd}, {Environment.NewLine}Number of invoices: {_loader.Invoices.Count}", status = 0 };
     }
 }
 
