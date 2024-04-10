@@ -13,4 +13,6 @@ public interface IInputLine
     double? UnitNetPrice { get; set; }
 
     string? Description { get; set; }
+
+    int? SourceFileLineNumber { get; set; }
 }

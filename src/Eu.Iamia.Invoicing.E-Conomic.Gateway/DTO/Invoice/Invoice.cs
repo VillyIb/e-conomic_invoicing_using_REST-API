@@ -87,7 +87,7 @@ public class Invoice : ValueObject<Invoice>
 
     /// <remarks>Required</remarks>
     [JsonPropertyName("paymentTerms")]
-    public PaymentTerms? PaymentTerms { get; init; }
+    public PaymentTerms? PaymentTerms { get; internal set; }
 
     /// <summary>
     /// The customer being invoiced.
@@ -179,7 +179,7 @@ public class Notes : ValueObject<Notes>
 public class PaymentTerms : ValueObject<PaymentTerms>
 {
     [JsonPropertyName("paymentTermsNumber")]
-    public int PaymentTermsNumber { get; init; }
+    public int PaymentTermsNumber { get; internal set; }
 
     [JsonPropertyName("daysOfCredit")]
     public int DaysOfCredit { get; init; }
@@ -444,6 +444,16 @@ public class Line : ValueObject<Line>
 
 public class Unit : ValueObject<Unit>
 {
+    public Unit()
+    {
+    }
+
+    public Unit(string? name, int unitNumber)
+    {
+        Name = name;
+        UnitNumber = unitNumber;
+    }
+
     [JsonPropertyName("unitNumber")]
     public int UnitNumber { get; init; }
 

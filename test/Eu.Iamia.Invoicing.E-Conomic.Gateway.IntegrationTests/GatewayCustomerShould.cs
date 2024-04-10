@@ -1,6 +1,17 @@
-﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests;
+﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
+
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests;
 public class GatewayCustomerShould
 {
+    private readonly IEconomicGateway sut;
+
+    public GatewayCustomerShould()
+    {
+        using var setup = new Setup();
+
+        sut = setup.GetService<IEconomicGateway>();
+    }
+
     [Theory]
     //[InlineData(0, 20)]
     //[InlineData(1, 20)]
@@ -19,7 +30,6 @@ public class GatewayCustomerShould
     //[InlineData(14, 20)]
     public async Task ReadCustomersPaged(int page, int pageSize)
     {
-        var sut = new GatewayBase(new HttpClientHandler());
         var result = await sut.ReadCustomersPaged(page, pageSize);
 
         Assert.NotEmpty(result);
@@ -28,10 +38,9 @@ public class GatewayCustomerShould
 
     [Theory]
     [InlineData(0, 20)]
-    //[InlineData(1, 20)]
+    [InlineData(1, 20)]
     public async Task ReadProductsPaged(int page, int pageSize)
     {
-        var sut = new GatewayBase(new HttpClientHandler());
         var result = await sut.ReadProductsPaged(page, pageSize);
 
         Assert.NotEmpty(result);

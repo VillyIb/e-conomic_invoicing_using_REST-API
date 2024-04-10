@@ -24,7 +24,7 @@ public class GatewayProductShould : GatewayBaseShould
         Mock.VerifyAll();
 
         Assert.NotNull(result);
-        Assert.Equal(Response, result);
+        Assert.Equal(OkResponse, result);
     }
 
     [Fact]
@@ -38,6 +38,6 @@ public class GatewayProductShould : GatewayBaseShould
         Mock.VerifyAll();
 
         Assert.NotNull(result);
-        Assert.NotEqual(Response, result);
+        Assert.NotEqual(OkResponse, result);
     }
 }

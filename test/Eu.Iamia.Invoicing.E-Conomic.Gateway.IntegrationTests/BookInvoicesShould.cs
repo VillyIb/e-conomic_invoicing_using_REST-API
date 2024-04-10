@@ -1,4 +1,5 @@
-﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
+﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Configuration;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 using Eu.Iamia.Invoicing.Loader.Contract;
@@ -6,6 +7,12 @@ using Eu.Iamia.Invoicing.Loader.Contract;
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests;
 public class BookInvoicesShould
 {
+    private static SettingsForEConomicGateway _settings = new SettingsForEConomicGateway
+    {
+        PaymentTerms = 1,
+        X_AgreementGrantToken = "Demo",
+        X_AppSecretToken = "Demo"
+    };
 
     // ReSharper disable once MemberCanBeMadeStatic.Local
     private (IList<IInputInvoice> Invoices, IList<int> CustomerGroupsToAccept) LoadCSV()
@@ -48,11 +55,11 @@ public class BookInvoicesShould
         Assert.NotNull(invoices);
         Assert.True(invoices.Any());
 
-        var gatewayInvoice = new GatewayBase(new HttpClientHandler());
+        var gatewayInvoice = new GatewayBase(_settings, new HttpClientHandler());
         var customerCache = await GetCustomerCache(gatewayInvoice, customerGroupsToAccept);
         var productCache = await GetProductCache(gatewayInvoice);
 
-        var mapper = new Mapper(customerCache, productCache);
+        var mapper = new Mapper(_settings, customerCache, productCache);
 
         foreach (var inputInvoice in invoices)
         {
@@ -66,7 +73,7 @@ public class BookInvoicesShould
                 continue;
             }
 
-            await gatewayInvoice.PushInvoice(invoice);
+            await gatewayInvoice.PushInvoice(invoice, inputInvoice.SourceFileLineNumber);
         }
 
 

@@ -1,0 +1,21 @@
+﻿#tags;#DebitorNummer;;;;#Produkt;;
+#Kundegrupper;4;;;;;;
+#Tekst1;ØD fakturering for 2024;;;;;;
+#Tekst1;;;;;;;
+#Bilagsdato;2023-03-21;;<- anføres som YYYY-MM-DD;;;;
+#Betalingsbetingelse;4711;;<- bb-nummer i e-conomic;;;;
+#Produkt;;;Varenummer i e-conomic NB! string prefix with ';;27;;
+#Tekst;;;Varelinje tekst;;Dette er en test;;
+#Enhedspris;;;Varepris pr. enhed;;0,00;;
+;;;Benyt: Gem Som: CSV UTF-8 (kommasepareret);;;;0,00
+;;;;;;;
+;Nr.;;Navn;;Antal;Kontingent;
+#invoice;117; ;GV TEST;;1;0;
+;;;;;;;
+;;;;;;;
+;;;;;;;
+;;;;;;;
+;;;;;;;
+;;;;;;;
+;;;;;;;
+;;;;;;;

@@ -32,7 +32,6 @@ public class InvoicingHandler : IInvoicingHandler
     {
         var csvFile = new FileInfo(_settings.CsvFileFullName);
         if (!csvFile.Exists)
-
         {
             throw new ArgumentException($"File '{csvFile.FullName}' does not exists", nameof(_settings.CsvFileFullName));
         }
@@ -69,7 +68,7 @@ public class InvoicingHandler : IInvoicingHandler
             inputInvoice.Text1 = _loader.Text1!;
             inputInvoice.InvoiceDate = invoiceDate;
             inputInvoice.PaymentTerm = paymetTerm;
-            await _economicGateway.PushInvoice(inputInvoice);
+            await _economicGateway.PushInvoice(inputInvoice, inputInvoice.SourceFileLineNumber);
             Console.Write('.');
         }
 

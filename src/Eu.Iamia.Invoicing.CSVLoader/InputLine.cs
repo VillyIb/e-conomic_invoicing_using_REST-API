@@ -15,4 +15,8 @@ public class InputLine : IInputLine
     public double? UnitNetPrice { get; set; }
 
     public string? Description { get; set; }
+
+    public int? SourceFileLineNumber { get; set; }
+
+    public int SourceFileLine { get; set; }
 }

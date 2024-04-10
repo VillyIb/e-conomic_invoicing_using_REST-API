@@ -1,4 +1,6 @@
-﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
+﻿using System.Text;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Configuration;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
 using Eu.Iamia.Invoicing.Loader.Contract;
@@ -7,22 +9,34 @@ namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 
 public class Mapper
 {
+    private readonly SettingsForEConomicGateway _settings;
     private readonly CustomerCache _customerCache;
     private readonly ProductCache _productCache;
 
-    public Mapper(CustomerCache customerCache, ProductCache productCache)
+    public Mapper(SettingsForEConomicGateway settings, CustomerCache customerCache, ProductCache productCache)
     {
+        _settings = settings;
         _customerCache = customerCache;
         _productCache = productCache;
     }
 
-    public Invoice? From(IInputInvoice inputInvoice)
+    private CachedCustomer CustomerMustExist(int customerNumber, int sourceFileLineNumber)
+    {
+        return _customerCache.GetInputCustomer(customerNumber)! ?? throw new ApplicationException($"Customer does not exist: '{customerNumber}', Source file line: {sourceFileLineNumber}");
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="inputInvoice"></param>
+    /// <returns></returns>
+    /// <exception cref="ApplicationException"></exception>
+    /// <seealso cref="https://restdocs.e-conomic.com/#post-invoices-drafts"/>
+    public Invoice From(IInputInvoice inputInvoice)
     {
         var inputInvoiceCustomerNumber = inputInvoice.CustomerNumber;
-        CachedCustomer? customer = _customerCache.GetInputCustomer(inputInvoiceCustomerNumber)!;
-
-        if (customer == null) return null;
-
+        var customer = CustomerMustExist(inputInvoiceCustomerNumber, inputInvoice.SourceFileLineNumber);
+        
         var inputInvoiceInvoiceDate = inputInvoice.InvoiceDate;
 
         var invoice = new Invoice
@@ -37,7 +51,7 @@ public class Mapper
             //, "delivery-country"
             //, DateTime.Today
             //),
-            Layout = new() { LayoutNumber = 21 }, // TODO get from configuration
+            Layout = new() { LayoutNumber = _settings.LayoutNumber }, 
             Notes = new()
             {
                 Heading = $"#{customer.CustomerNumber} {customer.Name}",
@@ -46,7 +60,7 @@ public class Mapper
             },
             Recipient = new()
             {
-                Address = $"{customer.Address}",
+                Address = $"{ customer.Address}",
                 City = $"{customer.City}",
                 Zip = $"{customer.Zip}",
                 Name = $"{customer.Name}",
@@ -79,25 +93,19 @@ public class Mapper
         {
             var lineNumber = 1;
 
-            var inputLineQuantity = inputLine.Quantity!.Value;
-            var inputLineUnitNetPrice = inputLine.UnitNetPrice!.Value;
-            var inputLineUnitNumber = inputLine.UnitNumber;
-            var _ = inputLine.UnitText;
-
             var inputProduct = _productCache.GetInputProduct(inputLine.ProductNumber);
 
             if (inputProduct is null)
             {
-                throw new ApplicationException($"Product: '{inputLine.ProductNumber}' not found in e-conomic.");
+                throw new ApplicationException($"Product: '{inputLine.ProductNumber}' not found in e-conomic, Source file line: {inputLine.SourceFileLineNumber}");
             }
 
-            E_Conomic.Gateway.DTO.Invoice.Unit? unit = inputProduct!.Unit is null 
+            var unit = inputProduct!.Unit is null 
                 ? null 
-                : new E_Conomic.Gateway.DTO.Invoice.Unit
-                {
-                    Name = inputProduct.Unit.Name,
-                    UnitNumber = inputProduct.Unit.UnitNumber
-                };
+                : new DTO.Invoice.Unit(
+                    name: inputProduct.Unit.Name,
+                    unitNumber: inputProduct.Unit.UnitNumber
+                );
 
             var line = new Line()
             {
@@ -107,10 +115,10 @@ public class Mapper
                 {
                     ProductNumber = inputLine.ProductNumber
                 },
-                Quantity = inputLineQuantity,
+                Quantity = inputLine.Quantity!.Value,
                 SortKey = lineNumber,
                 Unit = unit,
-                UnitNetPrice = inputLineUnitNetPrice,
+                UnitNetPrice = inputLine.UnitNetPrice!.Value,
             };
 
             invoice.Lines.Add(line);
@@ -118,6 +126,5 @@ public class Mapper
 
         return invoice;
     }
-
 }
 

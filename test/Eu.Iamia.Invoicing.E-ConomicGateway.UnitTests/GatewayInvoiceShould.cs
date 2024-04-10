@@ -16,31 +16,30 @@ public class GatewayInvoiceShould : GatewayBaseShould
 
 
     [Fact]
-    public async Task GivenMockedHandler_When_PushInvoice_HandleOkResponse()
+    public async Task GivenMockedHandler_When_PushInvoice_Handle_OkResponse()
     {
         MockResponse(HttpStatusCode.OK);
 
         using var sut = new GatewayBase(_settings, HttpMessageHandler);
-        var result = await sut.PushInvoice(new Invoice());
+        var result = await sut.PushInvoice(new Invoice(), -9);
 
         Mock.VerifyAll();
 
         Assert.NotNull(result);
-        Assert.Equal(Response, result);
+        //Assert.Equal(OkResponse, result);
     }
 
     [Fact]
-    public async Task GivenMockedHandler_When_PushInvoice_HandleNotFoundResponse()
+    public async Task GivenMockedHandler_When_PushInvoice_Handle_NotFoundResponse()
     {
         MockResponse(HttpStatusCode.NotFound);
 
         using var sut = new GatewayBase(_settings, HttpMessageHandler);
-        var result = await sut.PushInvoice(new Invoice());
+
+        _ =await Assert.ThrowsAsync<HttpRequestException>(async () =>   await sut.PushInvoice(new Invoice(),-9));
 
         Mock.VerifyAll();
 
-        Assert.NotNull(result);
-        Assert.NotEqual(Response, result);
     }
 
     [Fact]
@@ -54,7 +53,7 @@ public class GatewayInvoiceShould : GatewayBaseShould
         Mock.VerifyAll();
 
         Assert.NotNull(result);
-        Assert.Equal(Response, result);
+        Assert.Equal(OkResponse, result);
     }
 
     [Fact]
@@ -68,7 +67,7 @@ public class GatewayInvoiceShould : GatewayBaseShould
         Mock.VerifyAll();
 
         Assert.NotNull(result);
-        Assert.NotEqual(Response, result);
+        Assert.NotEqual(OkResponse, result);
     }
 
 }

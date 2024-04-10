@@ -14,6 +14,8 @@ public class InputInvoice : IInputInvoice
 
     private IList<IInputLine>? _invoiceLines;
 
+    public int SourceFileLineNumber { get; set; } = -1;
+
     public IList<IInputLine> InvoiceLines
     {
         get => _invoiceLines ??= new List<IInputLine>();

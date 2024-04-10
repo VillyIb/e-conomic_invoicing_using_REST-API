@@ -10,5 +10,7 @@ public interface IInputInvoice
 
     string Text1 { get; set; }
 
+    int SourceFileLineNumber { get; set; }
+
     IList<IInputLine> InvoiceLines { get; set; }
 }

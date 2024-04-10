@@ -1,12 +1,12 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Eu.Iamia.ConfigBase;
-using Eu.Iamia.Invoicing.Loader.Contract;
+using Eu.Iamia.Reporting.Contract;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Eu.Iamia.Invoicing.CSVLoader;
+namespace Eu.Iamia.Reporting.Configuration;
 
-public class Setup : IHandlerSetup
+public  class Setup : IHandlerSetup
 {
     private readonly IConfiguration _configuration;
 
@@ -17,14 +17,14 @@ public class Setup : IHandlerSetup
 
     private static void AddHandlers(IServiceCollection services)
     {
-        services.AddTransient<ILoader, Loader>();
+        services.AddTransient<IReport, Report>();
     }
 
-    private void AddSettings(IServiceCollection services)
+    private void AddSettings(Microsoft.Extensions.DependencyInjection.IServiceCollection services)
     {
         // see:https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-7.0
         // Binds Settings to the dependency injection container.
-        //services.Configure<SettingsFor...>(_configuration.GetSection(SettingsFor...));
+        services.Configure<SettingsForReporting>(_configuration.GetSection(SettingsForReporting.SectionName));
     }
 
     public void Register(IServiceCollection services)
@@ -35,7 +35,5 @@ public class Setup : IHandlerSetup
 
     [ExcludeFromCodeCoverage(Justification = "Unable to verify")]
     public void UnRegister()
-    {
-
-    }
+    { }
 }

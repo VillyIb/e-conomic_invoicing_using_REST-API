@@ -67,7 +67,6 @@ public class CustomerCache
     }
 }
 
-// TODO rename not "Input..."
 public class CachedCustomer
 {
     public int CustomerNumber { get; set; }

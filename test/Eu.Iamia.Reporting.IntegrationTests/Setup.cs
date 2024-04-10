@@ -1,7 +1,7 @@
 ﻿using Eu.Iamia.ConfigBase;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Eu.Iamia.Invoicing.ConsoleApp;
+namespace Eu.Iamia.Reporting.IntegrationTests;
 
 public  class Setup : SetupBase
 {
@@ -15,10 +15,7 @@ public  class Setup : SetupBase
         services ??= new ServiceCollection();
         Register(
             services,
-            new E_Conomic.Gateway.Configuration.Setup(configuration),
-            new Application.Configuration.Setup(configuration),
-            new CSVLoader.Configuration.Setup(configuration),
-            new Reporting.Configuration.Setup(configuration)
+            new Configuration.Setup(configuration)
         );
 
         ServiceProvider = services.BuildServiceProvider();

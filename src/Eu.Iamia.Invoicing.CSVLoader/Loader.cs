@@ -65,7 +65,7 @@ public class Loader : ILoader
 
         if (!DateTime.TryParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime date))
         {
-            throw new ArgumentException($"Unable to parse #Bilagsdato/#InvoiceDate '{value}'");
+            throw new ArgumentException($"Unable to parse #Bilagsdato/#InvoiceDate '{value}' {Environment.NewLine}, Source file line: {_sourceFileLineNumber}");
         }
         Metadata.InvoiceDate = date;
     }
@@ -76,7 +76,7 @@ public class Loader : ILoader
 
         if (!int.TryParse(value, out  int  paymentTerm))
         {
-            throw new ArgumentException($"Unable to parse #BetalingsBetingelse/ #PaymentTerm '{value}'");
+            throw new ArgumentException($"Unable to parse #BetalingsBetingelse/ #PaymentTerm '{value}' {Environment.NewLine}Source file line: {_sourceFileLineNumber}");
         }
         Metadata.PaymentTerm = paymentTerm;
     }
@@ -127,12 +127,16 @@ public class Loader : ILoader
 
         var invoice = new InputInvoice
         {
-            CustomerNumber = customerNumber
+            CustomerNumber = customerNumber,
+            SourceFileLineNumber = _sourceFileLineNumber
         };
 
         foreach (var productMetadata in Metadata.ProductMetadata)
         {
-            if (!double.TryParse(columns[productMetadata.Column], out var quantity) || quantity <= 0) continue;
+            if (!double.TryParse(columns[productMetadata.Column], out var quantity) || quantity <= 0.001)
+            {
+                continue;
+            }
 
             var inputLine = new InputLine
             {
@@ -141,7 +145,8 @@ public class Loader : ILoader
                 ProductNumber = productMetadata.ProductId,
                 UnitText = productMetadata.UnitText,
                 UnitNumber = productMetadata.UnitNumber,
-                Quantity = quantity
+                Quantity = quantity, 
+                SourceFileLine = _sourceFileLineNumber
             };
 
             invoice.InvoiceLines.Add(inputLine);
@@ -161,7 +166,9 @@ public class Loader : ILoader
             Metadata.CustomerGroupToAccept.Add(int.Parse(customerGroup));
         }
     }
-    
+
+    private int _sourceFileLineNumber = 0;
+
     public int ParseCSV(FileInfo file)
     {
         using var fs = file.OpenRead();
@@ -170,6 +177,8 @@ public class Loader : ILoader
         while (true)
         {
             var row = sr.ReadLine();
+            _sourceFileLineNumber++;
+
             if (row == null) break;
             if (!row.StartsWith("#")) continue;
 

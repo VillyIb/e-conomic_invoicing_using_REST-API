@@ -14,4 +14,6 @@ public class SettingsForEConomicGateway : SettingsBase
     public string X_AgreementGrantToken { get; set; } = string.Empty;
 
     public int PaymentTerms { get; set; } = 1;
+
+    public int LayoutNumber { get; set; } = 21;
 }

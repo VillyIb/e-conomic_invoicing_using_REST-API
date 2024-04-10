@@ -2,7 +2,7 @@
   "profiles": {
     "Eu.Iamia.Invoicing.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": "--Application:CsvFileFullName C:\\Development\\e-conomic_invoicing_using_REST-API\\test\\Eu.Iamia.Invoicing.CSVLoader.UnitTests\\TestData\\G1.csv"
+      "commandLineArgs": "--Application:CsvFileFullName C:\\Development\\e-conomic_invoicing_using_REST-API\\test\\Eu.Iamia.Invoicing.CSVLoader.UnitTests\\TestData\\G4.csv"
     }
   }
 }
