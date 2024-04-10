@@ -12,6 +12,11 @@ public class CustomerReportForTesting : CustomerCustomerReport
         return ReportFile is not null ? ReportFile.Exists : false;
     }
 
+    public bool Exists(string filename)
+    {
+        return new FileInfo(filename).Exists;
+    }
+
     public string GetContent()
     {
         if (ReportFile is null || !ReportFile.Exists) return string.Empty;

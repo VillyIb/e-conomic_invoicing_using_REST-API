@@ -35,6 +35,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eu.Iamia.Reporting.Integrat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eu.Iamia.Utils", "src\Eu.Iamia.Utils\Eu.Iamia.Utils.csproj", "{AD287782-022B-4EEE-A4CC-98823DC0C5D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eu.Iamia.Utils.UnitTests", "test\Eu.Iamia.Utils.UnitTests\Eu.Iamia.Utils.UnitTests.csproj", "{538FE921-2D2C-4FF6-A47F-C82C48F8DFBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,10 @@ Global
 		{AD287782-022B-4EEE-A4CC-98823DC0C5D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD287782-022B-4EEE-A4CC-98823DC0C5D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD287782-022B-4EEE-A4CC-98823DC0C5D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{538FE921-2D2C-4FF6-A47F-C82C48F8DFBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{538FE921-2D2C-4FF6-A47F-C82C48F8DFBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{538FE921-2D2C-4FF6-A47F-C82C48F8DFBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{538FE921-2D2C-4FF6-A47F-C82C48F8DFBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,6 +122,7 @@ Global
 		{FFB591B7-35FF-4A5F-AD9C-76B2B07FB58A} = {2DAF952C-CA92-4F32-9401-2B75DF2CEAE0}
 		{6CD5DBE4-4000-4072-AB64-60716AB2BE95} = {5DA775E7-8B00-4C4F-A9F1-51CB654ACB44}
 		{AD287782-022B-4EEE-A4CC-98823DC0C5D4} = {2DAF952C-CA92-4F32-9401-2B75DF2CEAE0}
+		{538FE921-2D2C-4FF6-A47F-C82C48F8DFBF} = {5DA775E7-8B00-4C4F-A9F1-51CB654ACB44}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8DFD028F-A269-4D03-AC4E-9C9305496793}

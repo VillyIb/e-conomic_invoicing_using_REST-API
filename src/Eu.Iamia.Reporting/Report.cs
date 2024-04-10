@@ -34,7 +34,7 @@ public class CustomerCustomerReport : ReportBase, ICustomerReport
 
     public void Setup(ICustomer customer)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     public ICustomerReport Create(DateTime timestamp)

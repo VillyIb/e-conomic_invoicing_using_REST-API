@@ -1,9 +1,10 @@
 using Eu.Iamia.Reporting.Configuration;
 using Eu.Iamia.Reporting.Contract;
+using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.Reporting.IntegrationTests;
 
-public class ReportShould
+public class CustomerReportShould
 {
     private readonly CustomerReportForTesting _sut;
 
@@ -18,27 +19,82 @@ public class ReportShould
      *
      * Filename should be informative about content.
      *
-     * A: processing invoices
      * Filename should reflect reference and time of execution optionally state (error/info)
      * "nnnn_ffff-llll_MM-dd_HH-mm-ss_[I/E].txt"
      * The Info/Error suffix is updated after the file is closed.
      *
-     * B: processing aggregate report
-     * "{report type}_MM-dd_HH-mm-ss.txt"
      */
 
-    public ReportShould()
+    private ICustomer GetCustomer()
+    {
+        return new Customer
+        {
+            Name = "firstname lastname",
+            CustomerNumber = 99,
+        };
+    }
+
+    private ICustomer GetCustomerWithoutName()
+    {
+        return new Customer
+        {
+            Name = null,
+            CustomerNumber = 99999,
+        };
+    }
+
+
+    private readonly SettingsForReporting _settings;
+
+        public CustomerReportShould()
     {
         using var setup = new Setup();
 
-        var settings = setup.GetSetting<SettingsForReporting>();
+        _settings = setup.GetSetting<SettingsForReporting>();
 
-        _sut = new CustomerReportForTesting(settings);
+        _settings.FilNameFormat = "yyyy-MM-dd_hh-mm-ss";
+
+        _sut = new CustomerReportForTesting(_settings);
     }
+
+    [Fact]
+    public void Given_CustomerWithName_When_Error_CreateRightFilename()
+    {
+        /*
+         * Filename should reflect reference and time of execution optionally state (error/info)
+         * "nnnn_ffff-llll_MM-dd_HH-mm-ss_[I/E].txt"*
+         */
+        var timestamp = DateTime.Now;
+        var customer = GetCustomer();
+
+        _sut.Setup(customer);
+        _sut.Create(timestamp);
+
+
+        var nameParts = customer.Name.Split(' ', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+        var customerPart = $"{customer.CustomerNumber.ToString().TrimNumberToLength(4)}_{nameParts.First().TrimToLength(4,'f')}-{nameParts.Last().TrimToLength(4,'l')}";
+        var timePart = timestamp.ToString("yyyy-MM-dd_hh-mm-ss");
+
+        var expectedFilename = $"{customerPart}_{timePart}_E.txt";
+
+        Assert.False(_sut.Exists(expectedFilename));
+        _sut.Error("Alfa", Alfa);
+        _sut.Close();
+        Assert.True(_sut.Exists(expectedFilename));
+    }
+
+    [Fact]
+    public void Given_CustomerWithOutName_When_Error_CreateRightFilename()
+    {
+
+    }
+
+
 
     [Fact]
     public void Test1()
     {
+        _sut.Setup(GetCustomer());
         _sut.Create(DateTime.Now);
 
         _sut.Error("Alfa", Alfa);
@@ -54,4 +110,11 @@ public class ReportShould
     }
 
     // info should not leave file.
+}
+
+public class Customer : ICustomer
+{
+    public int CustomerNumber { get; init; }
+
+    public string? Name { get; init; }
 }
