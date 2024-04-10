@@ -1,4 +1,7 @@
-﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
+﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
+using Eu.Iamia.Reporting.Contract;
+
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
 
 public class CustomerCache
 {
@@ -67,17 +70,17 @@ public class CustomerCache
     }
 }
 
-public class CachedCustomer
+public class CachedCustomer : ICachedCustomer, ICustomer
 {
-    public int CustomerNumber { get; set; }
+    public int CustomerNumber { get; init; }
 
-    public int PaymentTerms { get; set; }
+    public int PaymentTerms { get; init; }
     
-    public string Address { get; set; }
+    public string? Address { get; init; }
 
-    public string City { get; set; }
+    public string? City { get; init; }
 
-    public string Name { get; set; }
+    public string? Name { get; init; }
 
-    public string Zip { get; set; }
+    public string? Zip { get; init; }
 }

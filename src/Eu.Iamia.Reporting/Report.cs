@@ -2,32 +2,25 @@
 using Eu.Iamia.Reporting.Contract;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
+using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.Reporting;
 
-public class Report : IReport
+public abstract class ReportBase
+{
+
+}
+
+public class CustomerCustomerReport : ReportBase, ICustomerReport
 {
     private readonly SettingsForReporting _settings;
 
-    public static string JsonPrettify(string json)
-    {
-        try
-        {
-            using var jDoc = JsonDocument.Parse(json);
-            return JsonSerializer.Serialize(jDoc, new JsonSerializerOptions { WriteIndented = true });
-        }
-        catch
-        {
-            return json;
-        }
-    }
-
-    public Report(IOptions<SettingsForReporting> settings)
+    public CustomerCustomerReport(IOptions<SettingsForReporting> settings)
     {
         _settings = settings.Value;
     }
 
-    internal Report(SettingsForReporting settings)
+    internal CustomerCustomerReport(SettingsForReporting settings)
     {
         _settings = settings;
     }
@@ -36,10 +29,15 @@ public class Report : IReport
 
     protected FileInfo? ReportFile;
 
-    private bool HasErrors { get; set; } 
+    private bool HasErrors { get; set; }
+    
 
+    public void Setup(ICustomer customer)
+    {
+        throw new NotImplementedException();
+    }
 
-    public IReport Create(DateTime timestamp)
+    public ICustomerReport Create(DateTime timestamp)
     {
         Close();
         HasErrors = false;
@@ -61,17 +59,17 @@ public class Report : IReport
         return _report!;
     }
 
-    public IReport Info(string reference, string message)
+    public ICustomerReport Info(string reference, string message)
     {
-        var p2 = JsonPrettify(message);
+        var p2 = message.JsonPrettify();
 
         EnsureOpenReport().Write($"{Environment.NewLine}Info: {reference}{Environment.NewLine}{p2}{Environment.NewLine}");
         return this;
     }
 
-    public IReport Error(string reference, string message)
+    public ICustomerReport Error(string reference, string message)
     {
-        var p2 = JsonPrettify(message);
+        var p2 = message.JsonPrettify();
 
         EnsureOpenReport().Write($"{Environment.NewLine}Error: {reference}{Environment.NewLine}{p2}{Environment.NewLine}");
         HasErrors = true;
@@ -97,4 +95,9 @@ public class Report : IReport
     {
         Close();
     }
+}
+
+public class AggregateReport : ReportBase
+{
+
 }

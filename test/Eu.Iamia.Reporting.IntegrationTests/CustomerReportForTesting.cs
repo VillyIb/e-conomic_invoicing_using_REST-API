@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Options;
 
 namespace Eu.Iamia.Reporting.IntegrationTests;
-public class ReportForTesting : Report
+public class CustomerReportForTesting : CustomerCustomerReport
 {
-    public ReportForTesting(SettingsForReporting settings) : base(settings)
+    public CustomerReportForTesting(SettingsForReporting settings) : base(settings)
     { }
 
     public bool Exists()

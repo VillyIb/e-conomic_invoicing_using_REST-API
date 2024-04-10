@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Eu.Iamia.ConfigBase\Eu.Iamia.ConfigBase.csproj" />
     <ProjectReference Include="..\Eu.Iamia.Reporting.Contract\Eu.Iamia.Reporting.Contract.csproj" />
+    <ProjectReference Include="..\Eu.Iamia.Utils\Eu.Iamia.Utils.csproj" />
   </ItemGroup>
 
 </Project>

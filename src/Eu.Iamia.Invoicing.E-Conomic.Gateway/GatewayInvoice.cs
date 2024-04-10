@@ -4,6 +4,7 @@ using System.Text;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.DraftInvoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
+using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;
 
@@ -43,7 +44,7 @@ public partial class GatewayBase
         {
            var htmlBodyFail = await GetHtmlBody(response);
 
-            var prettyJson = Utils.JsonPrettify(htmlBodyFail);
+            var prettyJson = htmlBodyFail.JsonPrettify();
             Console.WriteLine($"{Environment.NewLine}{Environment.NewLine}");
             Console.WriteLine($"Failing on input line # {sourceFileLineNumber}" );
             Console.WriteLine(prettyJson);
