@@ -12,11 +12,17 @@ public class SettingsForReporting : SettingsBase
 
     public string OutputDirectory { get; set; } = string.Empty;
 
-    public string FilNameFormat { get; set; } = "yyyy-MM-dd_hh-mm-ss";
+    public string TimePartFormat { get; set; } = "yyyy-MM-dd_hh-mm-ss";
 
-    public string Filename { get; set; } = "{0}_InvoiceReport.txt";
+    public string Filename { get; set; } = "InvoiceReport.txt";
 
     public int MaxErrors { get; set; } = 10;
+
+    public int CustomerNumberLength { get; set; } = 4;
+
+    public int CustomerNameLength { get; set; } = 4;
+
+    public int CustomerSurnameLength { get; set; } = 4;
 
     /// <summary>
     /// True: Closing a file without errors in will be deleted.

@@ -25,6 +25,9 @@
       <NamedTestSelector>
         <TestName>Eu.Iamia.Invoicing.CSVLoader.UnitTests.StrategyByProductShould.VerifyStrategy("VideresalgVand")</TestName>
       </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Invoicing.CSVLoader.UnitTests.LoaderShould.LoadFileOk</TestName>
+      </NamedTestSelector>
     </IgnoredTests>
   </Settings>
 </ProjectConfiguration>

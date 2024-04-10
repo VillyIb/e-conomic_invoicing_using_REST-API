@@ -14,7 +14,11 @@ public class CustomerReportForTesting : CustomerCustomerReport
 
     public bool Exists(string filename)
     {
-        return new FileInfo(filename).Exists;
+        var t1 = new FileInfo(filename);
+        t1.Refresh();
+        var t2 = t1.Exists;
+        
+        return t2;
     }
 
     public string GetContent()

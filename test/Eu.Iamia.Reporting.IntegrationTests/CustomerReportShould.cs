@@ -1,6 +1,5 @@
 using Eu.Iamia.Reporting.Configuration;
 using Eu.Iamia.Reporting.Contract;
-using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.Reporting.IntegrationTests;
 
@@ -46,13 +45,18 @@ public class CustomerReportShould
 
     private readonly SettingsForReporting _settings;
 
-        public CustomerReportShould()
+    public CustomerReportShould()
     {
         using var setup = new Setup();
 
         _settings = setup.GetSetting<SettingsForReporting>();
 
-        _settings.FilNameFormat = "yyyy-MM-dd_hh-mm-ss";
+        _settings.TimePartFormat = "yyyy-MM-dd_HH-mm-ss";
+        _settings.CustomerNameLength = 4;
+        _settings.CustomerNumberLength = 4;
+        _settings.CustomerSurnameLength = 4;
+        _settings.Filename = "CustomerReportShould.txt";
+        //_settings.DiscardNonErrors = true;
 
         _sut = new CustomerReportForTesting(_settings);
     }
@@ -60,22 +64,16 @@ public class CustomerReportShould
     [Fact]
     public void Given_CustomerWithName_When_Error_CreateRightFilename()
     {
-        /*
-         * Filename should reflect reference and time of execution optionally state (error/info)
-         * "nnnn_ffff-llll_MM-dd_HH-mm-ss_[I/E].txt"*
-         */
         var timestamp = DateTime.Now;
         var customer = GetCustomer();
 
         _sut.Setup(customer);
         _sut.Create(timestamp);
 
+        var customerPart = $"__99_firs-last";
+        var timePart = timestamp.ToString("yyyy-MM-dd_HH-mm-ss");
 
-        var nameParts = customer.Name.Split(' ', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-        var customerPart = $"{customer.CustomerNumber.ToString().TrimNumberToLength(4)}_{nameParts.First().TrimToLength(4,'f')}-{nameParts.Last().TrimToLength(4,'l')}";
-        var timePart = timestamp.ToString("yyyy-MM-dd_hh-mm-ss");
-
-        var expectedFilename = $"{customerPart}_{timePart}_E.txt";
+        var expectedFilename = Path.Combine(_settings.OutputDirectory, $"{customerPart}_{timePart}_E_CustomerReportShould.txt");
 
         Assert.False(_sut.Exists(expectedFilename));
         _sut.Error("Alfa", Alfa);
@@ -84,32 +82,79 @@ public class CustomerReportShould
     }
 
     [Fact]
-    public void Given_CustomerWithOutName_When_Error_CreateRightFilename()
+    public void Given_CustomerWithName_When_Info_CreateRightFilename()
     {
+        var timestamp = DateTime.Now;
+        var customer = GetCustomer();
 
+        _sut.Setup(customer);
+        _sut.Create(timestamp);
+
+        var customerPart = $"__99_firs-last";
+        var timePart = timestamp.ToString("yyyy-MM-dd_HH-mm-ss");
+
+        var expectedFilename = Path.Combine(_settings.OutputDirectory, $"{customerPart}_{timePart}_I_CustomerReportShould.txt");
+
+        Assert.True(_sut.Exists(expectedFilename));
+        _sut.Info("Alfa", Alfa);
+        _sut.Close();
+        Assert.True(_sut.Exists(expectedFilename));
     }
-
-
 
     [Fact]
-    public void Test1()
+    public void Given_CustomerWithOutName_When_Error_CreateDefaultFilename()
     {
-        _sut.Setup(GetCustomer());
-        _sut.Create(DateTime.Now);
+        var timestamp = DateTime.Now;
+        var customer = GetCustomerWithoutName();
 
+        _sut.Setup(customer);
+        _sut.Create(timestamp);
+
+        var customerPart = $"9999_ffff-llll";
+        var timePart = timestamp.ToString("yyyy-MM-dd_HH-mm-ss");
+
+        var expectedFilename = Path.Combine(_settings.OutputDirectory, $"{customerPart}_{timePart}_E_CustomerReportShould.txt");
+
+        Assert.False(_sut.Exists(expectedFilename));
         _sut.Error("Alfa", Alfa);
-        _sut.Info("Charlie", Charlie);
-        _sut.Error("Bravo", Bravo);
-
         _sut.Close();
-
-        Assert.True(_sut.Exists());
-        var content = _sut.GetContent();
-        var parts = content.Split("\r\n", StringSplitOptions.RemoveEmptyEntries);
-        Assert.True(parts[0].Contains("Alfa"));
+        Assert.True(_sut.Exists(expectedFilename));
     }
 
-    // info should not leave file.
+    [Fact]
+    public void Given_ClosedReport_When_Info_ThrowsException()
+    {
+        var timestamp = DateTime.Now;
+        var customer = GetCustomer();
+
+        _sut.Setup(customer);
+        _sut.Create(timestamp);
+        _sut.Close();
+
+        _ = Assert.Throws<ApplicationException>(() => _sut.Info("Alfa", Alfa));
+    }
+
+    [Fact]
+    public void Given_DiscardNonErrors_is_True_When_Info_LeavesNoFile()
+    {
+        _settings.DiscardNonErrors = true;
+
+        var timestamp = DateTime.Now;
+        var customer = GetCustomer();
+
+        _sut.Setup(customer);
+        _sut.Create(timestamp);
+
+        var customerPart = $"__99_firs-last";
+        var timePart = timestamp.ToString("yyyy-MM-dd_HH-mm-ss");
+
+        var expectedFilename = Path.Combine(_settings.OutputDirectory, $"{customerPart}_{timePart}_I_CustomerReportShould.txt");
+
+        Assert.True(_sut.Exists(expectedFilename));
+        _sut.Info("Alfa", Alfa);
+        _sut.Close();
+        Assert.False(_sut.Exists(expectedFilename));
+    }
 }
 
 public class Customer : ICustomer

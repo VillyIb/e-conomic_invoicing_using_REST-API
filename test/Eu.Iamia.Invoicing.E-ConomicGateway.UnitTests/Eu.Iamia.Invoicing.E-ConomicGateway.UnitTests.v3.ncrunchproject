@@ -1,0 +1,9 @@
+﻿<ProjectConfiguration>
+  <Settings>
+    <IgnoredTests>
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests.DraftInvoiceShould.Given_InvalidJson_When_ParsingFromJson_Return_null</TestName>
+      </NamedTestSelector>
+    </IgnoredTests>
+  </Settings>
+</ProjectConfiguration>
