@@ -32,54 +32,89 @@ public class CustomerCustomerReport : ReportBase, ICustomerReport
 
     private bool HasErrors { get; set; }
 
-    private ICustomer? _customer;
+    protected int? CustomerNumber { get; set; } = null;
 
-    public void Setup(ICustomer customer)
+    protected string? CustomerName { get; set; } = null;
+
+    internal bool IsOpenForWriting => _report?.BaseStream is not null;
+
+    public ICustomerReport SetCustomer(ICustomer customer)
     {
-        _customer = customer;
-        //throw new NotImplementedException();
+        if (IsOpenForWriting)
+        {
+            return this;
+        }
+
+        if (!IsSameCustomer(customer))
+        {
+            _timeStamp = null;
+            HasErrors = false;
+        }
+
+        CustomerNumber = customer.CustomerNumber;
+        CustomerName = customer.Name;
+
+        return this;
     }
 
-    internal string GetFilename(bool exception)
+    private bool IsSameCustomer(ICustomer customer)
     {
-        if (_customer is null) { throw new ApplicationException($"{nameof(_customer)} is null"); }
+        return customer.CustomerNumber.Equals(CustomerNumber);
+    }
 
-        var namePart = (_customer.Name is not null)
-            ? _customer.Name.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+    //public ICustomerReport SetTime(DateTime timestamp)
+    //{
+    //    if (ReportFile is not null && ReportFile.Exists) { return this; }
+    //    _timeStamp = timestamp;
+    //    return this;
+    //}
+
+    internal string GetFilename(bool hasErrors)
+    {
+        if (CustomerNumber is null) { throw new ApplicationException($"{nameof(CustomerNumber)} is null"); }
+
+        var namePart = (CustomerName is not null)
+            ? CustomerName.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             : new[] { "", "" }
         ;
 
-        var number = _customer.CustomerNumber.ToString().TrimNumberToLength(_settings.CustomerNumberLength);
+        var number = CustomerNumber.ToString().TrimNumberToLength(_settings.CustomerNumberLength);
         var firstname = namePart.First().TrimToLength(_settings.CustomerNameLength, 'f');
         var lastname = namePart.Last().TrimToLength(_settings.CustomerSurnameLength, 'l');
         var customerPart = $"{number}_{firstname}-{lastname}";
-        var timePart = _timeStamp.ToString(_settings.TimePartFormat);
-        var statusPart = exception ? "E" : "I";
+        var timePart = _timeStamp!.Value.ToString(_settings.TimePartFormat);
+        var statusPart = hasErrors ? "E" : "I";
         var contentPart = _settings.Filename;
 
         return Path.Combine(_settings.OutputDirectory, $"{customerPart}_{timePart}_{statusPart}_{contentPart}");
     }
 
-    private DateTime _timeStamp;
+    protected DateTime? _timeStamp = null;
 
-    public ICustomerReport Create(DateTime timestamp)
+    internal void Create()
     {
-        _timeStamp = timestamp;
+        _timeStamp ??= DateTime.Now;
         Close();
-        HasErrors = false;
-        var timestampString = timestamp.ToString(_settings.TimePartFormat);
-        var filename = GetFilename(false);
+        var filename = GetFilename(HasErrors);
         ReportFile = new FileInfo(filename);
-        var fs = ReportFile.OpenWrite();
+        FileStream fs;
+        if (ReportFile.Exists)
+        {
+            fs = ReportFile.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            fs.Position = fs.Length;
+        }
+        else
+        {
+            fs = ReportFile.OpenWrite();
+        }
         _report = new StreamWriter(fs);
-        return this;
     }
 
     private StreamWriter EnsureOpenReport()
     {
         if (_report is null)
         {
-            throw new ApplicationException($"{nameof(_report)} is null");
+            Create();
         }
         return _report!;
     }
@@ -107,21 +142,26 @@ public class CustomerCustomerReport : ReportBase, ICustomerReport
 
         _report.Flush();
         _report.Close();
+        _report = null;
 
         if (!HasErrors && _settings.DiscardNonErrors)
         {
             ReportFile!.Delete();
+            return;
         }
 
-        if (HasErrors)
+        if (!HasErrors)
+            return;
+
+        var fs = new FileInfo(GetFilename(false));
+        if (fs.Exists)
         {
-            var fs = new FileInfo(GetFilename(false));
             fs.MoveTo(GetFilename(true));
+            ReportFile = new FileInfo(fs.FullName);
         }
-
-        _report = null;
     }
 
+    [ExcludeFromCodeCoverage]
     public void Dispose()
     {
         Close();

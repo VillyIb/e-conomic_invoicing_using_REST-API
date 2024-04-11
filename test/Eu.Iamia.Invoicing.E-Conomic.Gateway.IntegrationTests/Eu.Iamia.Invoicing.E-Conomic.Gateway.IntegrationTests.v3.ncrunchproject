@@ -1,9 +1,7 @@
 ﻿<ProjectConfiguration>
   <Settings>
     <IgnoredTests>
-      <FixtureTestSelector>
-        <FixtureName>Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests.GatewayInvoiceShould</FixtureName>
-      </FixtureTestSelector>
+      <AllTestsSelector />
     </IgnoredTests>
   </Settings>
 </ProjectConfiguration>

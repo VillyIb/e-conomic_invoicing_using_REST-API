@@ -16,7 +16,7 @@ public  class Setup : SetupBase
         Register(
             services,
             new E_Conomic.Gateway.Configuration.Setup(configuration),
-            //new Application.Configuration.Setup(configuration),
+            //new Application.Configuration.SetCustomer(configuration),
             new CSVLoader.Configuration.Setup(configuration)
         );
 

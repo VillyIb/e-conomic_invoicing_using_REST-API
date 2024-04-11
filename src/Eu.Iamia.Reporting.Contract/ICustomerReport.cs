@@ -3,9 +3,9 @@
 namespace Eu.Iamia.Reporting.Contract;
 public interface ICustomerReport : IDisposable
 {
-    void Setup(ICustomer customer);
+    ICustomerReport SetCustomer(ICustomer customer);
 
-    ICustomerReport Create(DateTime timestamp);
+    //ICustomerReport SetTime(DateTime timestamp);
 
     ICustomerReport Info(string reference, string message);
 
