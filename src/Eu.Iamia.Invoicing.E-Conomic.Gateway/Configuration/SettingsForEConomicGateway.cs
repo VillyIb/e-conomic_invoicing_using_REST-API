@@ -5,7 +5,7 @@
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Configuration;
 public class SettingsForEConomicGateway : SettingsBase
 {
-    public static string SectionName = "EConomicGateway";
+    public static string SectionName => "EConomicGateway";
 
     public SettingsForEConomicGateway() : base(SectionName) { }
 

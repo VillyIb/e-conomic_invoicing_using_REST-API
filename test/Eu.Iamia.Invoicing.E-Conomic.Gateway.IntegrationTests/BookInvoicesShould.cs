@@ -3,6 +3,7 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 using Eu.Iamia.Invoicing.Loader.Contract;
+using Eu.Iamia.Reporting.Contract;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests;
 public class BookInvoicesShould
@@ -13,6 +14,8 @@ public class BookInvoicesShould
         X_AgreementGrantToken = "Demo",
         X_AppSecretToken = "Demo"
     };
+
+    private static ICustomerReport CustomerReport => new MockedReport();
 
     // ReSharper disable once MemberCanBeMadeStatic.Local
     private (IList<IInputInvoice> Invoices, IList<int> CustomerGroupsToAccept) LoadCSV()
@@ -55,7 +58,7 @@ public class BookInvoicesShould
         Assert.NotNull(invoices);
         Assert.True(invoices.Any());
 
-        var gatewayInvoice = new GatewayBase(_settings, new HttpClientHandler());
+        var gatewayInvoice = new GatewayBase(_settings, CustomerReport, new HttpClientHandler());
         var customerCache = await GetCustomerCache(gatewayInvoice, customerGroupsToAccept);
         var productCache = await GetProductCache(gatewayInvoice);
 
@@ -67,15 +70,13 @@ public class BookInvoicesShould
 
             var invoice = mapper.From(inputInvoice);
 
-            if (invoice is null)
+            if (invoice.Item2 is null)
             {
                 Console.WriteLine($"Faulure on customer: {inputInvoice.CustomerNumber}");
                 continue;
             }
 
-            await gatewayInvoice.PushInvoice(invoice, inputInvoice.SourceFileLineNumber);
+            await gatewayInvoice.PushInvoice(invoice.Item1, invoice.Item2, inputInvoice.SourceFileLineNumber);
         }
-
-
     }
 }

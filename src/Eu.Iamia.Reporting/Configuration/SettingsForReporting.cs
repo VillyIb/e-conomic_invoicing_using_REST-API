@@ -1,4 +1,5 @@
 ﻿using Eu.Iamia.ConfigBase;
+using static Eu.Iamia.ConfigBase.HelpMetadataAttribute;
 
 // ReSharper disable InconsistentNaming
 
@@ -6,9 +7,10 @@ namespace Eu.Iamia.Reporting.Configuration;
 
 public class SettingsForReporting : SettingsBase
 {
-    public static string SectionName = "Reporting";
+    public static string SectionName => "Reporting";
 
-    public SettingsForReporting() : base(SectionName) { }
+    public SettingsForReporting() : base(SectionName)
+    { }
 
     public string OutputDirectory { get; set; } = string.Empty;
 
@@ -28,7 +30,8 @@ public class SettingsForReporting : SettingsBase
     /// True: Closing a file without errors in will be deleted.
     /// False: Files ar kept.
     /// </summary>
-    public bool DiscardNonErrors { get; set; } = false;
+    [HelpMetadata("Only keep logfiles showing errors","true|false")]
+    public bool DiscardNonErrorLogfiles { get; set; } = false;
 
 
 }

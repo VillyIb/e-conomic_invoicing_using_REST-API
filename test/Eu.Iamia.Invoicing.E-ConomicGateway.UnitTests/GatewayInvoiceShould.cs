@@ -20,8 +20,8 @@ public class GatewayInvoiceShould : GatewayBaseShould
     {
         MockResponse(HttpStatusCode.OK);
 
-        using var sut = new GatewayBase(_settings, HttpMessageHandler);
-        var result = await sut.PushInvoice(new Invoice(), -9);
+        using var sut = new GatewayBase(_settings, new MockedReport(), HttpMessageHandler);
+        var result = await sut.PushInvoice(MockedCustomer.Valid(), new Invoice(), -9);
 
         Mock.VerifyAll();
 
@@ -34,9 +34,9 @@ public class GatewayInvoiceShould : GatewayBaseShould
     {
         MockResponse(HttpStatusCode.NotFound);
 
-        using var sut = new GatewayBase(_settings, HttpMessageHandler);
-
-        _ =await Assert.ThrowsAsync<HttpRequestException>(async () =>   await sut.PushInvoice(new Invoice(),-9));
+        using var sut = new GatewayBase(_settings, new MockedReport(), HttpMessageHandler);
+        
+        _ = await Assert.ThrowsAsync<HttpRequestException>(async () =>   await sut.PushInvoice(MockedCustomer.Valid(), new Invoice(),-9));
 
         Mock.VerifyAll();
 
@@ -47,7 +47,7 @@ public class GatewayInvoiceShould : GatewayBaseShould
     {
         MockResponse(HttpStatusCode.OK);
 
-        using var sut = new GatewayBase(_settings, HttpMessageHandler);
+        using var sut = new GatewayBase(_settings, new MockedReport(), HttpMessageHandler);
         var result = await sut.ReadInvoice();
 
         Mock.VerifyAll();
@@ -61,7 +61,7 @@ public class GatewayInvoiceShould : GatewayBaseShould
     {
         MockResponse(HttpStatusCode.NotFound);
 
-        using var sut = new GatewayBase(_settings, HttpMessageHandler);
+        using var sut = new GatewayBase(_settings, new MockedReport(), HttpMessageHandler);
         var result = await sut.ReadInvoice();
 
         Mock.VerifyAll();

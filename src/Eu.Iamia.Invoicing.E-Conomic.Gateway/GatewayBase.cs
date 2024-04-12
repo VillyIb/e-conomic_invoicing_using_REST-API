@@ -2,19 +2,20 @@
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
+using Eu.Iamia.Reporting.Contract;
 using Microsoft.Extensions.Options;
-
-
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;
 
 public partial class GatewayBase : IEconomicGateway, IDisposable
 {
-    private readonly SettingsForEConomicGateway _settings;
+    protected readonly ICustomerReport _report;
+    protected readonly SettingsForEConomicGateway _settings;
     private readonly HttpClient _httpClient;
 
-    public GatewayBase(IOptions<SettingsForEConomicGateway> settings)
+    public GatewayBase(IOptions<SettingsForEConomicGateway> settings, ICustomerReport report)
     {
+        _report = report;
         _settings = settings.Value;
         _httpClient = new HttpClient();
     }
@@ -24,9 +25,10 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
     /// </summary>
     /// <param name="settings"></param>
     /// <param name="httpClientHandler"></param>
-    internal GatewayBase(SettingsForEConomicGateway settings, HttpMessageHandler httpClientHandler)
+    internal GatewayBase(SettingsForEConomicGateway settings, ICustomerReport report,  HttpMessageHandler httpClientHandler)
     {
         _settings = settings;
+        _report = report;
         _httpClient = new HttpClient(httpClientHandler);
     }
 

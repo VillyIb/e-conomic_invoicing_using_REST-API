@@ -10,4 +10,6 @@ public interface ICustomerReport : IDisposable
     ICustomerReport Info(string reference, string message);
 
     ICustomerReport Error(string reference, string message);
+
+    void Close();
 }

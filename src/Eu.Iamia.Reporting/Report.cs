@@ -144,7 +144,7 @@ public class CustomerCustomerReport : ReportBase, ICustomerReport
         _report.Close();
         _report = null;
 
-        if (!HasErrors && _settings.DiscardNonErrors)
+        if (!HasErrors && _settings.DiscardNonErrorLogfiles)
         {
             ReportFile!.Delete();
             return;

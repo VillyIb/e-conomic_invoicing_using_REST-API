@@ -3,7 +3,7 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests;
 
-public static class MockedCustomer
+public static class MockedCustomer 
 {
     public static CachedCustomer Valid()
     {
@@ -12,7 +12,7 @@ public static class MockedCustomer
             CustomerNumber = 99999,
             Address = "Customer1 address",
             City = "Customer 1 city",
-            Name = "Customer 1 name",
+            Name = "Mocked Customer",
             PaymentTerms = 99999,
             Zip = "3390"
         };

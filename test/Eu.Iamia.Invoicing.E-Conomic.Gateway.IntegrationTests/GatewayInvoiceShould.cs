@@ -26,7 +26,7 @@ public class GatewayInvoiceShould
     public async Task Given_Invoice_When_PushInvoice_Handle_OkResponse()
     {
         Invoice invalidInvoice = MockedInvoiceExtensions.Valid(MockedCustomer.Valid());
-        var result = await _sut.PushInvoice(invalidInvoice, 1);
+        var result = await _sut.PushInvoice(MockedCustomer.Valid(), invalidInvoice, 1);
         Assert.NotNull(result);
         Assert.True(result.DraftInvoiceNumber > 0);
     }
@@ -35,6 +35,6 @@ public class GatewayInvoiceShould
     public async Task Given_Invoice_With_Invalid_PaymentTerm_When_PushInvoice_Handle_Error()
     {
         Invoice invalidInvoice = MockedInvoiceExtensions.Valid(MockedCustomer.Valid()).Invalid_PaymentTerm();
-        var result = await _sut.PushInvoice(invalidInvoice, 1);
+        var result = await _sut.PushInvoice(MockedCustomer.Valid(), invalidInvoice, 1);
     }
 }

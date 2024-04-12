@@ -18,7 +18,7 @@ public class GatewayProductShould : GatewayBaseShould
     {
         MockResponse(HttpStatusCode.OK);
 
-        using var sut = new GatewayBase(_settings, HttpMessageHandler);
+        using var sut = new GatewayBase(_settings, new MockedReport(), HttpMessageHandler);
         var result = await sut.ReadProductsPaged(0, 20);
 
         Mock.VerifyAll();
@@ -32,7 +32,7 @@ public class GatewayProductShould : GatewayBaseShould
     {
         MockResponse(HttpStatusCode.NotFound);
 
-        using var sut = new GatewayBase(_settings, HttpMessageHandler);
+        using var sut = new GatewayBase(_settings, new MockedReport(), HttpMessageHandler);
         var result = await sut.ReadProductsPaged(0, 20);
 
         Mock.VerifyAll();

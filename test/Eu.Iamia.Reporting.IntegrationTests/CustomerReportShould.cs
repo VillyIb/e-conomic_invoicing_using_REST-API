@@ -56,7 +56,7 @@ public class CustomerReportShould
         _settings.CustomerNumberLength = 4;
         _settings.CustomerSurnameLength = 4;
         _settings.Filename = "CustomerReportShould.txt";
-        _settings.DiscardNonErrors = false;
+        _settings.DiscardNonErrorLogfiles = false;
 
         _sut = new CustomerReportForTesting(_settings);
     }
@@ -212,7 +212,7 @@ public class CustomerReportShould
     [Fact]
     public void Given_DiscardNonErrors_is_True_When_Info_LeavesNoFile()
     {
-        _settings.DiscardNonErrors = true;
+        _settings.DiscardNonErrorLogfiles = true;
         const int customerId = 37;
 
         _sut.SetCustomer(GetCustomer(customerId));

@@ -4,6 +4,7 @@ using System.Text;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.DraftInvoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
 using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;
@@ -30,43 +31,48 @@ public partial class GatewayBase
     }
 
     // TODO return a more explicit status code !
-    internal async Task<DraftInvoice?> PushInvoice(Invoice invoice, int sourceFileLineNumber)
+    internal async Task<DraftInvoice?> PushInvoice(CachedCustomer customer, Invoice invoice, int sourceFileLineNumber)
     {
-        SetAuthenticationHeaders();
+        _report.SetCustomer(customer);
 
-        var json = invoice.ToJson();
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        var response = await _httpClient.PostAsync("https://restapi.e-conomic.com/invoices/drafts", content);
-
-
-        if (!response.IsSuccessStatusCode)
+        try
         {
-           var htmlBodyFail = await GetHtmlBody(response);
+            SetAuthenticationHeaders();
 
-            var prettyJson = htmlBodyFail.JsonPrettify();
-            Console.WriteLine($"{Environment.NewLine}{Environment.NewLine}");
-            Console.WriteLine($"Failing on input line # {sourceFileLineNumber}" );
-            Console.WriteLine(prettyJson);
+            var json = invoice.ToJson();
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            // TODO return informative information.
-            // A: return Either<DraftInvoice;ErrorMessage>
-            // B: throw exception with ErrorMessage
-            // C: Log error message and throw HttpRequestException
-            // D: Log error and return null
-            // E: Log to console and return null
+            var response = await _httpClient.PostAsync("https://restapi.e-conomic.com/invoices/drafts", content);
 
-            var sourceFileLineNumberToErrorMessag3 = sourceFileLineNumber;
-            // error
-            var x = invoice.Customer;
-            response.EnsureSuccessStatusCode();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var htmlBodyFail = await GetHtmlBody(response);
+                _report.Error("", htmlBodyFail);
+
+                response.EnsureSuccessStatusCode();
+            }
+
+            var htmlBody = await GetHtmlBody(response);
+
+            var draftInvoice = DraftInvoiceExtensions.FromJson(htmlBody);
+
+            _report.Info("PushInvoice", htmlBody);
+
+            return draftInvoice;
         }
-
-        var htmlBody = await GetHtmlBody(response);
-
-        var draftInvoice = DraftInvoiceExtensions.FromJson(htmlBody);
-
-        return draftInvoice;
+        catch (HttpRequestException)
+        {
+            return new DraftInvoice
+            {
+                DraftInvoiceNumber = -1, 
+                GrossAmount = 0.0
+            };
+        }
+        finally
+        {
+            _report.Close();
+        }
     }
 
     private Mapper? _mapper;
@@ -75,17 +81,14 @@ public partial class GatewayBase
 
     public async Task<IDraftInvoice?> PushInvoice(IInputInvoice inputInvoice, int sourceFileLineNumber)
     {
-
         var economicInvoice = Mapper.From(inputInvoice);
 
-        if (economicInvoice == null)
+        if (economicInvoice.Item2 == null)
         {
             throw new ArgumentException($"Unable to map inputInvoice {inputInvoice.CustomerNumber}{Environment.NewLine}, Source file line: {inputInvoice.SourceFileLineNumber}");
         }
 
-        var status = await PushInvoice(economicInvoice, sourceFileLineNumber);
+        var status = await PushInvoice(economicInvoice.Item1, economicInvoice.Item2, sourceFileLineNumber);
         return status;
     }
-
-
 }
