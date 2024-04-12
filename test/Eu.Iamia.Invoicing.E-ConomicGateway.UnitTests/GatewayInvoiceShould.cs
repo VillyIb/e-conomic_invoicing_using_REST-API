@@ -19,6 +19,7 @@ public class GatewayInvoiceShould : GatewayBaseShould
     public async Task GivenMockedHandler_When_PushInvoice_Handle_OkResponse()
     {
         MockResponse(HttpStatusCode.OK);
+        // create a real mock and check for right calls. var mockedReport = Substi
 
         using var sut = new GatewayBase(_settings, new MockedReport(), HttpMessageHandler);
         var result = await sut.PushInvoice(MockedCustomer.Valid(), new Invoice(), -9);

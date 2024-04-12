@@ -33,8 +33,6 @@ public partial class GatewayBase
     // TODO return a more explicit status code !
     internal async Task<DraftInvoice?> PushInvoice(CachedCustomer customer, Invoice invoice, int sourceFileLineNumber)
     {
-        _report.SetCustomer(customer);
-
         try
         {
             SetAuthenticationHeaders();
@@ -69,26 +67,36 @@ public partial class GatewayBase
                 GrossAmount = 0.0
             };
         }
-        finally
-        {
-            _report.Close();
-        }
     }
 
     private Mapper? _mapper;
 
-    private Mapper Mapper => _mapper ??= new Mapper(_settings, CustomerCache, ProductCache);
+    private Mapper Mapper => _mapper ??= new Mapper(_settings, CustomerCache!, ProductCache!);
 
     public async Task<IDraftInvoice?> PushInvoice(IInputInvoice inputInvoice, int sourceFileLineNumber)
     {
-        var economicInvoice = Mapper.From(inputInvoice);
+        _report.SetCustomer(new CachedCustomer{Name = "---- ----", CustomerNumber = inputInvoice.CustomerNumber});
 
-        if (economicInvoice.Item2 == null)
+        try
         {
-            throw new ArgumentException($"Unable to map inputInvoice {inputInvoice.CustomerNumber}{Environment.NewLine}, Source file line: {inputInvoice.SourceFileLineNumber}");
-        }
+            var converted = Mapper.From(inputInvoice);
 
-        var status = await PushInvoice(economicInvoice.Item1, economicInvoice.Item2, sourceFileLineNumber);
-        return status;
+            var status = await PushInvoice(converted.customer, converted.ecInvoice, sourceFileLineNumber);
+            return status;
+        }
+        catch (ApplicationException ex)
+        {
+            _report.Error("PushInvoice", ex.Message);
+
+            return new DraftInvoice
+            {
+                DraftInvoiceNumber = -1,
+                GrossAmount = 0.0
+            };
+        }
+        finally
+        {
+            _report.Close(); 
+        }
     }
 }

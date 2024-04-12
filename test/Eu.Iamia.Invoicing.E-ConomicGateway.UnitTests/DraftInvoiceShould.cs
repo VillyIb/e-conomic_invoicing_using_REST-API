@@ -59,8 +59,6 @@ public  class DraftInvoiceShould
     {
         var invoice = DraftInvoiceExtensions.FromJson(draftInvoiceJson.Replace("{","["));
 
-        Assert.NotNull(invoice);
-        Assert.Equal(368, invoice.DraftInvoiceNumber);
-        Assert.Equal(1.38, invoice.GrossAmount);
+        Assert.Null(invoice);
     }
 }

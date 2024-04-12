@@ -25,14 +25,20 @@ public static class DraftInvoiceExtensions
 {
     public static DraftInvoice? FromJson(string json)
     {
-        var options = new JsonSerializerOptions
+        try
         {
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
-            Converters = { new JsonStringEnumConverter() }
-        };
+            var options = new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault, Converters = { new JsonStringEnumConverter() }
+            };
 
-        var result = JsonSerializer.Deserialize<DraftInvoice>(json, options);
+            var result = JsonSerializer.Deserialize<DraftInvoice>(json, options);
 
-        return result;
+            return result;
+        }
+        catch (JsonException )
+        {
+            return null;
+        }
     }
 }

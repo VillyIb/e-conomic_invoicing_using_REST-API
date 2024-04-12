@@ -32,7 +32,7 @@ public class Mapper
     /// <returns></returns>
     /// <exception cref="ApplicationException"></exception>
     /// <seealso cref="https://restdocs.e-conomic.com/#post-invoices-drafts"/>
-    public (CachedCustomer, Invoice) From(IInputInvoice inputInvoice)
+    public (CachedCustomer customer, Invoice ecInvoice) From(IInputInvoice inputInvoice)
     {
         var inputInvoiceCustomerNumber = inputInvoice.CustomerNumber;
         var customer = CustomerMustExist(inputInvoiceCustomerNumber, inputInvoice.SourceFileLineNumber);
