@@ -399,3 +399,4 @@ FodyWeavers.xsd
 
 # Files holding secret information
 appsettings.*.json
+launchSettings.json
