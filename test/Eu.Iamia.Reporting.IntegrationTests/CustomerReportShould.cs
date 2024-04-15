@@ -10,21 +10,7 @@ public class CustomerReportShould
     private const string Alfa = "{\"message\":\"Validation failed. 2 errors found.\",\"errorCode\":\"E04300\", \"developerHint\":\"Inspect validation errors and correct your request.\", \"logId\":\"86d2a1f150c392bb-CPH\", \"httpStatusCode\":400,\"errors\":{ \"paymentTerms\":{\"errors\":[{\"propertyName\":\"paymentTerms\",\"errorMessage\":\"PaymentTerms '4711' not found.\",\"errorCode\":\"E07080\",\"inputValue\":4711,\"developerHint\":\"Find a list of paymentTermss at https://restapi.e-conomic.com/payment-terms .\"}]}, \"paymentTermsType\":{\"errors\":[{\"propertyName\":\"paymentTermsType\",\"errorMessage\":\"Payment terms type does not match the type on the payment terms specified.\", \"errorCode\":\"E07180\",\"inputValue\":\"invoiceMonth\",\"developerHint\":\"Either specify the matching payment terms type for the payment terms in question, or omit the property.\"}]}},\"logTime\":\"2024-03-31T21:09:13\",\"errorCount\":2}";
 
     private const string Bravo = "{'message':'Validation failed. 2 errors found.','errorCode':'E04300', 'developerHint':'Inspect validation errors and correct your request.', 'logId':'86d2a1f150c392bb-CPH', 'httpStatusCode':400,'errors':{ 'paymentTerms':{'errors':[{'propertyName':'paymentTerms','errorMessage':'PaymentTerms '4711' not found.','errorCode':'E07080','inputValue':4711,'developerHint':'Find a list of paymentTermss at https://restapi.e-conomic.com/payment-terms .'}]}, 'paymentTermsType':{'errors':[{'propertyName':'paymentTermsType','errorMessage':'Payment terms type does not match the type on the payment terms specified.', 'errorCode':'E07180','inputValue':'invoiceMonth','developerHint':'Either specify the matching payment terms type for the payment terms in question, or omit the property.'}]}},'logTime':'2024-03-31T21:09:13','errorCount':2}";
-
-
-    /*
-     * Expected behaviour.
-     *
-     * Filename should be informative about content.
-     *
-     * Filename should reflect reference and time of execution optionally state (error/info)
-     * "nnnn_ffff-llll_MM-dd_HH-mm-ss_[I/E]_name.txt"
-     * The Customer can be updated multiple times, eg. name can be added.
-     * The file is not created until the firste write, then the filename is locked. Futher calls to 
-     * The Info/Error suffix is updated after the file is closed.
-     *
-     */
-
+    
     private ICustomer GetCustomer(int id = 99)
     {
         return new Customer
@@ -61,6 +47,9 @@ public class CustomerReportShould
         _sut = new CustomerReportForTesting(_settings);
     }
 
+    /// <summary>
+    /// A logfile name is upon close changed to contain an '_E' suffix if there has been any errors written to it.
+    /// </summary>
     [Fact]
     public void Given_CustomerWithName_When_Error_CreateErrorFilename()
     {
@@ -79,6 +68,9 @@ public class CustomerReportShould
         _sut.DeleteFile(expectedErrorFilename);
     }
 
+    /// <summary>
+    /// A logfile without any errors written to it should have an '_I' suffix.
+    /// </summary>
     [Fact]
     public void Given_CustomerWithName_When_Info_LeaveInfoFilename()
     {
@@ -98,6 +90,9 @@ public class CustomerReportShould
 
     }
 
+    /// <summary>
+    /// A logfile where the customer is unknown will have a default '_ffff-llll' name section.
+    /// </summary>
     [Fact]
     public void Given_CustomerWithOutName_When_Error_LeaveDefaultErrorFilename()
     {
@@ -117,7 +112,7 @@ public class CustomerReportShould
     }
 
     /// <summary>
-    /// Updating the customer after the file is created is ignored.
+    /// Changing the Customer section of a filename is ignored if the file is created.
     /// </summary>
     [Fact]
     public void Given_FileIsCreated_When_SetCustomer_CustomerIsUnchanged()
@@ -143,7 +138,7 @@ public class CustomerReportShould
     }
 
     /// <summary>
-    /// Updating the customer to a another customer has new customer values.
+    /// Changing the Customer section is accepted if the file isn't created.
     /// </summary>
     [Fact]
     public void Given_FileIsNotCreated_When_SetCustomer_CustomerIsChanged()
@@ -162,6 +157,9 @@ public class CustomerReportShould
         Assert.Equal(customerWithName.CustomerNumber, _sut.GetCustomerNumber());
     }
 
+    /// <summary>
+    /// A logfile can be reopened for writing if then name hasn't changed.
+    /// </summary>
     [Fact]
     public void Given_file_is_created_written_closed_opened_written_AllTextIsRetained()
     {
@@ -209,6 +207,9 @@ public class CustomerReportShould
         _sut.DeleteFile(expectedTemporaryFilename);
     }
 
+    /// <summary>
+    /// Files without any error written to it will optionally be deleted after close.
+    /// </summary>
     [Fact]
     public void Given_DiscardNonErrors_is_True_When_Info_LeavesNoFile()
     {
