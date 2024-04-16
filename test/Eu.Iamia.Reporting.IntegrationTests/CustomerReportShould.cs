@@ -10,7 +10,7 @@ public class CustomerReportShould
     private const string Alfa = "{\"message\":\"Validation failed. 2 errors found.\",\"errorCode\":\"E04300\", \"developerHint\":\"Inspect validation errors and correct your request.\", \"logId\":\"86d2a1f150c392bb-CPH\", \"httpStatusCode\":400,\"errors\":{ \"paymentTerms\":{\"errors\":[{\"propertyName\":\"paymentTerms\",\"errorMessage\":\"PaymentTerms '4711' not found.\",\"errorCode\":\"E07080\",\"inputValue\":4711,\"developerHint\":\"Find a list of paymentTermss at https://restapi.e-conomic.com/payment-terms .\"}]}, \"paymentTermsType\":{\"errors\":[{\"propertyName\":\"paymentTermsType\",\"errorMessage\":\"Payment terms type does not match the type on the payment terms specified.\", \"errorCode\":\"E07180\",\"inputValue\":\"invoiceMonth\",\"developerHint\":\"Either specify the matching payment terms type for the payment terms in question, or omit the property.\"}]}},\"logTime\":\"2024-03-31T21:09:13\",\"errorCount\":2}";
 
     private const string Bravo = "{'message':'Validation failed. 2 errors found.','errorCode':'E04300', 'developerHint':'Inspect validation errors and correct your request.', 'logId':'86d2a1f150c392bb-CPH', 'httpStatusCode':400,'errors':{ 'paymentTerms':{'errors':[{'propertyName':'paymentTerms','errorMessage':'PaymentTerms '4711' not found.','errorCode':'E07080','inputValue':4711,'developerHint':'Find a list of paymentTermss at https://restapi.e-conomic.com/payment-terms .'}]}, 'paymentTermsType':{'errors':[{'propertyName':'paymentTermsType','errorMessage':'Payment terms type does not match the type on the payment terms specified.', 'errorCode':'E07180','inputValue':'invoiceMonth','developerHint':'Either specify the matching payment terms type for the payment terms in question, or omit the property.'}]}},'logTime':'2024-03-31T21:09:13','errorCount':2}";
-    
+
     private ICustomer GetCustomer(int id = 99)
     {
         return new MockedCustomer
@@ -167,37 +167,36 @@ public class CustomerReportShould
 
         var customerWithoutName = GetCustomerWithoutName(customerId);
         _sut.SetCustomer(customerWithoutName);
-        _sut.Error("Alfa", Alfa);
 
+        _sut.Error("Alfa", Alfa);
         _sut.Close();
 
         _sut.Info("Bravo", Bravo);
         _sut.Close();
 
         var content = _sut.GetContent();
-        var lines = content.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        var lines = content.Split(new[] { "\r\n" }, StringSplitOptions.None).ToList();
 
+        var elements = new List<string>
         {
-            var asserts = new List<Action<string>>
+            lines[1]
+            , lines[2]
+            , lines[3]
+            , lines[36]
+            , lines[37]
+        };
+
+        var asserts = new List<Action<string>>
             {
                 state => Assert.Equal("Error: Alfa", state),
                 state => Assert.Equal("{", state),
-                state => Assert.Equal("\"message\": \"Validation failed. 2 errors found.\",", state),
-                state => Assert.Equal("\"errorCode\": \"E04300\",", state),
-                state => Assert.Equal("\"developerHint\": \"Inspect validation errors and correct your request.\",", state),
-            };
-
-            Assert.Collection(lines.Take(5), asserts.ToArray());
-        }
-
-        {
-            var asserts = new List<Action<string>>
-            {
+                state => Assert.Equal("  \"message\": \"Validation failed. 2 errors found.\",", state),
                 state => Assert.Equal("Info: Bravo", state),
-            };
+                state => Assert.StartsWith("{'message':'Validation failed. 2 errors", state)
+            }.ToArray();
 
-            Assert.Collection(lines.Skip(34).Take(1), asserts.ToArray());
-        }
+
+        Assert.Collection(elements, asserts);
 
         var customerPart = $"__{customerId}_ffff-llll";
         var timePart = _sut.GetTimeStamp()!.Value.ToString("yyyy-MM-dd_HH-mm-ss");
