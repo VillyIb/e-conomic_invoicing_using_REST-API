@@ -13,7 +13,7 @@ public class CustomerReportShould
     
     private ICustomer GetCustomer(int id = 99)
     {
-        return new Customer
+        return new MockedCustomer
         {
             Name = "firstname lastname",
             CustomerNumber = id,
@@ -22,7 +22,7 @@ public class CustomerReportShould
 
     private ICustomer GetCustomerWithoutName(int id = 9999)
     {
-        return new Customer
+        return new MockedCustomer
         {
             Name = null,
             CustomerNumber = id,
@@ -229,6 +229,9 @@ public class CustomerReportShould
         _sut.DeleteFile(expectedTemporaryFilename);
     }
 
+    /// <summary>
+    /// Logfile must contain indication of logLevel, key and a structured message (JsonPretty).
+    /// </summary>
     [Fact]
     public void Given_Alfa_as_Key_and_Body_When_Error_File_Contains_ExpectedText()
     {
@@ -247,26 +250,39 @@ public class CustomerReportShould
 
         var content = _sut.GetContent();
         var lines = content
-            .Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-            .Take(5)
+            .Split(new[] { "\r\n" }, StringSplitOptions.None)
+            .ToList()
         ;
+
+        var elements = new List<string>
+        {
+             lines[1]
+            , lines[2]
+            , lines[3]
+            , lines[4]
+            , lines[5]
+            , lines[9]
+            , lines[12]
+        };
 
         var asserts = new List<Action<string>>
         {
             state => Assert.Equal("Error: Alfa", state),
             state => Assert.Equal("{", state),
-            state => Assert.Equal("\"message\": \"Validation failed. 2 errors found.\",", state),
-            state => Assert.Equal("\"errorCode\": \"E04300\",", state),
-            state => Assert.Equal("\"developerHint\": \"Inspect validation errors and correct your request.\",", state)
-        };
+            state => Assert.Equal("  \"message\": \"Validation failed. 2 errors found.\",", state),
+            state => Assert.Equal("  \"errorCode\": \"E04300\",", state),
+            state => Assert.Equal("  \"developerHint\": \"Inspect validation errors and correct your request.\",", state),
+            state => Assert.Equal("    \"paymentTerms\": {", state),
+            state => Assert.Equal("          \"propertyName\": \"paymentTerms\",", state)
+        }.ToArray();
 
-        Assert.Collection(lines, asserts.ToArray());
+        Assert.Collection(elements, asserts);
 
         _sut.DeleteFile(expectedErrorFilename);
     }
 }
 
-public class Customer : ICustomer
+public class MockedCustomer : ICustomer
 {
     public int CustomerNumber { get; init; }
 
