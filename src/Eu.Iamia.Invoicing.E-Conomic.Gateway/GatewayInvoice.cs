@@ -5,7 +5,6 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.DraftInvoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
-using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;
 
@@ -20,17 +19,24 @@ public partial class GatewayBase
             SetAuthenticationHeaders();
 
             var response = await _httpClient.GetAsync("https://restapi.e-conomic.com/invoices/drafts/340");
-            response.EnsureSuccessStatusCode();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var htmlBodyFail = await GetHtmlBody(response);
+                Report.Error("ReadInvoice", htmlBodyFail);
+
+                response.EnsureSuccessStatusCode();
+            }
+
             var htmlBody = await GetHtmlBody(response);
             return htmlBody;
         }
-        catch (Exception ex)
+        catch (HttpRequestException ex)
         {
-            return ex.ToString();
+            return ex.StatusCode.ToString() ?? string.Empty;
         }
     }
 
-    // TODO return a more explicit status code !
     internal async Task<DraftInvoice?> PushInvoice(CachedCustomer customer, Invoice invoice, int sourceFileLineNumber)
     {
         try
@@ -45,7 +51,7 @@ public partial class GatewayBase
             if (!response.IsSuccessStatusCode)
             {
                 var htmlBodyFail = await GetHtmlBody(response);
-                _report.Error("PushInvoice", htmlBodyFail);
+                Report.Error("PushInvoice", htmlBodyFail);
 
                 response.EnsureSuccessStatusCode();
             }
@@ -54,7 +60,7 @@ public partial class GatewayBase
 
             var draftInvoice = DraftInvoiceExtensions.FromJson(htmlBody);
 
-            _report.Info("PushInvoice", htmlBody);
+            Report.Info("PushInvoice", htmlBody);
 
             return draftInvoice;
         }
@@ -70,11 +76,11 @@ public partial class GatewayBase
 
     private Mapper? _mapper;
 
-    private Mapper Mapper => _mapper ??= new Mapper(_settings, CustomerCache!, ProductCache!);
+    private Mapper Mapper => _mapper ??= new Mapper(Settings, CustomerCache!, ProductCache!);
 
     public async Task<IDraftInvoice?> PushInvoice(IInputInvoice inputInvoice, int sourceFileLineNumber)
     {
-        _report.SetCustomer(new CachedCustomer { Name = "---- ----", CustomerNumber = inputInvoice.CustomerNumber });
+        Report.SetCustomer(new CachedCustomer { Name = "---- ----", CustomerNumber = inputInvoice.CustomerNumber });
 
         try
         {
@@ -85,7 +91,7 @@ public partial class GatewayBase
         }
         catch (ApplicationException ex)
         {
-            _report.Error("PushInvoice", ex.Message);
+            Report.Error("PushInvoice", ex.Message);
 
             return new DraftInvoice
             {
@@ -95,7 +101,7 @@ public partial class GatewayBase
         }
         finally
         {
-            _report.Close();
+            Report.Close();
         }
     }
 }

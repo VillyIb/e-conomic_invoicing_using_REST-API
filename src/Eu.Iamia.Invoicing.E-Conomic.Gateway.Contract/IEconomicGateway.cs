@@ -8,7 +8,7 @@ public interface IEconomicGateway
 
     Task LoadCustomerCache(IList<int> customerGroupsToAccept);
 
-    Task LoadProcuctCache();
+    Task LoadProductCache();
 
     Task<string> ReadCustomersPaged(int page, int pageSize);
 

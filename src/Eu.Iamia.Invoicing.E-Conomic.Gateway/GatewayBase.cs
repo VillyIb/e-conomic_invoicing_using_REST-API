@@ -9,14 +9,14 @@ namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;
 
 public partial class GatewayBase : IEconomicGateway, IDisposable
 {
-    protected readonly ICustomerReport _report;
-    protected readonly SettingsForEConomicGateway _settings;
+    protected readonly ICustomerReport Report;
+    protected readonly SettingsForEConomicGateway Settings;
     private readonly HttpClient _httpClient;
 
     public GatewayBase(IOptions<SettingsForEConomicGateway> settings, ICustomerReport report)
     {
-        _report = report;
-        _settings = settings.Value;
+        Report = report;
+        Settings = settings.Value;
         _httpClient = new HttpClient();
     }
 
@@ -24,19 +24,20 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
     /// For UnitTesting.
     /// </summary>
     /// <param name="settings"></param>
+    /// <param name="report"></param>
     /// <param name="httpClientHandler"></param>
     internal GatewayBase(SettingsForEConomicGateway settings, ICustomerReport report, HttpMessageHandler httpClientHandler)
     {
-        _settings = settings;
-        _report = report;
+        Settings = settings;
+        Report = report;
         _httpClient = new HttpClient(httpClientHandler);
     }
 
-    public void SetIdempotencyKey(string idempotencyKey)
-    {
-        _httpClient.DefaultRequestHeaders.Remove("Idempotency-Key");
-        _httpClient.DefaultRequestHeaders.Add("Idempotency-Key", idempotencyKey);
-    }
+    //public void SetIdempotencyKey(string idempotencyKey)
+    //{
+    //    _httpClient.DefaultRequestHeaders.Remove("Idempotency-Key");
+    //    _httpClient.DefaultRequestHeaders.Add("Idempotency-Key", idempotencyKey);
+    //}
 
     public void SetDemoAuthenticationHeaders()
     {
@@ -68,14 +69,14 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
 
     protected void SetAuthenticationHeaders()
     {
-        CheckToken(_settings.X_AgreementGrantToken, nameof(_settings.X_AgreementGrantToken));
-        CheckToken(_settings.X_AppSecretToken, nameof(_settings.X_AppSecretToken));
+        CheckToken(Settings.X_AgreementGrantToken, nameof(Settings.X_AgreementGrantToken));
+        CheckToken(Settings.X_AppSecretToken, nameof(Settings.X_AppSecretToken));
 
         _httpClient.DefaultRequestHeaders.Remove("X-AppSecretToken");
-        _httpClient.DefaultRequestHeaders.Add("X-AppSecretToken", _settings.X_AppSecretToken);
+        _httpClient.DefaultRequestHeaders.Add("X-AppSecretToken", Settings.X_AppSecretToken);
 
         _httpClient.DefaultRequestHeaders.Remove("X-AgreementGrantToken");
-        _httpClient.DefaultRequestHeaders.Add("X-AgreementGrantToken", _settings.X_AgreementGrantToken);
+        _httpClient.DefaultRequestHeaders.Add("X-AgreementGrantToken", Settings.X_AgreementGrantToken);
     }
 
     private static async Task<string> GetHtmlBody(HttpResponseMessage response)
@@ -103,7 +104,7 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
 
     private ProductCache? ProductCache { get; set; }
 
-    public async Task LoadProcuctCache()
+    public async Task LoadProductCache()
     {
         ProductCache = new ProductCache(this);
         await ProductCache.LoadAllProducts();

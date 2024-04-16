@@ -15,7 +15,7 @@ public partial class GatewayBase
             if (!response.IsSuccessStatusCode)
             {
                 var htmlBodyFail = await GetHtmlBody(response);
-                _report.Error("ReadCustomersPaged", htmlBodyFail);
+                Report.Error("ReadCustomersPaged", htmlBodyFail);
 
                 response.EnsureSuccessStatusCode();
             }

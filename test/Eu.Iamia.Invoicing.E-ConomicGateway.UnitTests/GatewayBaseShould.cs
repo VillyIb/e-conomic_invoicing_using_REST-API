@@ -1,4 +1,5 @@
 using System.Net;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Configuration;
 using Moq;
 using Moq.Protected;
 
@@ -7,6 +8,13 @@ namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;
 public class GatewayBaseShould
 {
     protected readonly Mock<HttpMessageHandler> Mock = new();
+
+    protected static readonly SettingsForEConomicGateway Settings = new SettingsForEConomicGateway
+    {
+        PaymentTerms = 1,
+        X_AgreementGrantToken = "Demo",
+        X_AppSecretToken = "Demo"
+    };
 
     protected HttpMessageHandler HttpMessageHandler => Mock.Object;
 

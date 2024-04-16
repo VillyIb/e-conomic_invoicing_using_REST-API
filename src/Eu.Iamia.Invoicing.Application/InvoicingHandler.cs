@@ -58,7 +58,7 @@ public class InvoicingHandler : IInvoicingHandler
         var customerGroupsToAccept = _loader.CustomerGroupToAccept;
 
         await _economicGateway.LoadCustomerCache(customerGroupsToAccept);
-        await _economicGateway.LoadProcuctCache();
+        await _economicGateway.LoadProductCache();
 
         Console.WriteLine("");
         

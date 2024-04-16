@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Eu.Iamia.Invoicing.Loader.Contract;
+// ReSharper disable StringLiteralTypo
 
 namespace Eu.Iamia.Invoicing.CSVLoader;
 
@@ -17,7 +18,7 @@ public class Loader : ILoader
 
     public DateTime? InvoiceDate => Metadata?.InvoiceDate;
 
-    public int? PaymentTerm => Metadata.PaymentTerm;
+    public int? PaymentTerm => Metadata?.PaymentTerm;
 
     public IList<IInputInvoice> Invoices => _invoices ??= new List<IInputInvoice>();
 
