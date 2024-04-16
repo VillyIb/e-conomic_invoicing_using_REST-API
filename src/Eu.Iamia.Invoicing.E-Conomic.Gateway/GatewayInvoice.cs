@@ -42,11 +42,10 @@ public partial class GatewayBase
 
             var response = await _httpClient.PostAsync("https://restapi.e-conomic.com/invoices/drafts", content);
 
-
             if (!response.IsSuccessStatusCode)
             {
                 var htmlBodyFail = await GetHtmlBody(response);
-                _report.Error("", htmlBodyFail);
+                _report.Error("PushInvoice", htmlBodyFail);
 
                 response.EnsureSuccessStatusCode();
             }
@@ -63,7 +62,7 @@ public partial class GatewayBase
         {
             return new DraftInvoice
             {
-                DraftInvoiceNumber = -1, 
+                DraftInvoiceNumber = -1,
                 GrossAmount = 0.0
             };
         }
@@ -75,7 +74,7 @@ public partial class GatewayBase
 
     public async Task<IDraftInvoice?> PushInvoice(IInputInvoice inputInvoice, int sourceFileLineNumber)
     {
-        _report.SetCustomer(new CachedCustomer{Name = "---- ----", CustomerNumber = inputInvoice.CustomerNumber});
+        _report.SetCustomer(new CachedCustomer { Name = "---- ----", CustomerNumber = inputInvoice.CustomerNumber });
 
         try
         {
@@ -96,7 +95,7 @@ public partial class GatewayBase
         }
         finally
         {
-            _report.Close(); 
+            _report.Close();
         }
     }
 }

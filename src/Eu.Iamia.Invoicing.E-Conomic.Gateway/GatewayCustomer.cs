@@ -11,13 +11,21 @@ public partial class GatewayBase
             SetAuthenticationHeaders();
 
             var response = await _httpClient.GetAsync($"https://restapi.e-conomic.com/customers?skippages={page}&pagesize={pageSize}");
-            response.EnsureSuccessStatusCode();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var htmlBodyFail = await GetHtmlBody(response);
+                _report.Error("ReadCustomersPaged", htmlBodyFail);
+
+                response.EnsureSuccessStatusCode();
+            }
+
             var htmlBody = await GetHtmlBody(response);
             return htmlBody;
         }
-        catch (Exception ex)
+        catch (HttpRequestException ex)
         {
-            return ex.ToString();
+            return ex.StatusCode.ToString() ?? string.Empty;
         }
     }
 }

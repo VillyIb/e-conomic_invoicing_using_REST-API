@@ -25,7 +25,7 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
     /// </summary>
     /// <param name="settings"></param>
     /// <param name="httpClientHandler"></param>
-    internal GatewayBase(SettingsForEConomicGateway settings, ICustomerReport report,  HttpMessageHandler httpClientHandler)
+    internal GatewayBase(SettingsForEConomicGateway settings, ICustomerReport report, HttpMessageHandler httpClientHandler)
     {
         _settings = settings;
         _report = report;
@@ -68,8 +68,8 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
 
     protected void SetAuthenticationHeaders()
     {
-         CheckToken(_settings.X_AgreementGrantToken, nameof(_settings.X_AgreementGrantToken));
-         CheckToken(_settings.X_AppSecretToken, nameof(_settings.X_AppSecretToken));
+        CheckToken(_settings.X_AgreementGrantToken, nameof(_settings.X_AgreementGrantToken));
+        CheckToken(_settings.X_AppSecretToken, nameof(_settings.X_AppSecretToken));
 
         _httpClient.DefaultRequestHeaders.Remove("X-AppSecretToken");
         _httpClient.DefaultRequestHeaders.Add("X-AppSecretToken", _settings.X_AppSecretToken);
