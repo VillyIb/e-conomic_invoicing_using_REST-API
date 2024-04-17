@@ -170,6 +170,7 @@ public class Loader : ILoader
 
     private int _sourceFileLineNumber = 0;
 
+    // TODO refactor to enable UnitTesting.
     public int ParseCSV(FileInfo file)
     {
         using var fs = file.OpenRead();
