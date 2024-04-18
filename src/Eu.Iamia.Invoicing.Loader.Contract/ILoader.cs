@@ -2,7 +2,7 @@
 
 public interface ILoader
 {
-    IList<IInputInvoice> Invoices { get; }
+    IList<IInputInvoice>? Invoices { get; }
 
     IList<int>? CustomerGroupToAccept { get; }
 

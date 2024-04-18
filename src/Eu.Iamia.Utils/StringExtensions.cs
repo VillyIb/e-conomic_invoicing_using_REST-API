@@ -55,4 +55,20 @@ public static class StringExtensions
         return t2;
     }
 
+    /// <summary>
+    /// Returns a stream containing the specified value. Uses UTF8 encoding.
+    /// Remember to dispose after user.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public static Stream GetStream(this string value)
+    {
+        var stream = new MemoryStream();
+        var writer = new StreamWriter(stream, System.Text.Encoding.UTF8);
+        writer.Write(value);
+        writer.Flush();
+        stream.Position = 0;
+        return stream;
+    }
+
 }
