@@ -19,6 +19,11 @@ internal class MockedReport : ICustomerReport
         return this;
     }
 
+    public ICustomerReport Message(string reference, string message)
+    {
+        return this;
+    }
+
     public ICustomerReport Error(string reference, string message)
     {
         return this;

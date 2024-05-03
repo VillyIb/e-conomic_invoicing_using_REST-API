@@ -16,25 +16,37 @@ public class CustomerCustomerReport : ReportBase, ICustomerReport
     private readonly SettingsForReporting _settings;
 
     [ExcludeFromCodeCoverage]
-    public CustomerCustomerReport(IOptions<SettingsForReporting> settings)
-    {
-        _settings = settings.Value;
-    }
+    public CustomerCustomerReport(IOptions<SettingsForReporting> settings) : this(settings.Value)
+    { }
 
     internal CustomerCustomerReport(SettingsForReporting settings)
     {
         _settings = settings;
+        ReportStateStrategy = new ReportStateStrategy(ReportState.Info);
     }
 
     private StreamWriter? _report;
 
     protected FileInfo? ReportFile;
 
-    private bool HasErrors { get; set; }
+    private ReportState _reportState;
 
-    protected int? CustomerNumber { get; set; } = null;
+    private ReportState ReportState
+    {
+        get => _reportState;
+        set
+        {
+            if (ReportStateStrategy.Locked) return;
+            _reportState = value;
+            ReportStateStrategy = new ReportStateStrategy(value);
+        }
+    }
 
-    protected string? CustomerName { get; set; } = null;
+    internal ReportStateStrategy ReportStateStrategy { get; private set; }
+
+    protected int? CustomerNumber { get; set; }
+
+    protected string? CustomerName { get; set; }
 
     internal bool IsOpenForWriting => _report?.BaseStream is not null;
 
@@ -47,8 +59,8 @@ public class CustomerCustomerReport : ReportBase, ICustomerReport
 
         if (!IsSameCustomer(customer))
         {
-            _timeStamp = null;
-            HasErrors = false;
+            TimeStamp = null;
+            ReportState = ReportState.Info;
         }
 
         CustomerNumber = customer.CustomerNumber;
@@ -69,7 +81,7 @@ public class CustomerCustomerReport : ReportBase, ICustomerReport
     //    return this;
     //}
 
-    internal string GetFilename(bool hasErrors)
+    internal string GetFilename(ReportState reportState)
     {
         if (CustomerNumber is null) { throw new ApplicationException($"{nameof(CustomerNumber)} is null"); }
 
@@ -82,20 +94,20 @@ public class CustomerCustomerReport : ReportBase, ICustomerReport
         var firstname = namePart.First().TrimToLength(_settings.CustomerNameLength, 'f');
         var lastname = namePart.Last().TrimToLength(_settings.CustomerSurnameLength, 'l');
         var customerPart = $"{number}_{firstname}-{lastname}";
-        var timePart = _timeStamp!.Value.ToString(_settings.TimePartFormat);
-        var statusPart = hasErrors ? "E" : "I";
+        var timePart = TimeStamp!.Value.ToString(_settings.TimePartFormat);
+        var statusPart = new ReportStateStrategy(reportState).StatusPart;
         var contentPart = _settings.Filename;
 
         return Path.Combine(_settings.OutputDirectory, $"{customerPart}_{timePart}_{statusPart}_{contentPart}");
     }
 
-    protected DateTime? _timeStamp = null;
+    protected DateTime? TimeStamp;
 
     internal void Create()
     {
-        _timeStamp ??= DateTime.Now;
+        TimeStamp ??= DateTime.Now;
         Close();
-        var filename = GetFilename(HasErrors);
+        var filename = GetFilename(ReportState);
         ReportFile = new FileInfo(filename);
         FileStream fs;
         if (ReportFile.Exists)
@@ -127,12 +139,21 @@ public class CustomerCustomerReport : ReportBase, ICustomerReport
         return this;
     }
 
+    public ICustomerReport Message(string reference, string message)
+    {
+        var p2 = message.JsonPrettify();
+
+        EnsureOpenReport().Write($"{Environment.NewLine}Error: {reference}{Environment.NewLine}{p2}{Environment.NewLine}");
+        ReportState = ReportState.Message;
+        return this;
+    }
+
     public ICustomerReport Error(string reference, string message)
     {
         var p2 = message.JsonPrettify();
 
         EnsureOpenReport().Write($"{Environment.NewLine}Error: {reference}{Environment.NewLine}{p2}{Environment.NewLine}");
-        HasErrors = true;
+        ReportState = ReportState.Error;
         return this;
     }
 
@@ -144,19 +165,21 @@ public class CustomerCustomerReport : ReportBase, ICustomerReport
         _report.Close();
         _report = null;
 
-        if (!HasErrors && _settings.DiscardNonErrorLogfiles)
+        var reportStateStrategy = new ReportStateStrategy(ReportState);
+
+        if (reportStateStrategy.PruneFileAfterClose && _settings.PruneLogfiles)
         {
             ReportFile!.Delete();
             return;
         }
 
-        if (!HasErrors)
+        if (reportStateStrategy.PruneFileAfterClose)
             return;
 
-        var fs = new FileInfo(GetFilename(false));
+        var fs = new FileInfo(GetFilename(ReportState.Info));
         if (fs.Exists)
         {
-            fs.MoveTo(GetFilename(true));
+            fs.MoveTo(GetFilename(ReportState));
             ReportFile = new FileInfo(fs.FullName);
         }
     }

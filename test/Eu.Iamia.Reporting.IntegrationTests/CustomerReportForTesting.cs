@@ -34,7 +34,7 @@ public class CustomerReportForTesting : CustomerCustomerReport
 
     internal DateTime? GetTimeStamp()
     {
-        return _timeStamp;
+        return TimeStamp;
     }
 
     internal void DeleteFile(string filename)

@@ -42,7 +42,7 @@ public class CustomerReportShould
         _settings.CustomerNumberLength = 4;
         _settings.CustomerSurnameLength = 4;
         _settings.Filename = "CustomerReportShould.txt";
-        _settings.DiscardNonErrorLogfiles = false;
+        _settings.PruneLogfiles = false;
 
         _sut = new CustomerReportForTesting(_settings);
     }
@@ -58,6 +58,7 @@ public class CustomerReportShould
         _sut.SetCustomer(GetCustomerWithoutName(customerId));
 
         _sut.Error("Alfa", Alfa);
+        _sut.Message("Alfa", Alfa);
         _sut.Close();
 
         var customerPart = $"__{customerId}_ffff-llll";
@@ -66,6 +67,28 @@ public class CustomerReportShould
 
         Assert.True(_sut.Exists(expectedErrorFilename));
         _sut.DeleteFile(expectedErrorFilename);
+    }
+
+    /// <summary>
+    /// A logfile name is upon close changed to contain an '_E' suffix if there has been any errors written to it.
+    /// </summary>
+    [Fact]
+    public void Given_CustomerWithName_When_Message_CreateMessageFilename()
+    {
+        const int customerId = 15;
+
+        _sut.SetCustomer(GetCustomerWithoutName(customerId));
+
+        _sut.Message("Alfa", Alfa);
+        _sut.Info("Alfa", Alfa);
+        _sut.Close();
+
+        var customerPart = $"__{customerId}_ffff-llll";
+        var timePart = _sut.GetTimeStamp()!.Value.ToString("yyyy-MM-dd_HH-mm-ss");
+        var expectedMessageFilename = Path.Combine(_settings.OutputDirectory, $"{customerPart}_{timePart}_M_CustomerReportShould.txt");
+
+        Assert.True(_sut.Exists(expectedMessageFilename));
+        _sut.DeleteFile(expectedMessageFilename);
     }
 
     /// <summary>
@@ -212,7 +235,7 @@ public class CustomerReportShould
     [Fact]
     public void Given_DiscardNonErrors_is_True_When_Info_LeavesNoFile()
     {
-        _settings.DiscardNonErrorLogfiles = true;
+        _settings.PruneLogfiles = true;
         const int customerId = 37;
 
         _sut.SetCustomer(GetCustomer(customerId));
