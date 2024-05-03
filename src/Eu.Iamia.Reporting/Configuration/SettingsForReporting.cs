@@ -1,5 +1,4 @@
 ﻿using Eu.Iamia.ConfigBase;
-using static Eu.Iamia.ConfigBase.HelpMetadataAttribute;
 
 // ReSharper disable InconsistentNaming
 
@@ -18,8 +17,6 @@ public class SettingsForReporting : SettingsBase
 
     public string Filename { get; set; } = "InvoiceReport.txt";
 
-    public int MaxErrors { get; set; } = 10;
-
     public int CustomerNumberLength { get; set; } = 4;
 
     public int CustomerNameLength { get; set; } = 4;
@@ -27,11 +24,11 @@ public class SettingsForReporting : SettingsBase
     public int CustomerSurnameLength { get; set; } = 4;
 
     /// <summary>
-    /// True: Closing a file without errors in will be deleted.
+    /// True: When closing a file without errors in will be deleted.
     /// False: Files ar kept.
     /// </summary>
-    [HelpMetadata("Only keep logfiles showing errors","true|false")]
-    public bool DiscardNonErrorLogfiles { get; set; } = false;
+    [HelpMetadata("Remove log-files not showing errors","true|false")]
+    public bool PruneLogfiles { get; set; } = false;
 
 
 }

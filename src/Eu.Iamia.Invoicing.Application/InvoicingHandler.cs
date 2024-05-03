@@ -30,10 +30,10 @@ public class InvoicingHandler : IInvoicingHandler
 
     public async Task<ExecutionStatus> LoadInvoices()
     {
-        var csvFile = new FileInfo(_settings.CsvFileFullName);
+        var csvFile = new FileInfo(_settings.CsvFile);
         if (!csvFile.Exists)
         {
-            throw new ArgumentException($"File '{csvFile.FullName}' does not exists", nameof(_settings.CsvFileFullName));
+            throw new ArgumentException($"File '{csvFile.FullName}' does not exists", nameof(_settings.CsvFile));
         }
 
         _loader.ParseCSV(csvFile);
