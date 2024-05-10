@@ -83,4 +83,9 @@ public class CachedCustomer : ICachedCustomer, ICustomer
     public string? Name { get; init; }
 
     public string? Zip { get; init; }
+
+    public override string ToString()
+    {
+        return $"{nameof(CustomerNumber)}: {CustomerNumber}, {nameof(Name)}: {Name}, ";
+    }
 }

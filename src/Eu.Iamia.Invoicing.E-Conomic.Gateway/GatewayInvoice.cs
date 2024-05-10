@@ -5,6 +5,7 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.DraftInvoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;
 
@@ -72,6 +73,45 @@ public partial class GatewayBase
                 GrossAmount = 0.0
             };
         }
+    }
+
+    internal async Task<DraftInvoice> GetDraftInvoice(int invoiceNumber)
+    {
+        try
+        {
+            SetAuthenticationHeaders();
+
+            var response = await _httpClient.GetAsync($"https://restapi.e-conomic.com/invoices/drafts/{invoiceNumber}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var htmlBodyFail = await GetHtmlBody(response);
+                Report.Error("PushInvoice", htmlBodyFail);
+
+                response.EnsureSuccessStatusCode();
+            }
+
+            var htmlBody = await GetHtmlBody(response);
+
+            var draftInvoice = DraftInvoiceExtensions.FromJson(htmlBody);
+
+            Report.Info("PushInvoice", htmlBody);
+
+            return draftInvoice;
+        }
+        catch (HttpRequestException)
+        {
+            return new DraftInvoice
+            {
+                DraftInvoiceNumber = -1,
+                GrossAmount = 0.0
+            };
+        }
+    }
+
+    internal async Task DeleteInvoce(int invoiceNumber)
+    {
+
     }
 
     private Mapper? _mapper;

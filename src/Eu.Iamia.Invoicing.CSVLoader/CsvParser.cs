@@ -6,7 +6,7 @@ namespace Eu.Iamia.Invoicing.CSVLoader;
 
 public class CsvParser
 {
-    public Metadata? Metadata { get; set; }
+    public Metadata? Metadata => _level2Parsers.Metadata;
 
     private int? _sourceFileLineNumber = 0;
 

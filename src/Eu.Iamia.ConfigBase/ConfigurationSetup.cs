@@ -20,7 +20,6 @@ public class ConfigurationSetup
         var environmentKeys = new[]
         {
             "ASPNETCORE_ENVIRONMENT", // This doesn't work (come for free) in NCrunch/ReSharper tests.
-            "WSA_TEST",
             "COMPUTERNAME"
         };
         foreach (var environmentKey in environmentKeys)

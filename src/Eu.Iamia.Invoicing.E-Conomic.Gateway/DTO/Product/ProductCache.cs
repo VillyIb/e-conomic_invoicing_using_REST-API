@@ -75,6 +75,11 @@ public class InputProduct
     public string Name { get; set; } = string.Empty;
 
     public string ProductNumber { get; set; } = string.Empty;
+
+    public override string ToString()
+    {
+        return $"{nameof(ProductNumber)}: {ProductNumber}, {nameof(Name)}: {Name} ";
+    }
 }
 
 public class InputUnit

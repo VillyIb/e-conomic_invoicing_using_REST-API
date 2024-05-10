@@ -1,6 +1,6 @@
-﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Configuration;
+﻿using System.Reflection;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Configuration;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 using Eu.Iamia.Invoicing.Loader.Contract;
@@ -9,27 +9,32 @@ using Eu.Iamia.Reporting.Contract;
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests;
 public class BookInvoicesShould
 {
-    private static SettingsForEConomicGateway _settings = new SettingsForEConomicGateway
+    private static readonly SettingsForEConomicGateway SettingsDemo = new SettingsForEConomicGateway
     {
         PaymentTerms = 1,
+        LayoutNumber = 21,
         X_AgreementGrantToken = "Demo",
         X_AppSecretToken = "Demo"
     };
 
+    private SettingsForEConomicGateway SettingsReal { get; init; }
+
     private static ICustomerReport CustomerReport => new MockedReport();
 
     // ReSharper disable once MemberCanBeMadeStatic.Local
+    // ReSharper disable once InconsistentNaming
     private (IList<IInputInvoice> Invoices, IList<int> CustomerGroupsToAccept) LoadCSV()
     {
-        var fi = new FileInfo("C:\\Development\\e-conomic_invoicing_using_REST-API\\test\\Eu.Iamia.Invoicing.CSVLoader.UnitTests\\TestData\\G1.csv");
-        //var fi = new FileInfo("C:\\Development\\e-conomic_invoicing_using_REST-API\\test\\Eu.Iamia.Invoicing.CSVLoader.UnitTests\\TestData\\G2.csv");
-        //var fi = new FileInfo("C:\\Development\\e-conomic_invoicing_using_REST-API\\test\\Eu.Iamia.Invoicing.CSVLoader.UnitTests\\TestData\\G6.csv");
+        var assembly = Assembly.GetExecutingAssembly();
+        var resourceName = "Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests.TestData.G1.csv";
+
+        using var stream = assembly.GetManifestResourceStream(resourceName);
 
         var loader = new CSVLoader.Loader();
 
-        var _ = loader.ParseCSV(fi);
+        var __ = loader.ParseCSV(stream!);
 
-        return (loader.Invoices, loader.CustomerGroupToAccept);
+        return (loader.Invoices!, loader.CustomerGroupToAccept!);
     }
 
     public async Task<CustomerCache> GetCustomerCache(GatewayBase gatewayInvoice, IList<int> customerGroupsToAccept)
@@ -48,8 +53,14 @@ public class BookInvoicesShould
         return productCache;
     }
 
-    [Fact(Skip = "skip")]
-    public async Task BookAll()
+    public BookInvoicesShould()
+    {
+        using var setup = new Setup(null);
+        SettingsReal = setup.GetSetting<SettingsForEConomicGateway>();
+    }
+
+    [Fact]
+    public async Task GivenDemoAuthentication_BookInvoices_In_CsvFile()
     {
         var invoiceDate = DateTime.Today;
 
@@ -59,25 +70,35 @@ public class BookInvoicesShould
         Assert.NotNull(invoices);
         Assert.True(invoices.Any());
 
-        var gatewayInvoice = new GatewayBase(_settings, CustomerReport, new HttpClientHandler());
+        var gatewayInvoice = new GatewayBase(SettingsDemo, CustomerReport, new HttpClientHandler());
         var customerCache = await GetCustomerCache(gatewayInvoice, customerGroupsToAccept);
         var productCache = await GetProductCache(gatewayInvoice);
 
-        var mapper = new Mapper(_settings, customerCache, productCache);
+        var mapper = new Mapper(SettingsDemo, customerCache, productCache);
 
         foreach (var inputInvoice in invoices)
         {
-            inputInvoice.InvoiceDate = invoiceDate; // TODO evaluate.
+            inputInvoice.InvoiceDate = invoiceDate;
 
             var invoice = mapper.From(inputInvoice);
 
-            if (invoice.Item2 is null)
-            {
-                Console.WriteLine($"Faulure on customer: {inputInvoice.CustomerNumber}");
-                continue;
-            }
+            var response = await gatewayInvoice.PushInvoice(invoice.customer, invoice.ecInvoice, inputInvoice.SourceFileLineNumber);
 
-            await gatewayInvoice.PushInvoice(invoice.Item1, invoice.Item2, inputInvoice.SourceFileLineNumber);
+            Assert.NotNull(response);
+
+            Assert.True(response.DraftInvoiceNumber > 0);
         }
+    }
+
+    [Fact]
+    public async Task GivenRealAuthentication_ReadDraftInvoice_Successfully()
+    {
+        var gatewayInvoice = new GatewayBase(SettingsReal, CustomerReport, new HttpClientHandler());
+        var customerCache = await GetCustomerCache(gatewayInvoice, new List<int> { 1, 3 });
+        var productCache = await GetProductCache(gatewayInvoice);
+
+        var x = await gatewayInvoice.GetDraftInvoice(373);
+
+
     }
 }

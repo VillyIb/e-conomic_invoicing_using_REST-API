@@ -9,7 +9,7 @@ namespace Eu.Iamia.Invoicing.CSVLoader;
 /// </summary>
 public partial class Loader : ILoader
 {
-    private Metadata? Metadata => _csvParser?.Metadata;
+    private Metadata? Metadata { get; set; }
 
     public string? Text1 => Metadata?.Text1;
 
@@ -17,7 +17,7 @@ public partial class Loader : ILoader
 
     public int? PaymentTerm => Metadata?.PaymentTerm;
 
-    public IList<int>? CustomerGroupToAccept => Metadata?.CustomerGroupToAccept;
+    public IList<int>? CustomerGroupToAccept => _csvParser?.Metadata?.CustomerGroupToAccept;
 
     public IList<IInputInvoice>? Invoices => _csvParser?.Invoices;
 
@@ -31,6 +31,11 @@ public partial class Loader : ILoader
     public int ParseCSV(FileInfo file)
     {
         using var fs = file.OpenRead();
+        return _csvParser!.ParseCSV(fs);
+    }
+
+    public int ParseCSV(Stream fs)
+    {
         return _csvParser!.ParseCSV(fs);
     }
 }
