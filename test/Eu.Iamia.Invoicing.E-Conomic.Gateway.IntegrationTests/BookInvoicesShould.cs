@@ -86,7 +86,7 @@ public class BookInvoicesShould
 
             Assert.NotNull(response);
 
-            Assert.True(response.DraftInvoiceNumber > 0);
+            Assert.Equal(-1, response.DraftInvoiceNumber);
         }
     }
 

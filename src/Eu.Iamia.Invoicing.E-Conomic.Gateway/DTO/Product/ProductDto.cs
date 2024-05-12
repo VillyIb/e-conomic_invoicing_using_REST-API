@@ -1,5 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 using System.Text.Json;
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+#pragma warning disable CS8618
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
 internal class ProductDto
@@ -9,7 +12,18 @@ internal class ProductDto
 // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
 public class Collection
 {
-    public string productNumber { get; set; }
+    private string _productNumber;
+
+    public string productNumber
+    {
+        get => _productNumber;
+        set
+        {
+            _productNumber = value;
+            if (string.IsNullOrWhiteSpace(value)) throw new ArgumentNullException(nameof(productNumber), "Please provide a value");
+        }
+    }
+
     public string description { get; set; }
     public string name { get; set; }
     public double salesPrice { get; set; }
@@ -100,16 +114,37 @@ public static class ProductsHandleExtension
         return json;
     }
 
-    public static ProductsHandle? FromJson(string json)
+    /// <summary>
+    /// Returns deserialized object.
+    /// </summary>
+    /// <param name="json">Json formatted string</param>
+    /// <returns></returns>
+    /// <exception cref="JsonException"></exception>
+    public static ProductsHandle FromJson(string json)
     {
-        var options = new JsonSerializerOptions
+        try
         {
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
-            Converters = { new JsonStringEnumConverter() }
-        };
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
+                Converters = { new JsonStringEnumConverter() }
+            };
 
-        var invoice = JsonSerializer.Deserialize<ProductsHandle>(json, options);
-        return invoice;
+            var invoice = JsonSerializer.Deserialize<ProductsHandle>(json, options);
+            if (invoice?.collection is null)
+                throw new JsonException("No content: Collection");
+            return invoice;
+        }
+        catch (JsonException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            var type = ex.GetType().Name;
+            throw new JsonException(type, ex);
+        }
     }
 
 }

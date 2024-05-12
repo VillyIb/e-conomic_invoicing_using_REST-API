@@ -5,7 +5,6 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.DraftInvoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;
 
@@ -93,7 +92,7 @@ public partial class GatewayBase
 
             var htmlBody = await GetHtmlBody(response);
 
-            var draftInvoice = DraftInvoiceExtensions.FromJson(htmlBody);
+            DraftInvoice? draftInvoice = DraftInvoiceExtensions.FromJson(htmlBody);
 
             Report.Info("PushInvoice", htmlBody);
 
