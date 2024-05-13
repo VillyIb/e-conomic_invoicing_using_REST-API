@@ -57,7 +57,8 @@ public  class DraftInvoiceShould
     [Fact]
     public void Given_InvalidJson_When_ParsingFromJson_Return_null()
     {
-        var invoice = DraftInvoiceExtensions.FromJson(draftInvoiceJson.Replace("{","["));
+        var invalidJson = draftInvoiceJson.Replace("{","[");
+        var invoice = DraftInvoiceExtensions.FromJson(invalidJson);
 
         Assert.Null(invoice);
     }

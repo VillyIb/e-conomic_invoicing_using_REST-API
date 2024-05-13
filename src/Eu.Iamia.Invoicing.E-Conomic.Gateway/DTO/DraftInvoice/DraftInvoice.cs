@@ -1,6 +1,7 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.DraftInvoice;
 
@@ -27,12 +28,8 @@ public static class DraftInvoiceExtensions
     {
         try
         {
-            var options = new JsonSerializerOptions
-            {
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault, Converters = { new JsonStringEnumConverter() }
-            };
 
-            var result = JsonSerializer.Deserialize<DraftInvoice>(json, options);
+            var result = JsonSerializerFacade.Deserialize<DraftInvoice>(json);
 
             return result;
         }

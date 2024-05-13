@@ -55,15 +55,21 @@ public partial class GatewayBase
             var productsHandle = ProductsHandleExtension.FromJson(json);
             return productsHandle!;
         }
-        catch (HttpRequestException)
+        catch (HttpRequestException ex)
         {
-            // TODO log exception.
-            return null!;
+            Report.Error(nameof(ReadProductsPaged2), ex.Message);
+            return new ProductsHandle
+            {
+                collection = new List<Collection>(0),
+            };
         }
-        catch (JsonException)
+        catch (JsonException ex)
         {
-            // TODO log exception.
-            return null!;
+            Report.Error(nameof(ReadProductsPaged2), ex.Message);
+            return new ProductsHandle
+            {
+                collection = new List<Collection>(0),
+            };
         }
     }
 }

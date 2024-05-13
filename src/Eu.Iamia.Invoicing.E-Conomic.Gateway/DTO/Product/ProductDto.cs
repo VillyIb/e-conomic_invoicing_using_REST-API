@@ -1,5 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using System.Text.Json;
+using Eu.Iamia.Utils;
+
 // ReSharper disable InconsistentNaming
 // ReSharper disable UnusedMember.Global
 #pragma warning disable CS8618
@@ -12,18 +14,7 @@ internal class ProductDto
 // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
 public class Collection
 {
-    private string _productNumber;
-
-    public string productNumber
-    {
-        get => _productNumber;
-        set
-        {
-            _productNumber = value;
-            if (string.IsNullOrWhiteSpace(value)) throw new ArgumentNullException(nameof(productNumber), "Please provide a value");
-        }
-    }
-
+    public string productNumber { get; set; }
     public string description { get; set; }
     public string name { get; set; }
     public double salesPrice { get; set; }
@@ -122,29 +113,8 @@ public static class ProductsHandleExtension
     /// <exception cref="JsonException"></exception>
     public static ProductsHandle FromJson(string json)
     {
-        try
-        {
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
-                Converters = { new JsonStringEnumConverter() }
-            };
-
-            var invoice = JsonSerializer.Deserialize<ProductsHandle>(json, options);
-            if (invoice?.collection is null)
-                throw new JsonException("No content: Collection");
-            return invoice;
-        }
-        catch (JsonException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            var type = ex.GetType().Name;
-            throw new JsonException(type, ex);
-        }
+        var invoice = JsonSerializerFacade.Deserialize<ProductsHandle>(json);
+        return invoice;
     }
 
 }

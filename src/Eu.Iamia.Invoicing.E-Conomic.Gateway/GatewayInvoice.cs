@@ -1,6 +1,7 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
 using Eu.Iamia.Invoicing.Loader.Contract;
 using System.Text;
+using System.Text.Json;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.DraftInvoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
@@ -99,6 +100,13 @@ public partial class GatewayBase
             return draftInvoice;
         }
         catch (HttpRequestException)
+        {
+            return new DraftInvoice
+            {
+                DraftInvoiceNumber = -1, GrossAmount = 0.0
+            };
+        }
+        catch (JsonException)
         {
             return new DraftInvoice
             {
