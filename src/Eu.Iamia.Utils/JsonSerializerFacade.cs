@@ -45,4 +45,40 @@ public static class JsonSerializerFacade
             throw new JsonException(type, ex);
         }
     }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TValue"></typeparam>
+    /// <param name="utf8Json"></param>
+    /// <returns></returns>
+    /// <exception cref="JsonException"></exception>
+    public static async Task<TValue> DeserializeAsync<TValue>(Stream utf8Json)
+    {
+        try
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
+                Converters = { new JsonStringEnumConverter() }
+            };
+
+            var value = await JsonSerializer.DeserializeAsync<TValue>(utf8Json, options);
+            return value is not null
+                    ? value
+                    : throw new JsonException()
+                ;
+        }
+        catch (JsonException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            var type = ex.GetType().Name;
+            throw new JsonException(type, ex);
+        }
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
+using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;
 
@@ -31,7 +32,7 @@ public partial class GatewayBase
         }
     }
 
-    public async Task<ProductsHandle>? ReadProductsPaged2(int page, int pageSize)
+    public async Task<ProductsHandle>? ReadProductsPaged2(int page, int pageSize, CancellationToken ct)
     {
         try
         {
@@ -50,6 +51,9 @@ public partial class GatewayBase
 
                 response.EnsureSuccessStatusCode();
             }
+
+            var utf8Json = await response.Content.ReadAsStreamAsync(ct);
+            var x = await JsonSerializerFacade.DeserializeAsync<ProductsHandle>(utf8Json);
 
             var json = await GetHtmlBody(response);
             var productsHandle = ProductsHandleExtension.FromJson(json);

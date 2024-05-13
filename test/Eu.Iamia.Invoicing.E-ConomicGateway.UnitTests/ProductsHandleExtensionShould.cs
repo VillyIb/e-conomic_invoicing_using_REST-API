@@ -52,16 +52,18 @@ public class ProductsHandleExtensionShould
     [Fact]
     public void GivenInvalidContent_DeserializeFail_With_JsonException()
     {
-        var ex = Assert.Throws<JsonException>(() => ProductsHandleExtension.FromJson(ProductsHandleJsonInvalidContent));
+        var value = ProductsHandleExtension.FromJson(ProductsHandleJsonInvalidContent);
 
-        Assert.NotNull(ex.InnerException);
-        Assert.Equal(typeof(ArgumentNullException), ex.InnerException!.GetType());
+        Assert.NotNull(value);
+        Assert.Null(value.collection);
     }
 
     [Fact]
-    public void GivenEmptyJson_DeserializeFail_With_JsonExceptionX()
+    public void GivenEmptyJson_DeserializeFail_With_NullProperties()
     {
-        Assert.Throws<JsonException>(() => ProductsHandleExtension.FromJson(ProductsHandleJsonEmpty));
+        var value = ProductsHandleExtension.FromJson(ProductsHandleJsonEmpty);
+        Assert.NotNull(value);
+        Assert.Null(value.collection);
     }
 
 }
