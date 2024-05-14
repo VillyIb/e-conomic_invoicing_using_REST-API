@@ -13,6 +13,8 @@ public partial class GatewayBase
 {
     // see:http://restdocs.e-conomic.com/#post-invoices-drafts
 
+    // TODO return Invoice make FromJson Async.
+
     public async Task<string> ReadInvoice()
     {
         try
