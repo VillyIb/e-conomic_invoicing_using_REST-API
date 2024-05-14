@@ -51,10 +51,13 @@ public static class JsonSerializerFacade
     /// 
     /// </summary>
     /// <typeparam name="TValue"></typeparam>
-    /// <param name="utf8Json"></param>
-    /// <returns></returns>
+    /// <param name="utf8Json">JSON data to parse.</param>
+    /// <param name="cancellationToken">
+    /// The <see cref="System.Threading.CancellationToken"/> that can be used to cancel the read operation.
+    /// </param>
+    /// <returns>A <typeparamref name="TValue"/> representation of the JSON value.</returns>
     /// <exception cref="JsonException"></exception>
-    public static async Task<TValue> DeserializeAsync<TValue>(Stream utf8Json)
+    public static async Task<TValue> DeserializeAsync<TValue>(Stream utf8Json, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -65,10 +68,10 @@ public static class JsonSerializerFacade
                 Converters = { new JsonStringEnumConverter() }
             };
 
-            var value = await JsonSerializer.DeserializeAsync<TValue>(utf8Json, options);
+            var value = await JsonSerializer.DeserializeAsync<TValue>(utf8Json, options, cancellationToken);
             return value is not null
                     ? value
-                    : throw new JsonException()
+                    : throw new JsonException("Deserialize returned null")
                 ;
         }
         catch (JsonException)

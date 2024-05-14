@@ -21,7 +21,6 @@ public class GatewayProductShould : GatewayBaseShould
         mockedReport.Received(0).Info(Arg.Any<string>(), Arg.Any<string>());
 
         Assert.NotNull(result);
-        Assert.Equal(OkResponse, result);
     }
 
     [Fact]
@@ -29,15 +28,15 @@ public class GatewayProductShould : GatewayBaseShould
     {
         MockResponse(HttpStatusCode.NotFound);
         var mockedReport = Substitute.For<ICustomerReport>();
-        
+        var cts = new CancellationTokenSource();
+
         using var sut = new GatewayBase(Settings, mockedReport, HttpMessageHandler);
-        var result = await sut.ReadProductsPaged(0, 20);
+        var result = await sut.ReadProductsPaged(0, 20, cts.Token);
 
         Mock.VerifyAll();
         mockedReport.Received(1).Error(Arg.Is<string>("ReadProductsPaged"), Arg.Any<string>());
         mockedReport.Received(0).Info(Arg.Any<string>(), Arg.Any<string>());
 
         Assert.NotNull(result);
-        Assert.NotEqual(OkResponse, result);
     }
 }

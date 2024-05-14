@@ -10,9 +10,9 @@ public interface IEconomicGateway
 
     Task LoadProductCache();
 
-    Task<string> ReadCustomersPaged(int page, int pageSize);
+    Task<string> ReadCustomersPaged(int page, int pageSize, CancellationToken cancellationToken = default);
 
-    Task<string> ReadProductsPaged(int page, int pageSize);
+    Task<ProductsHandle> ReadProductsPaged(int page, int pageSize, CancellationToken cancellationToken = default);
 
     Task<string> ReadInvoice();
 }

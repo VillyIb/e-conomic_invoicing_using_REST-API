@@ -41,7 +41,7 @@ public class GatewayCustomerShould
     [InlineData(1, 20)]
     public async Task ReadProductsPaged(int page, int pageSize)
     {
-        var result = await sut.ReadProductsPaged(page, pageSize);
+        var result = await sut.ReadProductsPagedObsolete(page, pageSize);
 
         Assert.NotEmpty(result);
 
