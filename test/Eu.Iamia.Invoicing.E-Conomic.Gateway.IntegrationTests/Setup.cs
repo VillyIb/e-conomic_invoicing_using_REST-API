@@ -17,7 +17,8 @@ public  class Setup : SetupBase
             services,
             new E_Conomic.Gateway.Configuration.Setup(configuration),
             //new Application.Configuration.SetCustomer(configuration),
-            new CSVLoader.Configuration.Setup(configuration)
+            new CSVLoader.Configuration.Setup(configuration),
+            new Reporting.Configuration.Setup(configuration)
         );
 
         ServiceProvider = services.BuildServiceProvider();

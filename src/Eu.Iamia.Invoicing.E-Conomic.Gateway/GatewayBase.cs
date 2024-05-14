@@ -33,12 +33,6 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
         _httpClient = new HttpClient(httpClientHandler);
     }
 
-    //public void SetIdempotencyKey(string idempotencyKey)
-    //{
-    //    _httpClient.DefaultRequestHeaders.Remove("Idempotency-Key");
-    //    _httpClient.DefaultRequestHeaders.Add("Idempotency-Key", idempotencyKey);
-    //}
-
     public void SetDemoAuthenticationHeaders()
     {
         _httpClient.DefaultRequestHeaders.Remove("X-AppSecretToken");
@@ -81,9 +75,6 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
 
     private static async Task<string> GetHtmlBody(HttpResponseMessage response)
     {
-        //var stream = await response.Content.ReadAsStreamAsync();
-        //using var streamReader = new StreamReader(stream);
-        //var htmlBody = await streamReader.ReadToEndAsync();
         var htmlBody = await response.Content.ReadAsStringAsync();
         var h2 = htmlBody.Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
         return h2;

@@ -1,4 +1,6 @@
-﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
+﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Product;
+
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
 
 using Eu.Iamia.Invoicing.Loader.Contract;
 

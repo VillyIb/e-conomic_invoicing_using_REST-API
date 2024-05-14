@@ -1,12 +1,12 @@
 ﻿<ProjectConfiguration>
   <Settings>
     <IgnoredTests>
-      <FixtureTestSelector>
-        <FixtureName>Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests.GatewayCustomerShould</FixtureName>
-      </FixtureTestSelector>
-      <FixtureTestSelector>
-        <FixtureName>Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests.GatewayInvoiceShould</FixtureName>
-      </FixtureTestSelector>
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests.GatewayInvoiceShould.Given_Invoice_With_Invalid_PaymentTerm_When_PushInvoice_Handle_Error</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests.GatewayInvoiceShould.Given_Invoice_When_PushInvoice_Handle_OkResponse</TestName>
+      </NamedTestSelector>
     </IgnoredTests>
   </Settings>
 </ProjectConfiguration>

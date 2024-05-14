@@ -12,9 +12,10 @@ public class GatewayCustomerShould : GatewayBaseShould
     {
         MockResponse(HttpStatusCode.OK);
         var mockedReport = Substitute.For<ICustomerReport>();
-        
+        var cts = new CancellationTokenSource();
+
         using var sut = new GatewayBase(Settings, mockedReport, HttpMessageHandler);
-        var result = await sut.ReadCustomersPaged(0, 20);
+        var result = await sut.ReadCustomersPaged(0, 20, cts.Token);
 
         Mock.VerifyAll();
         mockedReport.Received(0).Error(Arg.Any<string>(), Arg.Any<string>());
@@ -29,9 +30,10 @@ public class GatewayCustomerShould : GatewayBaseShould
     {
         MockResponse(HttpStatusCode.NotFound);
         var mockedReport = Substitute.For<ICustomerReport>();
+        var cts = new CancellationTokenSource();
 
         using var sut = new GatewayBase(Settings, mockedReport, HttpMessageHandler);
-        var result = await sut.ReadCustomersPaged(0, 20);
+        var result = await sut.ReadCustomersPaged(0, 20, cts.Token);
         mockedReport.Received(1).Error(Arg.Is<string>("ReadCustomersPaged"), Arg.Any<string>());
         mockedReport.Received(0).Info(Arg.Any<string>(), Arg.Any<string>());
 

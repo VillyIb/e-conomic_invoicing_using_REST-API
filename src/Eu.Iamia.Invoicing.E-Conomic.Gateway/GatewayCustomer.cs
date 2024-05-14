@@ -4,7 +4,7 @@ public partial class GatewayBase
 {
     // https://restapi.e-conomic.com/customers?skippages=0&pagesize=20
 
-    public async Task<string> ReadCustomersPaged(int page, int pageSize)
+    public async Task<string> ReadCustomersPaged(int page, int pageSize, CancellationToken cancellationToken)
     {
         try
         {

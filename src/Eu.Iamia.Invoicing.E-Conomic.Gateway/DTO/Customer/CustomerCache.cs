@@ -58,11 +58,13 @@ public class CustomerCache
 
     public async Task LoadAllCustomers()
     {
+        var cts = new CancellationTokenSource();
+
         bool @continue = true;
         var page = 0;
         while (@continue)
         {
-            var json = await _gateway.ReadCustomersPaged(page, 20);
+            var json = await _gateway.ReadCustomersPaged(page, 20, cts.Token);
             var customersHandle = CustomersHandleExtension.FromJson(json);
             @continue = AddCustomers(customersHandle) && page < 100;
             page++;

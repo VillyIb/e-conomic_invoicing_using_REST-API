@@ -33,7 +33,7 @@ public partial class GatewayBase
         }
     }
 
-    public async Task<ProductsHandle> ReadProductsPaged(int page, int pageSize, CancellationToken cancellationToken )
+    public async Task<ProductsHandle> ReadProductsPaged(int page, int pageSize, CancellationToken cancellationToken)
     {
         try
         {
@@ -53,13 +53,12 @@ public partial class GatewayBase
                 response.EnsureSuccessStatusCode();
             }
 
-            var productsHandle = await JsonSerializerFacade.DeserializeAsync<ProductsHandle>(await response.Content.ReadAsStreamAsync(cancellationToken),cancellationToken);
+            var productsHandle = await JsonSerializerFacade.DeserializeAsync<ProductsHandle>(await response.Content.ReadAsStreamAsync(cancellationToken), cancellationToken);
 
             return productsHandle!;
         }
         catch (HttpRequestException ex)
         {
-            Report.Error(nameof(ReadProductsPaged), ex.Message);
             return new ProductsHandle
             {
                 collection = new List<Collection>(0),

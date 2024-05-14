@@ -13,8 +13,6 @@ public class GatewayInvoiceShould
         _sut = (GatewayBase)setup.GetService<IEconomicGateway>();
     }
 
-
-
     //[Fact]
     //public async Task GivenFaultyInputInvoice_When_PushInvoice_HandleError()
     //{

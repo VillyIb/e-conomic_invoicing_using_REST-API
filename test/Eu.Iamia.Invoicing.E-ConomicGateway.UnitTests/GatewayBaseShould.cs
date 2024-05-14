@@ -47,6 +47,10 @@ public class GatewayBaseShould
             case HttpStatusCode.NotFound:
                 content = new StringContent(NotFoundResponse);
                 break;
+
+            case HttpStatusCode.NoContent:
+                content = new StringContent(string.Empty);
+                break;
             
             default:
                 content = new StringContent(Reason);

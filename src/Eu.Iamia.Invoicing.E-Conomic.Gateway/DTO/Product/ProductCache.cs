@@ -56,12 +56,12 @@ public class ProductCache
 
     public async Task LoadAllProducts()
     {
+        var cts = new CancellationTokenSource();
         bool @continue = true;
         var page = 0;
         while (@continue)
         {
-            var json = await _gateway.ReadProductsPagedObsolete(page, 20);
-            var productsHandle = ProductsHandleExtension.FromJson(json);
+            var productsHandle = await _gateway.ReadProductsPaged(page, 20, cts.Token);
             @continue = AddProducts(productsHandle) && page < 100;
             page++;
         }
