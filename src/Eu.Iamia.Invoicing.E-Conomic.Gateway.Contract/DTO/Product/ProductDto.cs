@@ -1,12 +1,11 @@
-﻿using System.Text.Json.Serialization;
-using System.Text.Json;
-using Eu.Iamia.Utils;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable UnusedMember.Global
 #pragma warning disable CS8618
 
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Product;
 internal class ProductDto
 {
 }
@@ -74,7 +73,7 @@ public class ProductGroup
     public string self { get; set; }
 }
 
-public class ProductsHandle
+public class ProductsHandle 
 {
     public List<Collection> collection { get; set; }
     public Pagination pagination { get; set; }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Product;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
 
 namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;

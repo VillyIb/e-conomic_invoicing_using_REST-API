@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Product;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
 using Eu.Iamia.Utils;
 
@@ -7,7 +8,7 @@ namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;
 public partial class GatewayBase
 {
     [Obsolete]
-    public async Task<string> ReadProductsPaged(int page, int pageSize)
+    public async Task<string> ReadProductsPagedObsolete(int page, int pageSize)
     {
         try
         {
@@ -32,7 +33,7 @@ public partial class GatewayBase
         }
     }
 
-    public async Task<ProductsHandle>? ReadProductsPaged2(int page, int pageSize, CancellationToken ct)
+    public async Task<ProductsHandle> ReadProductsPaged(int page, int pageSize, CancellationToken cancellationToken )
     {
         try
         {
@@ -52,16 +53,13 @@ public partial class GatewayBase
                 response.EnsureSuccessStatusCode();
             }
 
-            var utf8Json = await response.Content.ReadAsStreamAsync(ct);
-            var x = await JsonSerializerFacade.DeserializeAsync<ProductsHandle>(utf8Json);
+            var productsHandle = await JsonSerializerFacade.DeserializeAsync<ProductsHandle>(await response.Content.ReadAsStreamAsync(cancellationToken),cancellationToken);
 
-            var json = await GetHtmlBody(response);
-            var productsHandle = ProductsHandleExtension.FromJson(json);
             return productsHandle!;
         }
         catch (HttpRequestException ex)
         {
-            Report.Error(nameof(ReadProductsPaged2), ex.Message);
+            Report.Error(nameof(ReadProductsPaged), ex.Message);
             return new ProductsHandle
             {
                 collection = new List<Collection>(0),
@@ -69,7 +67,7 @@ public partial class GatewayBase
         }
         catch (JsonException ex)
         {
-            Report.Error(nameof(ReadProductsPaged2), ex.Message);
+            Report.Error(nameof(ReadProductsPaged), ex.Message);
             return new ProductsHandle
             {
                 collection = new List<Collection>(0),

@@ -1,4 +1,6 @@
-﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
+﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Product;
+
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
 
 public class ProductCache
 {
@@ -58,7 +60,7 @@ public class ProductCache
         var page = 0;
         while (@continue)
         {
-            var json = await _gateway.ReadProductsPaged(page, 20);
+            var json = await _gateway.ReadProductsPagedObsolete(page, 20);
             var productsHandle = ProductsHandleExtension.FromJson(json);
             @continue = AddProducts(productsHandle) && page < 100;
             page++;
