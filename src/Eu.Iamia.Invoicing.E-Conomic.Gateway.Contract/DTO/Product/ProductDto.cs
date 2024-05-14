@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable UnusedMember.Global
@@ -87,33 +86,4 @@ public class Unit
     public string name { get; set; }
     public string products { get; set; }
     public string self { get; set; }
-}
-
-
-public static class ProductsHandleExtension
-{
-    public static string ToJson(this ProductsHandle productsHandle)
-    {
-        var options = new JsonSerializerOptions
-        {
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
-            Converters = { new JsonStringEnumConverter() }
-        };
-
-        var json = JsonSerializer.Serialize(productsHandle, options);
-        return json;
-    }
-
-    /// <summary>
-    /// Returns deserialized object.
-    /// </summary>
-    /// <param name="json">Json formatted string</param>
-    /// <returns></returns>
-    /// <exception cref="JsonException"></exception>
-    public static ProductsHandle FromJson(string json)
-    {
-        var invoice = JsonSerializerFacade.Deserialize<ProductsHandle>(json);
-        return invoice;
-    }
-
 }
