@@ -1,4 +1,5 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Customer;
 using Eu.Iamia.Reporting.Contract;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
@@ -64,8 +65,7 @@ public class CustomerCache
         var page = 0;
         while (@continue)
         {
-            var json = await _gateway.ReadCustomersPaged(page, 20, cts.Token);
-            var customersHandle = CustomersHandleExtension.FromJson(json);
+            var customersHandle = await _gateway.ReadCustomersPaged(page, 20, cts.Token);
             @continue = AddCustomers(customersHandle) && page < 100;
             page++;
         }

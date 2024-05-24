@@ -1,33 +1,52 @@
-﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;
+﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Customer;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Product;
+using System.Text.Json;
+using Eu.Iamia.Utils;
+using Collection = Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Customer.Collection;
+
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;
 
 public partial class GatewayBase
 {
     // https://restapi.e-conomic.com/customers?skippages=0&pagesize=20
 
-    // TODO return Customer-collection, FromJson -> async.
-
-    public async Task<string> ReadCustomersPaged(int page, int pageSize, CancellationToken cancellationToken)
+    public async Task<CustomersHandle> ReadCustomersPaged(int page, int pageSize, CancellationToken cancellationToken)
     {
         try
         {
             SetAuthenticationHeaders();
 
-            var response = await _httpClient.GetAsync($"https://restapi.e-conomic.com/customers?skippages={page}&pagesize={pageSize}");
+            var response = await _httpClient.GetAsync($"https://restapi.e-conomic.com/customers?skippages={page}&pagesize={pageSize}", cancellationToken);
 
             if (!response.IsSuccessStatusCode)
             {
                 var htmlBodyFail = await GetHtmlBody(response);
-                Report.Error("ReadCustomersPaged", htmlBodyFail);
+                Report.Error(nameof(ReadCustomersPaged), htmlBodyFail);
 
                 response.EnsureSuccessStatusCode();
             }
 
-            var htmlBody = await GetHtmlBody(response);
-            return htmlBody;
+            var customersHandle = await JsonSerializerFacade.DeserializeAsync<CustomersHandle>(
+                await response.Content.ReadAsStreamAsync(cancellationToken), 
+                cancellationToken
+            );
+
+            return customersHandle;
         }
         catch (HttpRequestException ex)
         {
-            return ex.StatusCode.ToString() ?? string.Empty;
+            return new CustomersHandle()
+            {
+                collection = new List<Collection>(0)
+            };
+        }
+        catch (JsonException ex)
+        {
+            Report.Error(nameof(ReadCustomersPaged), ex.Message);
+            return new CustomersHandle()
+            {
+                collection = new List<Collection>(0)
+            };
         }
     }
 }
