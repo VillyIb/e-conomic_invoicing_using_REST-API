@@ -400,3 +400,4 @@ FodyWeavers.xsd
 # Files holding secret information
 appsettings.*.json
 launchSettings.json
+test/Eu.Iamia.Reporting.IntegrationTests/Testdata/*
