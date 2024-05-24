@@ -1,10 +1,9 @@
-﻿using System.Text.Json.Serialization;
-using System.Text.Json;
+﻿
 // ReSharper disable InconsistentNaming
 // ReSharper disable UnusedMember.Global
 #pragma warning disable CS8618
 
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Customer;
 
 internal class CustomerDto
 {
@@ -106,32 +105,4 @@ public class VatZone
 {
     public int vatZoneNumber { get; set; }
     public string self { get; set; }
-}
-
-public static class CustomersHandleExtension
-{
-    public static string ToJson(this CustomersHandle customersHandle)
-    {
-        var options = new JsonSerializerOptions
-        {
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
-            Converters = { new JsonStringEnumConverter() }
-        };
-
-        var json = JsonSerializer.Serialize(customersHandle, options);
-        return json;
-    }
-
-    public static CustomersHandle? FromJson(string json)
-    {
-        var options = new JsonSerializerOptions
-        {
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
-            Converters = { new JsonStringEnumConverter() }
-        };
-
-        var invoice = JsonSerializer.Deserialize<CustomersHandle>(json, options);
-        return invoice;
-    }
-
 }
