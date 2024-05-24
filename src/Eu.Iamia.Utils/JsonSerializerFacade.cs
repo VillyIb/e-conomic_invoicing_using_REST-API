@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Eu.Iamia.Utils;
 public static class JsonSerializerFacade
 {
-    // public static TValue? Deserialize<TValue>([StringSyntax(StringSyntaxAttribute.Json)] string json, JsonSerializerOptions? options = null)
+    private static readonly JsonSerializerOptions Options = new JsonSerializerOptions
+    {
+        PropertyNameCaseInsensitive = true,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
+        Converters = { new JsonStringEnumConverter() }
+    };
 
     /// <summary>
     /// 
@@ -22,14 +23,7 @@ public static class JsonSerializerFacade
     {
         try
         {
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
-                Converters = { new JsonStringEnumConverter() }
-            };
-
-            var value = JsonSerializer.Deserialize<TValue>(json, options);
+            var value = JsonSerializer.Deserialize<TValue>(json, Options);
             return value is not null 
                 ? value
                 : throw new JsonException()
@@ -46,7 +40,6 @@ public static class JsonSerializerFacade
         }
     }
 
-
     /// <summary>
     /// 
     /// </summary>
@@ -61,14 +54,7 @@ public static class JsonSerializerFacade
     {
         try
         {
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
-                Converters = { new JsonStringEnumConverter() }
-            };
-
-            var value = await JsonSerializer.DeserializeAsync<TValue>(utf8Json, options, cancellationToken);
+            var value = await JsonSerializer.DeserializeAsync<TValue>(utf8Json, Options, cancellationToken);
             return value is not null
                     ? value
                     : throw new JsonException("Deserialize returned null")

@@ -8,8 +8,10 @@ namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;
 
 public class GatewayInvoiceShould : GatewayBaseShould
 {
+    #region PushInvoice
+
     [Fact]
-    public async Task GivenMockedHandler_When_PushInvoice_Handle_OkResponse()
+    public async Task PushInvoice_When_OkResponse_Handle_Success()
     {
         MockResponse(HttpStatusCode.OK);
         var mockedReport = Substitute.For<ICustomerReport>();
@@ -25,14 +27,14 @@ public class GatewayInvoiceShould : GatewayBaseShould
     }
 
     [Fact]
-    public async Task GivenMockedHandler_When_PushInvoice_Handle_NotFoundResponse()
+    public async Task PushInvoice_When_NotFound_Handle_HttpRequestException()
     {
         MockResponse(HttpStatusCode.NotFound);
         var mockedReport = Substitute.For<ICustomerReport>();
 
         using var sut = new GatewayBase(Settings, mockedReport, HttpMessageHandler);
-        
-        var result = await sut.PushInvoice(MockedCustomer.Valid(), new Invoice(),-9);
+
+        var result = await sut.PushInvoice(MockedCustomer.Valid(), new Invoice(), -9);
 
         Mock.VerifyAll();
         mockedReport.Received(1).Error(Arg.Is<string>("PushInvoice"), Arg.Any<string>());
@@ -42,18 +44,39 @@ public class GatewayInvoiceShould : GatewayBaseShould
     }
 
     [Fact]
+    public async Task PushInvoice_When_NoContent_Handle_Exception()
+    {
+        MockResponse(HttpStatusCode.NoContent);
+        var mockedReport = Substitute.For<ICustomerReport>();
+
+        using var sut = new GatewayBase(Settings, mockedReport, HttpMessageHandler);
+
+        var result = await sut.PushInvoice(MockedCustomer.Valid(), new Invoice(), -9);
+
+        Mock.VerifyAll();
+        mockedReport.Received(1).Error(Arg.Is<string>("PushInvoice"), Arg.Any<string>());
+        mockedReport.Received(0).Info(Arg.Any<string>(), Arg.Any<string>());
+
+        Assert.NotNull(result);
+    }
+
+    #endregion
+
+    #region ReadInvoice
+
+    [Fact]
     public async Task GivenMockedHandler_When_ReadInvoice_HandleOkResponse()
     {
         MockResponse(HttpStatusCode.OK);
         var mockedReport = Substitute.For<ICustomerReport>();
-        
+
         using var sut = new GatewayBase(Settings, mockedReport, HttpMessageHandler);
         var result = await sut.ReadInvoice();
 
         Mock.VerifyAll();
         mockedReport.Received(0).Error(Arg.Any<string>(), Arg.Any<string>());
         mockedReport.Received(0).Info(Arg.Any<string>(), Arg.Any<string>());
-        
+
         Assert.NotNull(result);
         Assert.Equal(OkResponse, result);
     }
@@ -74,5 +97,7 @@ public class GatewayInvoiceShould : GatewayBaseShould
         Assert.NotNull(result);
         Assert.NotEqual(OkResponse, result);
     }
+
+    #endregion
 
 }

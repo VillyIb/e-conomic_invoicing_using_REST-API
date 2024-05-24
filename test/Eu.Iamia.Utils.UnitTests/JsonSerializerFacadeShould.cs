@@ -4,9 +4,10 @@ namespace Eu.Iamia.Utils.UnitTests;
 
 public class JsonSerializerFacadeShould
 {
+    // Synchronous
 
     [Fact]
-    public void Given_DtoThrowsArgumentException_When_JsonSerializerFacade_Deserialize_ThrowsJsonExceptionWithInnerException()
+    public void Deserialize_When_DtoThrowsArgumentException_Expect_JsonException()
     {
         var ex = Assert.Throws<JsonException>(() => JsonSerializerFacade.Deserialize<TestSubjectDto>("{\"Subject\": \"\"}"));
         Assert.NotNull(ex);
@@ -14,7 +15,7 @@ public class JsonSerializerFacadeShould
     }
 
     [Fact]
-    public void Given_NullArgument_When_JsonSerializerFacade_Deserialize_ThrowsJsonExceptionWithInnerException()
+    public void Deserialize_When_NullArgument_Expect_JsonException()
     {
         var ex = Assert.Throws<JsonException>(() => JsonSerializerFacade.Deserialize<TestSubjectDto>((string)null!));
         Assert.NotNull(ex);
@@ -36,4 +37,60 @@ public class JsonSerializerFacadeShould
         Assert.NotNull(dto);
         Assert.Null(dto.Subject);
     }
+
+    // Asynchronous
+    private static Stream GenerateStreamFromString(string s)
+    {
+        var stream = new MemoryStream();
+        var writer = new StreamWriter(stream);
+        writer.Write(s);
+        writer.Flush();
+        stream.Position = 0;
+        return stream;
+    }
+
+    [Fact]
+    public void DeserializeAsync_When_DtoThrowsArgumentException_Expect_JsonException()
+    {
+        var cts = new CancellationTokenSource();
+        using var st = GenerateStreamFromString("{\"Subject\": \"\"}");
+
+        var ex = Assert.ThrowsAsync<JsonException>(() => JsonSerializerFacade.DeserializeAsync<TestSubjectDto>(st, cts.Token));
+        Assert.NotNull(ex.Result);
+        Assert.NotNull(ex.Result.InnerException);
+    }
+
+    [Fact]
+    public void DeserializeAsync_When_NullArgument_Expect_JsonException()
+    {
+        var cts = new CancellationTokenSource();
+        using var st = GenerateStreamFromString((string)null);
+
+        var ex = Assert.ThrowsAsync<JsonException>(() => JsonSerializerFacade.DeserializeAsync<TestSubjectDto>(st, cts.Token));
+        Assert.NotNull(ex.Result);
+        Assert.NotNull(ex.Result.InnerException);
+    }
+
+    [Fact]
+    public void DeserializeAsync_ValidJson_When_JsonSerializerFacade_Deserialize_Returns_ValidDto_With_ValidProperties()
+    {
+        var cts = new CancellationTokenSource();
+        using var st = GenerateStreamFromString("{\"Subject\": \"x\"}");
+
+        var dto = JsonSerializerFacade.DeserializeAsync<TestSubjectDto>(st,cts.Token);
+        Assert.NotNull(dto.Result);
+        Assert.NotNull(dto.Result.Subject);
+    }
+
+    [Fact]
+    public void DeserializeAsync_ValidJson_WithoutProperties_When_JsonSerializerFacade_Deserialize_Returns_ValidDto_With_UninitializedProperties()
+    {
+        var cts = new CancellationTokenSource();
+        using var st = GenerateStreamFromString("{}");
+
+        var dto = JsonSerializerFacade.DeserializeAsync<TestSubjectDto>(st, cts.Token);
+        Assert.NotNull(dto.Result);
+        Assert.Null(dto.Result.Subject);
+    }
+
 }

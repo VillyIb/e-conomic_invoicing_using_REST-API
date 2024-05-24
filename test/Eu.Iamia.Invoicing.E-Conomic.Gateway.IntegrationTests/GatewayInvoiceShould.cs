@@ -21,7 +21,7 @@ public class GatewayInvoiceShould
     //}
 
     [Fact]
-    public async Task Given_Invoice_When_PushInvoice_Handle_OkResponse()
+    public async Task PushInvoice_When_InvalidInvoice_Handle_XXXX()
     {
         Invoice invalidInvoice = MockedInvoiceExtensions.Valid(MockedCustomer.Valid());
         var result = await _sut.PushInvoice(MockedCustomer.Valid(), invalidInvoice, 1);
@@ -30,7 +30,7 @@ public class GatewayInvoiceShould
     }
 
     [Fact]
-    public async Task Given_Invoice_With_Invalid_PaymentTerm_When_PushInvoice_Handle_Error()
+    public async Task PushInvoice_When_Invoice_With_Invalid_PaymentTerm_Handle_Error()
     {
         Invoice invalidInvoice = MockedInvoiceExtensions.Valid(MockedCustomer.Valid()).Invalid_PaymentTerm();
         var result = await _sut.PushInvoice(MockedCustomer.Valid(), invalidInvoice, 1);

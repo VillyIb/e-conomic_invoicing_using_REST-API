@@ -45,6 +45,7 @@ public partial class GatewayBase
         try
         {
             SetAuthenticationHeaders();
+            Report.SetCustomer(customer);
 
             var json = invoice.ToJson();
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -71,8 +72,15 @@ public partial class GatewayBase
         {
             return new DraftInvoice
             {
-                DraftInvoiceNumber = -1,
-                GrossAmount = 0.0
+                DraftInvoiceNumber = -1, GrossAmount = 0.0
+            };
+        }
+        catch (Exception ex)
+        {
+            Report.Error("PushInvoice", ex.Message);
+            return new DraftInvoice
+            {
+                DraftInvoiceNumber = -1, GrossAmount = 0.0
             };
         }
     }

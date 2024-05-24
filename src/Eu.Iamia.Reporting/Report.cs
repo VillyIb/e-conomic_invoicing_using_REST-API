@@ -83,7 +83,7 @@ public class CustomerCustomerReport : ReportBase, ICustomerReport
 
     internal string GetFilename(ReportState reportState)
     {
-        if (CustomerNumber is null) { throw new ApplicationException($"{nameof(CustomerNumber)} is null"); }
+        if (CustomerNumber is null) { throw new ApplicationException($"{nameof(CustomerNumber)} is not provided"); }
 
         var namePart = (CustomerName is not null)
             ? CustomerName.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)

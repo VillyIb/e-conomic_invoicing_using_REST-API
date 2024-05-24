@@ -1,5 +1,4 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using Eu.Iamia.Utils;
 
@@ -26,16 +25,7 @@ public static class DraftInvoiceExtensions
 {
     public static DraftInvoice? FromJson(string json)
     {
-        try
-        {
-
-            var result = JsonSerializerFacade.Deserialize<DraftInvoice>(json);
-
-            return result;
-        }
-        catch (JsonException )
-        {
-            return null;
-        }
+        var result = JsonSerializerFacade.Deserialize<DraftInvoice>(json);
+        return result;
     }
 }

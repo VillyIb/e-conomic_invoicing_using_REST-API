@@ -42,18 +42,21 @@ public partial class GatewayBase
             // ReSharper disable StringLiteralTypo
             var response =
                 await _httpClient.GetAsync(
-                    $"https://restapi.e-conomic.com/products?skippages={page}&pagesize={pageSize}");
+                    $"https://restapi.e-conomic.com/products?skippages={page}&pagesize={pageSize}", cancellationToken);
             // ReSharper restore StringLiteralTypo
 
             if (!response.IsSuccessStatusCode)
             {
                 var htmlBodyFail = await GetHtmlBody(response);
-                Report.Error("ReadProductsPaged", htmlBodyFail);
+                Report.Error(nameof(ReadProductsPaged), htmlBodyFail);
 
                 response.EnsureSuccessStatusCode();
             }
 
-            var productsHandle = await JsonSerializerFacade.DeserializeAsync<ProductsHandle>(await response.Content.ReadAsStreamAsync(cancellationToken), cancellationToken);
+            var productsHandle = await JsonSerializerFacade.DeserializeAsync<ProductsHandle>(
+                await response.Content.ReadAsStreamAsync(cancellationToken), 
+                cancellationToken
+            );
 
             return productsHandle!;
         }
