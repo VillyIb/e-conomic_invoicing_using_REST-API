@@ -23,21 +23,25 @@ public static class StringExtensions
         }
     }
 
+    public const char DefaultPostFix = '…';
+
     /// <summary>
     /// Cuts string at the end and pads with suffix at the end.
     /// </summary>
     /// <param name="value"></param>
     /// <param name="length"></param>
-    /// <param name="suffix"></param>
+    /// <param name="postfix"></param>
     /// <returns></returns>
-    public static string? TrimToLength(this string? value, int length, char suffix = '…')
+    public static string TrimToLength(this string? value, int length, char postfix = DefaultPostFix)
     {
         var t1 = value ?? string.Empty;
 
-        var t2 = (t1.Length > length ? t1[..length] : t1).PadRight(length, suffix);
+        var t2 = (t1.Length > length ? t1[..length] : t1).PadRight(length, postfix);
 
         return t2;
     }
+
+    public const char DefaultPreFix = '_';
 
     /// <summary>
     /// Cuts number at the end and pads with prefix at the beginning.
@@ -46,9 +50,9 @@ public static class StringExtensions
     /// <param name="length"></param>
     /// <param name="prefix"></param>
     /// <returns></returns>
-    public static string? TrimNumberToLength(this string? value, int length, char prefix = '_')
+    public static string TrimNumberToLength(this string? value, int length, char prefix = DefaultPreFix)
     {
-        var t1 = value ?? string.Empty;
+        var t1 = (value ?? string.Empty);
 
         var t2 = (t1.Length > length ? t1[..length] : t1).PadLeft(length, prefix);
 
