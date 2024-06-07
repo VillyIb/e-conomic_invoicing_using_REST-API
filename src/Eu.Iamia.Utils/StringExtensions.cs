@@ -4,6 +4,8 @@ namespace Eu.Iamia.Utils;
 
 public static class StringExtensions
 {
+    private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };
+    
     /// <summary>
     /// Returns the provided json with newlines and indenting.
     /// - or the provided NON-json as it is.
@@ -15,13 +17,14 @@ public static class StringExtensions
         try
         {
             using var jDoc = JsonDocument.Parse(json);
-            return JsonSerializer.Serialize(jDoc, new JsonSerializerOptions { WriteIndented = true });
+            return JsonSerializer.Serialize(jDoc, Options);
         }
         catch
         {
             return json;
         }
     }
+
 
     public const char DefaultPostFix = '…';
 
