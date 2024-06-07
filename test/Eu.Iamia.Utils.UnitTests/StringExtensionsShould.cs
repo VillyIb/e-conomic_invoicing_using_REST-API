@@ -1,42 +1,49 @@
+// ReSharper disable StringLiteralTypo
 namespace Eu.Iamia.Utils.UnitTests;
 
 public class StringExtensionsShould
 {
     [Theory]
-    [InlineData("", 0, "AbCdEf")]
-    [InlineData("A", 1, "AbCdEf")]
-    [InlineData("Ab", 2, "AbCdEf")]
-    [InlineData("AbC", 3, "AbCdEf")]
-    [InlineData("AbCd", 4, "AbCdEf")]
-    [InlineData("AbCdE", 5, "AbCdEf")]
-    [InlineData("AbCdEf", 6, "AbCdEf")]
-    [InlineData("AbCdEf@", 7, "AbCdEf")]
-    [InlineData("AbCdEf@@", 8, "AbCdEf")]
-    [InlineData("@@@@", 4, "")]
-    [InlineData("@@@@", 4, null)]
-    public void TrimToLength_Returns_RightValue(string expected, int length, string? input)
+    [InlineData("", '@', 0, "AbCdEf")]
+    [InlineData("A", '@', 1, "AbCdEf")]
+    [InlineData("Ab", '@', 2, "AbCdEf")]
+    [InlineData("AbC", '@', 3, "AbCdEf")]
+    [InlineData("AbCd", '@', 4, "AbCdEf")]
+    [InlineData("AbCdE", '@', 5, "AbCdEf")]
+    [InlineData("AbCdEf", '@', 6, "AbCdEf")]
+    [InlineData("AbCdEf@", '@', 7, "AbCdEf")]
+    [InlineData("AbCdEf@@", '@', 8, "AbCdEf")]
+    [InlineData("@@@@", '@', 4, "")]
+    [InlineData("…………", null, 4, "")]
+    [InlineData("zzzz", 'z', 4, null)]
+    public void TrimToLength_Returns_RightValue(string expected, char? postfix, int length, string? input)
     {
-        const char postfix = '@';
-        var actual = input.TrimToLength(length, postfix);
+        var actual = postfix.HasValue
+            ? input.TrimToLength(length, postfix.Value)
+            : input.TrimToLength(length)
+        ;
         Assert.Equal(expected, actual);
     }
 
     [Theory]
-    [InlineData("", 0, "AbCdEf")]
-    [InlineData("A", 1, "AbCdEf")]
-    [InlineData("Ab", 2, "AbCdEf")]
-    [InlineData("AbC", 3, "AbCdEf")]
-    [InlineData("AbCd", 4, "AbCdEf")]
-    [InlineData("AbCdE", 5, "AbCdEf")]
-    [InlineData("AbCdEf", 6, "AbCdEf")]
-    [InlineData("@AbCdEf", 7, "AbCdEf")]
-    [InlineData("@@AbCdEf", 8, "AbCdEf")]
-    [InlineData("@@@@", 4, "")]
-    [InlineData("@@@@", 4, null)]
-    public void TrimToNumberLength_Returns_RightValue(string expected, int length, string? input)
+    [InlineData("", '@', 0, "AbCdEf")]
+    [InlineData("A", '@', 1, "AbCdEf")]
+    [InlineData("Ab", '@', 2, "AbCdEf")]
+    [InlineData("AbC", '@', 3, "AbCdEf")]
+    [InlineData("AbCd", '@', 4, "AbCdEf")]
+    [InlineData("AbCdE", '@', 5, "AbCdEf")]
+    [InlineData("AbCdEf", '@', 6, "AbCdEf")]
+    [InlineData("@AbCdEf", '@', 7, "AbCdEf")]
+    [InlineData("@@AbCdEf", '@', 8, "AbCdEf")]
+    [InlineData("@@@@", '@', 4, "")]
+    [InlineData("____", null, 4, "")]
+    [InlineData("zzzz", 'z', 4, null)]
+    public void TrimToNumberLength_Returns_RightValue(string expected,char? postfix, int length, string? input)
     {
-        const char postfix = '@';
-        var actual = input.TrimNumberToLength(length, postfix);
+        var actual = postfix.HasValue
+                ? input.TrimNumberToLength(length, postfix.Value)
+                : input.TrimNumberToLength(length)
+            ;
         Assert.Equal(expected, actual);
     }
 
