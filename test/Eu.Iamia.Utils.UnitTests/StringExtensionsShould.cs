@@ -3,6 +3,24 @@ namespace Eu.Iamia.Utils.UnitTests;
 
 public class StringExtensionsShould
 {
+    [Fact]
+    public void JsonPrettify_For_Valid_Json_Returns_Formatted_Json()
+    {
+        const string source = "{ \"Alfa\": \"aaaa\", \"Bravo\": \"bbbb\"}";
+        const string expected = "{\r\n  \"Alfa\": \"aaaa\",\r\n  \"Bravo\": \"bbbb\"\r\n}";
+        var actual = source.JsonPrettify();
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void JsonPrettify_For_Invalid_Json_Returns_Same()
+    {
+        const string source = "{ \"Alfa\" \"aaaa\", \"Bravo\" \"bbbb\"}";
+        const string expected = source;
+        var actual = source.JsonPrettify();
+        Assert.Equal(expected, actual);
+    }
+
     [Theory]
     [InlineData("", '@', 0, "AbCdEf")]
     [InlineData("A", '@', 1, "AbCdEf")]
@@ -38,7 +56,7 @@ public class StringExtensionsShould
     [InlineData("@@@@", '@', 4, "")]
     [InlineData("____", null, 4, "")]
     [InlineData("zzzz", 'z', 4, null)]
-    public void TrimToNumberLength_Returns_RightValue(string expected,char? postfix, int length, string? input)
+    public void TrimToNumberLength_Returns_RightValue(string expected, char? postfix, int length, string? input)
     {
         var actual = postfix.HasValue
                 ? input.TrimNumberToLength(length, postfix.Value)
@@ -60,4 +78,6 @@ public class StringExtensionsShould
 
         Assert.True(mockString.Equals(actual));
     }
+
+
 }
