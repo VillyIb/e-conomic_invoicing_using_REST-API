@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace Eu.Iamia.Invoicing.CSVLoader.UnitTests;
+﻿namespace Eu.Iamia.Invoicing.CSVLoader.UnitTests;
 public class LoaderShould
 {
 
@@ -14,7 +12,7 @@ public class LoaderShould
 
         loader.ParseCSV(fi);
 
-        Assert.True(loader.Invoices.Any());
+        Assert.True(loader.Invoices?.Any());
 
     }
 }

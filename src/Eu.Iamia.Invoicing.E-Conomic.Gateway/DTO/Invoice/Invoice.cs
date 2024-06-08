@@ -501,7 +501,7 @@ public static class InvoiceExtension
         var options = new JsonSerializerOptions
         {
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
-            Converters = { new JsonStringEnumConverter() }
+            Converters = { new JsonStringEnumConverter() },
         };
 
         var invoice = JsonSerializer.Deserialize<Invoice>(json, options);

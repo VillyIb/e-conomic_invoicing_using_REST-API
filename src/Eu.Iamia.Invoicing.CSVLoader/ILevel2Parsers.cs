@@ -8,7 +8,7 @@ namespace Eu.Iamia.Invoicing.CSVLoader
         IList<IInputInvoice> Invoices { get; }
         Metadata? Metadata { get; set; }
 
-        void ParseCustomerGroupeRow(IList<string> columns);
+        void ParseCustomerGroupRow(IList<string> columns);
         void ParseInvoiceDateRow(IList<string> columns);
         void ParseInvoiceRow(IList<string> columns);
         void ParseInvoiceTextRow(IList<string> columns);

@@ -15,7 +15,7 @@
             //sut.ParseInvoiceDateRow();
             //sut.ParseInvoiceTextRow();
             //sut.ParseInvoiceRow();
-            //sut.ParseCustomerGroupeRow();
+            //sut.ParseCustomerGroupRow();
             //sut.ParsePaymentTermRow();
             //sut.ParseProductsRow();
             //sut.ParseTagsRow();

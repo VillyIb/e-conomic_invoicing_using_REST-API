@@ -13,7 +13,7 @@ namespace Eu.Iamia.Invoicing.CSVLoader
 
         public IList<IInputInvoice> Invoices => _invoices ??= new List<IInputInvoice>();
 
-        public void ParseCustomerGroupeRow(IList<string> columns)
+        public void ParseCustomerGroupRow(IList<string> columns)
         {
             var customerGroups = columns[1];
             var cc = customerGroups.Split(',', StringSplitOptions.RemoveEmptyEntries);

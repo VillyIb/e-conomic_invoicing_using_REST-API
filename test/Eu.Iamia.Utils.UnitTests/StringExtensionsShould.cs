@@ -76,7 +76,7 @@ public class StringExtensionsShould
 
         var actual = streamReader.ReadToEnd();
 
-        Assert.True(mockString.Equals(actual));
+        Assert.Equal(mockString, actual);
     }
 
 

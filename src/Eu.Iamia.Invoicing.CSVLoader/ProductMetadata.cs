@@ -15,5 +15,5 @@ public class ProductMetadata
 
     public int UnitNumber { get; set; }
 
-    public string ProductId { get; set; }
+    public string ProductId { get; set; } = string.Empty;
 }

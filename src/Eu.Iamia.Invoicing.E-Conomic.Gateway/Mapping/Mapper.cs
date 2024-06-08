@@ -35,7 +35,7 @@ public class Mapper
     {
         var inputInvoiceCustomerNumber = inputInvoice.CustomerNumber;
         var customer = CustomerMustExist(inputInvoiceCustomerNumber, inputInvoice.SourceFileLineNumber);
-        
+
         var inputInvoiceInvoiceDate = inputInvoice.InvoiceDate;
 
         var invoice = new Invoice
@@ -50,7 +50,7 @@ public class Mapper
             //, "delivery-country"
             //, DateTime.Today
             //),
-            Layout = new() { LayoutNumber = _settings.LayoutNumber }, 
+            Layout = new() { LayoutNumber = _settings.LayoutNumber },
             Notes = new()
             {
                 Heading = $"#{customer.CustomerNumber} {customer.Name}",
@@ -59,7 +59,7 @@ public class Mapper
             },
             Recipient = new()
             {
-                Address = $"{ customer.Address}",
+                Address = $"{customer.Address}",
                 City = $"{customer.City}",
                 Zip = $"{customer.Zip}",
                 Name = $"{customer.Name}",
@@ -99,8 +99,8 @@ public class Mapper
                 throw new ApplicationException($"Product: '{inputLine.ProductNumber}' not found in e-conomic, Source file line: {inputLine.SourceFileLineNumber}");
             }
 
-            var unit = inputProduct!.Unit is null 
-                ? null 
+            var unit = inputProduct!.Unit is null
+                ? null
                 : new DTO.Invoice.Unit(
                     name: inputProduct.Unit.Name,
                     unitNumber: inputProduct.Unit.UnitNumber
@@ -123,7 +123,7 @@ public class Mapper
             invoice.Lines.Add(line);
         }
 
-        return (customer,invoice);
+        return (customer, invoice);
     }
 }
 

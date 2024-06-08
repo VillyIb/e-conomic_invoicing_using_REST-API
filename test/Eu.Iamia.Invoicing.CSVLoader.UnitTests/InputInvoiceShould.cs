@@ -7,7 +7,7 @@ public class InputInvoiceShould
     {
         var sut= new InputInvoice();
         sut.InvoiceLines.Add(new InputLine());
-        Assert.Equal(1, sut.InvoiceLines.Count);
+        Assert.Single(sut.InvoiceLines);
         sut.InvoiceLines.Add(new InputLine());
         Assert.Equal(2, sut.InvoiceLines.Count);
     }

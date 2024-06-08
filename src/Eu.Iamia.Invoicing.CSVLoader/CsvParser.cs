@@ -54,7 +54,7 @@ public class CsvParser
                 case "#kundegruppe":
                 case "#kundegrupper":
                     // parse for customer groups to accept on customers
-                    _level2Parsers.ParseCustomerGroupeRow(columns);
+                    _level2Parsers.ParseCustomerGroupRow(columns);
                     break;
 
                 case "#tekst1":
