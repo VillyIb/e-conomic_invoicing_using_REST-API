@@ -1,5 +1,6 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Configuration;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Deserializers;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
 using Eu.Iamia.Reporting.Contract;
@@ -9,14 +10,26 @@ namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;
 
 public partial class GatewayBase : IEconomicGateway, IDisposable
 {
+    protected readonly ISerializerDraftInvoice SerializerDraftInvoice;
+    protected readonly ISerializerCustomersHandle SerializerCustomersHandle;
+    protected readonly ISerializerProductsHandle SerializerProductsHandle;
     protected readonly ICustomerReport Report;
     protected readonly SettingsForEConomicGateway Settings;
     private readonly HttpClient _httpClient;
 
-    public GatewayBase(IOptions<SettingsForEConomicGateway> settings, ICustomerReport report)
+    public GatewayBase(
+        IOptions<SettingsForEConomicGateway> settings,
+        ISerializerCustomersHandle serializerCustomersHandle,
+        ISerializerDraftInvoice serializerDraftInvoice,
+        ISerializerProductsHandle serializerProductsHandle,
+        ICustomerReport report
+    )
     {
-        Report = report;
         Settings = settings.Value;
+        SerializerCustomersHandle = serializerCustomersHandle;
+        SerializerDraftInvoice = serializerDraftInvoice;
+        SerializerProductsHandle = serializerProductsHandle;
+        Report = report;
         _httpClient = new HttpClient();
     }
 
@@ -24,13 +37,26 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
     /// For UnitTesting.
     /// </summary>
     /// <param name="settings"></param>
+    /// <param name="serializerDraftInvoice"></param>
+    /// <param name="serializerProductsHandle"></param>
     /// <param name="report"></param>
     /// <param name="httpClientHandler"></param>
-    internal GatewayBase(SettingsForEConomicGateway settings, ICustomerReport report, HttpMessageHandler httpClientHandler)
+    /// <param name="serializerCustomersHandle"></param>
+    internal GatewayBase(
+        SettingsForEConomicGateway settings,
+        ISerializerCustomersHandle serializerCustomersHandle,
+        ISerializerDraftInvoice serializerDraftInvoice,
+        ISerializerProductsHandle serializerProductsHandle,
+        ICustomerReport report,
+        HttpMessageHandler httpClientHandler
+    )
     {
         Settings = settings;
+        SerializerCustomersHandle = serializerCustomersHandle;
+        SerializerDraftInvoice = serializerDraftInvoice;
+        SerializerProductsHandle = serializerProductsHandle;
         Report = report;
-        _httpClient = new HttpClient(httpClientHandler);
+        _httpClient = new HttpClient(httpClientHandler); // TODO remove constructor but create virtual HttpClient property.
     }
 
     public void SetDemoAuthenticationHeaders()

@@ -2,6 +2,8 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway;
 using Eu.Iamia.Reporting.Contract;
 using NSubstitute;
 using System.Net;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Deserializers;
+using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;
 
@@ -14,7 +16,16 @@ public class GatewayProductShould : GatewayBaseShould
         var mockedReport = Substitute.For<ICustomerReport>();
         var cts = new CancellationTokenSource();
 
-        using var sut = new GatewayBase(Settings, mockedReport, HttpMessageHandler);
+        var serializer = new JsonSerializerFacadeV2();
+
+        using var sut = new GatewayBase(
+            Settings,
+            new SerializerCustomersHandle(serializer),
+            new SerializerDraftInvoice(serializer),
+            new SerializerProductsHandle(serializer),
+            mockedReport,
+            HttpMessageHandler
+        );
         var result = await sut.ReadProductsPaged(0, 20, cts.Token);
 
         Mock.VerifyAll();
@@ -31,7 +42,16 @@ public class GatewayProductShould : GatewayBaseShould
         var mockedReport = Substitute.For<ICustomerReport>();
         var cts = new CancellationTokenSource();
 
-        using var sut = new GatewayBase(Settings, mockedReport, HttpMessageHandler);
+        var serializer = new JsonSerializerFacadeV2();
+
+        using var sut = new GatewayBase(
+            Settings,
+            new SerializerCustomersHandle(serializer),
+            new SerializerDraftInvoice(serializer),
+            new SerializerProductsHandle(serializer),
+            mockedReport,
+            HttpMessageHandler
+        );
         var result = await sut.ReadProductsPaged(0, 20, cts.Token);
 
         Mock.VerifyAll();
@@ -48,7 +68,16 @@ public class GatewayProductShould : GatewayBaseShould
         var mockedReport = Substitute.For<ICustomerReport>();
         var cts = new CancellationTokenSource();
 
-        using var sut = new GatewayBase(Settings, mockedReport, HttpMessageHandler);
+        var serializer = new JsonSerializerFacadeV2();
+
+        using var sut = new GatewayBase(
+            Settings,
+            new SerializerCustomersHandle(serializer),
+            new SerializerDraftInvoice(serializer),
+            new SerializerProductsHandle(serializer),
+            mockedReport,
+            HttpMessageHandler
+        );
         var result = await sut.ReadProductsPaged(0, 20, cts.Token);
 
         Mock.VerifyAll();

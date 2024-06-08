@@ -1,8 +1,11 @@
 ﻿using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization.Metadata;
 
 namespace Eu.Iamia.Utils;
+
+[Obsolete]
 public static class JsonSerializerFacade
 {
     private static readonly JsonSerializerOptions Options = new JsonSerializerOptions
@@ -10,6 +13,21 @@ public static class JsonSerializerFacade
         PropertyNameCaseInsensitive = true,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
         Converters = { new JsonStringEnumConverter() }
+        ,
+        MaxDepth = -1
+        ,
+        PropertyNamingPolicy = JsonNamingPolicy.KebabCaseLower
+        ,
+        ReadCommentHandling = JsonCommentHandling.Skip
+        ,
+        AllowTrailingCommas = true
+        ,
+        NumberHandling = JsonNumberHandling.Strict
+        ,
+        UnknownTypeHandling = JsonUnknownTypeHandling.JsonElement
+            ,
+        WriteIndented = true
+        //, TypeInfoResolver = new DefaultJsonTypeInfoResolver(){  Modifiers = new List<Action<JsonTypeInfo>>(){ }}
     };
 
     /// <summary>
@@ -24,13 +42,19 @@ public static class JsonSerializerFacade
         try
         {
             var value = JsonSerializer.Deserialize<TValue>(json, Options);
-            return value is not null 
-                ? value
-                : throw new JsonException()
-            ;
+            //return value is not null 
+            //    ? value
+            //    : throw new JsonException()
+            //;
+            if (value is null)
+            {
+                throw new JsonException("value is null");
+            }
+            return value;
         }
-        catch (JsonException)
+        catch (JsonException ex)
         {
+            var type = ex.GetType().Name;
             throw;
         }
         catch (Exception ex)

@@ -3,6 +3,8 @@ using System.Net;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
 using Eu.Iamia.Reporting.Contract;
 using NSubstitute;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Deserializers;
+using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;
 
@@ -16,7 +18,16 @@ public class GatewayInvoiceShould : GatewayBaseShould
         MockResponse(HttpStatusCode.OK);
         var mockedReport = Substitute.For<ICustomerReport>();
 
-        using var sut = new GatewayBase(Settings, mockedReport, HttpMessageHandler);
+        var serializer = new JsonSerializerFacadeV2();
+
+        using var sut = new GatewayBase(
+            Settings,
+            new SerializerCustomersHandle(serializer),
+            new SerializerDraftInvoice(serializer),
+            new SerializerProductsHandle(serializer),
+            mockedReport,
+            HttpMessageHandler
+        );
         var result = await sut.PushInvoice(MockedCustomer.Valid(), new Invoice(), -9);
 
         Mock.VerifyAll();
@@ -32,7 +43,16 @@ public class GatewayInvoiceShould : GatewayBaseShould
         MockResponse(HttpStatusCode.NotFound);
         var mockedReport = Substitute.For<ICustomerReport>();
 
-        using var sut = new GatewayBase(Settings, mockedReport, HttpMessageHandler);
+        var serializer = new JsonSerializerFacadeV2();
+
+        using var sut = new GatewayBase(
+            Settings,
+            new SerializerCustomersHandle(serializer),
+            new SerializerDraftInvoice(serializer),
+            new SerializerProductsHandle(serializer),
+            mockedReport,
+            HttpMessageHandler
+        );
 
         var result = await sut.PushInvoice(MockedCustomer.Valid(), new Invoice(), -9);
 
@@ -49,7 +69,16 @@ public class GatewayInvoiceShould : GatewayBaseShould
         MockResponse(HttpStatusCode.NoContent);
         var mockedReport = Substitute.For<ICustomerReport>();
 
-        using var sut = new GatewayBase(Settings, mockedReport, HttpMessageHandler);
+        var serializer = new JsonSerializerFacadeV2();
+
+        using var sut = new GatewayBase(
+            Settings,
+            new SerializerCustomersHandle(serializer),
+            new SerializerDraftInvoice(serializer),
+            new SerializerProductsHandle(serializer),
+            mockedReport,
+            HttpMessageHandler
+        );
 
         var result = await sut.PushInvoice(MockedCustomer.Valid(), new Invoice(), -9);
 
@@ -70,7 +99,16 @@ public class GatewayInvoiceShould : GatewayBaseShould
         MockResponse(HttpStatusCode.OK);
         var mockedReport = Substitute.For<ICustomerReport>();
 
-        using var sut = new GatewayBase(Settings, mockedReport, HttpMessageHandler);
+        var serializer = new JsonSerializerFacadeV2();
+
+        using var sut = new GatewayBase(
+            Settings,
+            new SerializerCustomersHandle(serializer),
+            new SerializerDraftInvoice(serializer),
+            new SerializerProductsHandle(serializer),
+            mockedReport,
+            HttpMessageHandler
+        );
         var result = await sut.ReadInvoice();
 
         Mock.VerifyAll();
@@ -87,7 +125,16 @@ public class GatewayInvoiceShould : GatewayBaseShould
         MockResponse(HttpStatusCode.NotFound);
         var mockedReport = Substitute.For<ICustomerReport>();
 
-        using var sut = new GatewayBase(Settings, mockedReport, HttpMessageHandler);
+        var serializer = new JsonSerializerFacadeV2();
+
+        using var sut = new GatewayBase(
+            Settings,
+            new SerializerCustomersHandle(serializer),
+            new SerializerDraftInvoice(serializer),
+            new SerializerProductsHandle(serializer),
+            mockedReport,
+            HttpMessageHandler
+        );
         var result = await sut.ReadInvoice();
 
         Mock.VerifyAll();

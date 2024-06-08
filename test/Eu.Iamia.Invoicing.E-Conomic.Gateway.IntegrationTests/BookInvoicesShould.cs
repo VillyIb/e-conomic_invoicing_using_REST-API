@@ -1,10 +1,12 @@
 ﻿using System.Reflection;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Configuration;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Deserializers;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 using Eu.Iamia.Invoicing.Loader.Contract;
 using Eu.Iamia.Reporting.Contract;
+using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests;
 public class BookInvoicesShould
@@ -70,7 +72,16 @@ public class BookInvoicesShould
         Assert.NotNull(invoices);
         Assert.True(invoices.Any());
 
-        var gatewayInvoice = new GatewayBase(SettingsDemo, CustomerReport, new HttpClientHandler());
+        var serializer = new JsonSerializerFacadeV2();
+
+        var gatewayInvoice = new GatewayBase(
+            SettingsDemo,
+            new SerializerCustomersHandle(serializer),
+            new SerializerDraftInvoice(serializer),
+            new SerializerProductsHandle(serializer),
+            CustomerReport,
+            new HttpClientHandler()
+        );
         var customerCache = await GetCustomerCache(gatewayInvoice, customerGroupsToAccept);
         var productCache = await GetProductCache(gatewayInvoice);
 
@@ -93,7 +104,16 @@ public class BookInvoicesShould
     [Fact]
     public async Task GivenRealAuthentication_ReadDraftInvoice_Successfully()
     {
-        var gatewayInvoice = new GatewayBase(SettingsReal, CustomerReport, new HttpClientHandler());
+        var serializer = new JsonSerializerFacadeV2();
+
+        var gatewayInvoice = new GatewayBase(
+            SettingsReal,
+            new SerializerCustomersHandle(serializer),
+            new SerializerDraftInvoice(serializer),
+            new SerializerProductsHandle(serializer),
+            CustomerReport,
+            new HttpClientHandler()
+            );
         var customerCache = await GetCustomerCache(gatewayInvoice, new List<int> { 1, 3 });
         var productCache = await GetProductCache(gatewayInvoice);
 

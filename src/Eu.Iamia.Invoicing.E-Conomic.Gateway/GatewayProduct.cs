@@ -1,7 +1,5 @@
 ﻿using System.Text.Json;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Product;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
-using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;
 
@@ -53,14 +51,14 @@ public partial class GatewayBase
                 response.EnsureSuccessStatusCode();
             }
 
-            var productsHandle = await JsonSerializerFacade.DeserializeAsync<ProductsHandle>(
-                await response.Content.ReadAsStreamAsync(cancellationToken), 
+            var productsHandle = await SerializerProductsHandle.DeserializeAsync(
+                await response.Content.ReadAsStreamAsync(cancellationToken),
                 cancellationToken
             );
 
-            return productsHandle!;
+            return productsHandle;
         }
-        catch (HttpRequestException ex)
+        catch (HttpRequestException)
         {
             return new ProductsHandle
             {

@@ -1,5 +1,4 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Customer;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Product;
 using System.Text.Json;
 using Eu.Iamia.Utils;
 using Collection = Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Customer.Collection;
@@ -25,15 +24,15 @@ public partial class GatewayBase
 
                 response.EnsureSuccessStatusCode();
             }
-
-            var customersHandle = await JsonSerializerFacade.DeserializeAsync<CustomersHandle>(
-                await response.Content.ReadAsStreamAsync(cancellationToken), 
+            
+            var customersHandle = await SerializerCustomersHandle.DeserializeAsync(
+                await response.Content.ReadAsStreamAsync(cancellationToken),
                 cancellationToken
             );
 
             return customersHandle;
         }
-        catch (HttpRequestException ex)
+        catch (HttpRequestException)
         {
             return new CustomersHandle()
             {

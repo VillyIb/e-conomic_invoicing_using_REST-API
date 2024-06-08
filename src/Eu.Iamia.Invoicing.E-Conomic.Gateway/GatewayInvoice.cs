@@ -5,7 +5,9 @@ using System.Text.Json;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.DraftInvoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Deserializers;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
+using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;
 
@@ -62,7 +64,7 @@ public partial class GatewayBase
 
             var htmlBody = await GetHtmlBody(response);
 
-            var draftInvoice = DraftInvoiceExtensions.FromJson(htmlBody);
+            var draftInvoice = new SerializerDraftInvoice(new JsonSerializerFacadeV2()).Deserialize(htmlBody);
 
             Report.Info("PushInvoice", htmlBody);
 
@@ -72,7 +74,8 @@ public partial class GatewayBase
         {
             return new DraftInvoice
             {
-                DraftInvoiceNumber = -1, GrossAmount = 0.0
+                DraftInvoiceNumber = -1,
+                GrossAmount = 0.0
             };
         }
         catch (Exception ex)
@@ -80,7 +83,8 @@ public partial class GatewayBase
             Report.Error("PushInvoice", ex.Message);
             return new DraftInvoice
             {
-                DraftInvoiceNumber = -1, GrossAmount = 0.0
+                DraftInvoiceNumber = -1,
+                GrossAmount = 0.0
             };
         }
     }
@@ -103,7 +107,7 @@ public partial class GatewayBase
 
             var htmlBody = await GetHtmlBody(response);
 
-            DraftInvoice? draftInvoice = DraftInvoiceExtensions.FromJson(htmlBody);
+            var draftInvoice = new SerializerDraftInvoice(new JsonSerializerFacadeV2()).Deserialize(htmlBody);
 
             Report.Info("PushInvoice", htmlBody);
 
@@ -113,7 +117,8 @@ public partial class GatewayBase
         {
             return new DraftInvoice
             {
-                DraftInvoiceNumber = -1, GrossAmount = 0.0
+                DraftInvoiceNumber = -1,
+                GrossAmount = 0.0
             };
         }
         catch (JsonException)
@@ -128,7 +133,7 @@ public partial class GatewayBase
 
     internal async Task DeleteInvoce(int invoiceNumber)
     {
-
+        // TODO implement.
     }
 
     private Mapper? _mapper;
