@@ -12,7 +12,7 @@ public partial class GatewayBase
         {
             SetAuthenticationHeaders();
 
-            var response = await _httpClient.GetAsync($"https://restapi.e-conomic.com/products?skippages={page}&pagesize={pageSize}");
+            var response = await HttpClient.GetAsync($"https://restapi.e-conomic.com/products?skippages={page}&pagesize={pageSize}");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -39,7 +39,7 @@ public partial class GatewayBase
 
             // ReSharper disable StringLiteralTypo
             var response =
-                await _httpClient.GetAsync(
+                await HttpClient.GetAsync(
                     $"https://restapi.e-conomic.com/products?skippages={page}&pagesize={pageSize}", cancellationToken);
             // ReSharper restore StringLiteralTypo
 

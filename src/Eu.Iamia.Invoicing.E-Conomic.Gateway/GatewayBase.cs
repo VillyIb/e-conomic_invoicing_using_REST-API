@@ -15,40 +15,17 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
     protected readonly ISerializerProductsHandle SerializerProductsHandle;
     protected readonly ICustomerReport Report;
     protected readonly SettingsForEConomicGateway Settings;
-    private readonly HttpClient _httpClient;
+
+    protected HttpClient? HttpClientField;
+
+    protected virtual  HttpClient HttpClient => HttpClientField ??= new HttpClient();
 
     public GatewayBase(
-        IOptions<SettingsForEConomicGateway> settings,
+    SettingsForEConomicGateway settings,
         ISerializerCustomersHandle serializerCustomersHandle,
         ISerializerDraftInvoice serializerDraftInvoice,
         ISerializerProductsHandle serializerProductsHandle,
         ICustomerReport report
-    )
-    {
-        Settings = settings.Value;
-        SerializerCustomersHandle = serializerCustomersHandle;
-        SerializerDraftInvoice = serializerDraftInvoice;
-        SerializerProductsHandle = serializerProductsHandle;
-        Report = report;
-        _httpClient = new HttpClient();
-    }
-
-    /// <summary>
-    /// For UnitTesting.
-    /// </summary>
-    /// <param name="settings"></param>
-    /// <param name="serializerDraftInvoice"></param>
-    /// <param name="serializerProductsHandle"></param>
-    /// <param name="report"></param>
-    /// <param name="httpClientHandler"></param>
-    /// <param name="serializerCustomersHandle"></param>
-    internal GatewayBase(
-        SettingsForEConomicGateway settings,
-        ISerializerCustomersHandle serializerCustomersHandle,
-        ISerializerDraftInvoice serializerDraftInvoice,
-        ISerializerProductsHandle serializerProductsHandle,
-        ICustomerReport report,
-        HttpMessageHandler httpClientHandler
     )
     {
         Settings = settings;
@@ -56,17 +33,16 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
         SerializerDraftInvoice = serializerDraftInvoice;
         SerializerProductsHandle = serializerProductsHandle;
         Report = report;
-        _httpClient = new HttpClient(httpClientHandler); // TODO remove constructor but create virtual HttpClient property.
     }
 
-    public void SetDemoAuthenticationHeaders()
-    {
-        _httpClient.DefaultRequestHeaders.Remove("X-AppSecretToken");
-        _httpClient.DefaultRequestHeaders.Add("X-AppSecretToken", "demo");
-
-        _httpClient.DefaultRequestHeaders.Remove("X-AgreementGrantToken");
-        _httpClient.DefaultRequestHeaders.Add("X-AgreementGrantToken", "demo");
-    }
+    public GatewayBase(
+        IOptions<SettingsForEConomicGateway> settings,
+        ISerializerCustomersHandle serializerCustomersHandle,
+        ISerializerDraftInvoice serializerDraftInvoice,
+        ISerializerProductsHandle serializerProductsHandle,
+        ICustomerReport report
+    ) : this(settings.Value, serializerCustomersHandle, serializerDraftInvoice, serializerProductsHandle, report)
+    { }
 
     /// <summary>
     /// Fails if token is null, whitespace of contain blanks.
@@ -92,11 +68,11 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
         CheckToken(Settings.X_AgreementGrantToken, nameof(Settings.X_AgreementGrantToken));
         CheckToken(Settings.X_AppSecretToken, nameof(Settings.X_AppSecretToken));
 
-        _httpClient.DefaultRequestHeaders.Remove("X-AppSecretToken");
-        _httpClient.DefaultRequestHeaders.Add("X-AppSecretToken", Settings.X_AppSecretToken);
+        HttpClient.DefaultRequestHeaders.Remove("X-AppSecretToken");
+        HttpClient.DefaultRequestHeaders.Add("X-AppSecretToken", Settings.X_AppSecretToken);
 
-        _httpClient.DefaultRequestHeaders.Remove("X-AgreementGrantToken");
-        _httpClient.DefaultRequestHeaders.Add("X-AgreementGrantToken", Settings.X_AgreementGrantToken);
+        HttpClient.DefaultRequestHeaders.Remove("X-AgreementGrantToken");
+        HttpClient.DefaultRequestHeaders.Add("X-AgreementGrantToken", Settings.X_AgreementGrantToken);
     }
 
     private static async Task<string> GetHtmlBody(HttpResponseMessage response)
@@ -108,7 +84,8 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
 
     public void Dispose()
     {
-        _httpClient.Dispose();
+        HttpClient.Dispose();
+        Report.Dispose();
     }
 
     private CustomerCache? CustomerCache { get; set; }

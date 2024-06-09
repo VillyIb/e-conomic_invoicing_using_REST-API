@@ -1,5 +1,4 @@
-﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway;
-using System.Net;
+﻿using System.Net;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
 using Eu.Iamia.Reporting.Contract;
@@ -20,7 +19,7 @@ public class GatewayInvoiceShould : GatewayBaseShould
 
         var serializer = new JsonSerializerFacadeV2();
 
-        using var sut = new GatewayBase(
+        using var sut = new GatewayBaseStub(
             Settings,
             new SerializerCustomersHandle(serializer),
             new SerializerDraftInvoice(serializer),
@@ -45,7 +44,7 @@ public class GatewayInvoiceShould : GatewayBaseShould
 
         var serializer = new JsonSerializerFacadeV2();
 
-        using var sut = new GatewayBase(
+        using var sut = new GatewayBaseStub(
             Settings,
             new SerializerCustomersHandle(serializer),
             new SerializerDraftInvoice(serializer),
@@ -71,7 +70,7 @@ public class GatewayInvoiceShould : GatewayBaseShould
 
         var serializer = new JsonSerializerFacadeV2();
 
-        using var sut = new GatewayBase(
+        using var sut = new GatewayBaseStub(
             Settings,
             new SerializerCustomersHandle(serializer),
             new SerializerDraftInvoice(serializer),
@@ -101,7 +100,7 @@ public class GatewayInvoiceShould : GatewayBaseShould
 
         var serializer = new JsonSerializerFacadeV2();
 
-        using var sut = new GatewayBase(
+        using var sut = new GatewayBaseStub(
             Settings,
             new SerializerCustomersHandle(serializer),
             new SerializerDraftInvoice(serializer),
@@ -127,7 +126,7 @@ public class GatewayInvoiceShould : GatewayBaseShould
 
         var serializer = new JsonSerializerFacadeV2();
 
-        using var sut = new GatewayBase(
+        using var sut = new GatewayBaseStub(
             Settings,
             new SerializerCustomersHandle(serializer),
             new SerializerDraftInvoice(serializer),

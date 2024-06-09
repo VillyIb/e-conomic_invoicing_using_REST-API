@@ -23,7 +23,7 @@ public partial class GatewayBase
         {
             SetAuthenticationHeaders();
 
-            var response = await _httpClient.GetAsync("https://restapi.e-conomic.com/invoices/drafts/340");
+            var response = await HttpClient.GetAsync("https://restapi.e-conomic.com/invoices/drafts/340");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -52,7 +52,7 @@ public partial class GatewayBase
             var json = invoice.ToJson();
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("https://restapi.e-conomic.com/invoices/drafts", content);
+            var response = await HttpClient.PostAsync("https://restapi.e-conomic.com/invoices/drafts", content);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -95,7 +95,7 @@ public partial class GatewayBase
         {
             SetAuthenticationHeaders();
 
-            var response = await _httpClient.GetAsync($"https://restapi.e-conomic.com/invoices/drafts/{invoiceNumber}");
+            var response = await HttpClient.GetAsync($"https://restapi.e-conomic.com/invoices/drafts/{invoiceNumber}");
 
             if (!response.IsSuccessStatusCode)
             {

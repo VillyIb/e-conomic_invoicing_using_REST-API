@@ -74,7 +74,7 @@ public class BookInvoicesShould
 
         var serializer = new JsonSerializerFacadeV2();
 
-        var gatewayInvoice = new GatewayBase(
+        var gatewayInvoice = new GatewayBaseStub(
             SettingsDemo,
             new SerializerCustomersHandle(serializer),
             new SerializerDraftInvoice(serializer),
@@ -106,7 +106,7 @@ public class BookInvoicesShould
     {
         var serializer = new JsonSerializerFacadeV2();
 
-        var gatewayInvoice = new GatewayBase(
+        var gatewayInvoice = new GatewayBaseStub(
             SettingsReal,
             new SerializerCustomersHandle(serializer),
             new SerializerDraftInvoice(serializer),

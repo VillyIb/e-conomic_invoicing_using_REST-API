@@ -14,7 +14,7 @@ public partial class GatewayBase
         {
             SetAuthenticationHeaders();
 
-            var response = await _httpClient.GetAsync($"https://restapi.e-conomic.com/customers?skippages={page}&pagesize={pageSize}", cancellationToken);
+            var response = await HttpClient.GetAsync($"https://restapi.e-conomic.com/customers?skippages={page}&pagesize={pageSize}", cancellationToken);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -31,8 +31,10 @@ public partial class GatewayBase
 
             return customersHandle;
         }
-        catch (HttpRequestException)
+        catch (HttpRequestException ex)
         {
+            var name = ex.GetType().Name;
+
             return new CustomersHandle()
             {
                 collection = new List<Collection>(0)
