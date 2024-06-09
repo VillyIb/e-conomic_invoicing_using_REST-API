@@ -1,7 +1,6 @@
-﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.DraftInvoice;
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.DraftInvoice;
 
 public class DraftInvoice : IDraftInvoice
 {
@@ -19,12 +18,3 @@ public class DraftInvoice : IDraftInvoice
     [JsonPropertyName("grossAmount")]
     public double GrossAmount { get; set; }
 }
-
-//public static class DraftInvoiceExtensions
-//{
-//    public static DraftInvoice FromJson(string json)
-//    {
-//        var result = JsonSerializerFacade.Deserialize<DraftInvoice>(json);
-//        return result;
-//    }
-//}

@@ -2,11 +2,11 @@
 using Eu.Iamia.Invoicing.Loader.Contract;
 using System.Text;
 using System.Text.Json;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.DraftInvoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Deserializers;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.DraftInvoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
 using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;

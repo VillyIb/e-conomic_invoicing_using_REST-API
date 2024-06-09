@@ -1,6 +1,6 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Configuration;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Deserializers;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Serializers;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
 using Eu.Iamia.Reporting.Contract;

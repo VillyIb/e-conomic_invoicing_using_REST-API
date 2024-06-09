@@ -2,7 +2,7 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway;
 using Eu.Iamia.Reporting.Contract;
 using NSubstitute;
 using System.Net;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Deserializers;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
 using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;

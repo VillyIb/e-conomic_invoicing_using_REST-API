@@ -1,6 +1,6 @@
-﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Deserializers;
-using Eu.Iamia.Utils;
+﻿using Eu.Iamia.Utils;
 using System.Text.Json;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
 
 namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;
 public class DraftInvoiceShould

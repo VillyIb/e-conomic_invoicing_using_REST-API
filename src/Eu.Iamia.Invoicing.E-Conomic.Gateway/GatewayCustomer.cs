@@ -1,6 +1,5 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Customer;
 using System.Text.Json;
-using Eu.Iamia.Utils;
 using Collection = Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Customer.Collection;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;
