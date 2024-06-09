@@ -1,94 +1,94 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
+// ReSharper disable InconsistentNaming
 
 namespace Eu.Iamia.Utils.UnitTests;
 
+/// <summary>
+/// 
+/// </summary>
+/// <exception cref="ArgumentNullException"></exception>
+public class JsonSerializerFacadeStub_ArgumentNullException : JsonSerializerFacade
+{
+    protected override TValue? Deserialize<TValue>(string json, JsonSerializerOptions options) where TValue : default
+    {
+        throw new ArgumentNullException(nameof(json));
+    }
+
+    protected override ValueTask<TValue?> DeserializeAsync<TValue>(Stream utf8Json, JsonSerializerOptions options, CancellationToken cancellationToken) where TValue : default
+    {
+        throw new ArgumentNullException(nameof(utf8Json));
+    }
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <exception cref="JsonException"></exception>
+public class JsonSerializerFacadeStub_JsonException : JsonSerializerFacade
+{
+    protected override TValue? Deserialize<TValue>(string json, JsonSerializerOptions options) where TValue : default
+    {
+        throw new JsonException();
+    }
+
+    protected override ValueTask<TValue?> DeserializeAsync<TValue>(Stream utf8Json, JsonSerializerOptions options, CancellationToken cancellationToken) where TValue : default
+    {
+        throw new JsonException();
+    }
+}
+
+/// <summary>
+/// Returns default TValue.
+/// </summary>
+public class JsonSerializerFacadeStub_ReturnsNull : JsonSerializerFacade
+{
+    protected override TValue? Deserialize<TValue>(string json, JsonSerializerOptions options) where TValue : default
+    {
+        return default;
+    }
+
+    protected override ValueTask<TValue?> DeserializeAsync<TValue>(Stream utf8Json, JsonSerializerOptions options, CancellationToken cancellationToken) where TValue : default
+    {
+        return new ValueTask<TValue?>();
+    }
+}
+
 public class JsonSerializerFacadeShould
 {
-    // Synchronous
+    // synchronous 
 
     [Fact]
-    public void Deserialize_When_DtoThrowsArgumentException_Expect_JsonException()
+    public void Deserialize_Throws_ArgumentNullException_HandledOK()
     {
-        var ex = Assert.Throws<JsonException>(() => JsonSerializerFacade.Deserialize<TestSubjectDto>("{\"Subject\": \"\"}"));
-        Assert.NotNull(ex);
-        Assert.NotNull(ex.InnerException);
+        var sut = new JsonSerializerFacadeStub_ArgumentNullException();
+        var _ = Assert.Throws<JsonException>(() => sut.Deserialize<TestSubjectDto>(null!));
     }
 
     [Fact]
-    public void Deserialize_When_NullArgument_Expect_JsonException()
+    public void Deserialize_Throws_JsonException_HandledOK()
     {
-        var ex = Assert.Throws<JsonException>(() => JsonSerializerFacade.Deserialize<TestSubjectDto>(null!));
-        Assert.NotNull(ex);
-        Assert.NotNull(ex.InnerException);
+        var sut = new JsonSerializerFacadeStub_JsonException();
+        var _ = Assert.Throws<JsonException>(() => sut.Deserialize<TestSubjectDto>(null!));
     }
 
     [Fact]
-    public void Given_ValidJson_When_JsonSerializerFacade_Deserialize_Returns_ValidDto_With_ValidProperties()
+    public void Deserialize_Returns_Null_HandledOK()
     {
-        var dto = JsonSerializerFacade.Deserialize<TestSubjectDto>("{\"Subject\": \"x\"}");
-        Assert.NotNull(dto);
-        Assert.NotNull(dto.Subject);
+        var sut = new JsonSerializerFacadeStub_ReturnsNull();
+        var _ = Assert.Throws<JsonException>(() => sut.Deserialize<TestSubjectDto>(null!));
     }
 
     [Fact]
-    public void Given_ValidJson_WithoutProperties_When_JsonSerializerFacade_Deserialize_Returns_ValidDto_With_UninitializedProperties()
+    public void Deserialize_ValidJson_Returns_ExpectedValue()
     {
-        var dto = JsonSerializerFacade.Deserialize<TestSubjectDto>("{}");
-        Assert.NotNull(dto);
-        Assert.Null(dto.Subject);
+        var expected = new TestSubjectDto { Subject = "subject" };
+        var sut = new JsonSerializerFacade();
+        var actual = sut.Deserialize<TestSubjectDto>("{\"Subject\":\"subject\"}");
+        Assert.Equal(expected, actual);
     }
 
-    private static readonly JsonSerializerOptions Options = new JsonSerializerOptions
-    {
-        PropertyNameCaseInsensitive = true,
-        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
-        Converters = { new JsonStringEnumConverter() }
-        ,
-        MaxDepth = 0
-        ,
-        PropertyNamingPolicy = JsonNamingPolicy.KebabCaseLower
-        ,
-        ReadCommentHandling = JsonCommentHandling.Skip
-        ,
-        AllowTrailingCommas = true
-        ,
-        NumberHandling = JsonNumberHandling.Strict
-        ,
-        UnknownTypeHandling = JsonUnknownTypeHandling.JsonElement
-        ,
-        WriteIndented = true
+    // asynchronous  
 
-        //, ReferenceHandler = ReferenceHandler.Preserve
-        //, TypeInfoResolver = new DefaultJsonTypeInfoResolver(){  Modifiers = new List<Action<JsonTypeInfo>>(){ }}
-    };
-
-    [Fact]
-    public void Deserialize_X()
-    {
-        var expected = new DeepTestSubjectL0Dto
-        {
-            L1 = new DeepTestSubjectL1Dto
-            {
-                L2 = new DeepTestSubjectL2Dto
-                {
-                    L3 = new DeepTestSubjectL3Dto
-                    {
-                        L4 = "Level4"
-                    }
-                }
-            }
-        };
-
-        var json = JsonSerializer.Serialize(expected, Options);
-
-
-        var dto = JsonSerializerFacade.Deserialize<TestSubjectDto>(json);
-        Assert.NotNull(dto);
-        Assert.Null(dto.Subject);
-    }
-
-    // Asynchronous
     private static Stream GenerateStreamFromString(string? s)
     {
         var stream = new MemoryStream();
@@ -100,47 +100,43 @@ public class JsonSerializerFacadeShould
     }
 
     [Fact]
-    public async Task DeserializeAsync_When_DtoThrowsArgumentException_Expect_JsonException()
+    public async Task DeserializeAsync_Throws_ArgumentNullException_HandledOK()
     {
-        var cts = new CancellationTokenSource();
-        await using var st = GenerateStreamFromString("{\"Subject\": \"\"}");
+        await using var st = GenerateStreamFromString("{\"Subject\":\"subject\"}");
 
-        var ex = await Assert.ThrowsAsync<JsonException>(() => JsonSerializerFacade.DeserializeAsync<TestSubjectDto>(st, cts.Token));
-        Assert.NotNull(ex);
-        Assert.NotNull(ex.InnerException);
+        var sut = new JsonSerializerFacadeStub_ArgumentNullException();
+        var _ = await Assert.ThrowsAsync<JsonException>(() => sut.DeserializeAsync<TestSubjectDto>(st));
     }
 
     [Fact]
-    public async Task DeserializeAsync_When_NullArgument_Expect_JsonException()
+    public async Task DeserializeAsync_Throws_JsonException_HandledOK()
     {
-        var cts = new CancellationTokenSource();
-        await using var st = GenerateStreamFromString(null);
+        await using var st = GenerateStreamFromString("{\"Subject\":\"subject\"}");
 
-        var ex = await Assert.ThrowsAsync<JsonException>(() => JsonSerializerFacade.DeserializeAsync<TestSubjectDto>(st, cts.Token));
-        Assert.NotNull(ex);
-        Assert.NotNull(ex.InnerException);
+        var sut = new JsonSerializerFacadeStub_JsonException();
+        var _ = await Assert.ThrowsAsync<JsonException>(() => sut.DeserializeAsync<TestSubjectDto>(st));
     }
 
     [Fact]
-    public async Task DeserializeAsync_ValidJson_When_JsonSerializerFacade_Deserialize_Returns_ValidDto_With_ValidProperties()
+    public async Task DeserializeAsync_Returns_Null_HandledOK()
     {
-        var cts = new CancellationTokenSource();
-        await using var st = GenerateStreamFromString("{\"Subject\": \"x\"}");
+        await using var st = GenerateStreamFromString("{\"Subject\":\"subject\"}");
 
-        var dto = await JsonSerializerFacade.DeserializeAsync<TestSubjectDto>(st, cts.Token);
-        Assert.NotNull(dto);
-        Assert.NotNull(dto.Subject);
+        var sut = new JsonSerializerFacadeStub_ReturnsNull();
+        var _ = await Assert.ThrowsAsync<JsonException>(() => sut.DeserializeAsync<TestSubjectDto>(st));
     }
 
     [Fact]
-    public async Task DeserializeAsync_ValidJson_WithoutProperties_When_JsonSerializerFacade_Deserialize_Returns_ValidDto_With_UninitializedProperties()
+    public async Task DeserializeAsync_ValidJson_Returns_ExpectedValue()
     {
         var cts = new CancellationTokenSource();
-        await using var st = GenerateStreamFromString("{}");
+        await using var st = GenerateStreamFromString("{\"Subject\":\"subject\"}");
 
-        var dto = await JsonSerializerFacade.DeserializeAsync<TestSubjectDto>(st, cts.Token);
-        Assert.NotNull(dto);
-        Assert.Null(dto.Subject);
+        var expected = new TestSubjectDto { Subject = "subject" };
+        var sut = new JsonSerializerFacade();
+        var actual = await sut.DeserializeAsync<TestSubjectDto>(st, cts.Token);
+        Assert.NotNull(actual);
+        Assert.Equal(expected, actual);
     }
 
 }

@@ -17,7 +17,7 @@ public class GatewayInvoiceShould : GatewayBaseShould
         MockResponse(HttpStatusCode.OK);
         var mockedReport = Substitute.For<ICustomerReport>();
 
-        var serializer = new JsonSerializerFacadeV2();
+        var serializer = new JsonSerializerFacade();
 
         using var sut = new GatewayBaseStub(
             Settings,
@@ -42,7 +42,7 @@ public class GatewayInvoiceShould : GatewayBaseShould
         MockResponse(HttpStatusCode.NotFound);
         var mockedReport = Substitute.For<ICustomerReport>();
 
-        var serializer = new JsonSerializerFacadeV2();
+        var serializer = new JsonSerializerFacade();
 
         using var sut = new GatewayBaseStub(
             Settings,
@@ -68,7 +68,7 @@ public class GatewayInvoiceShould : GatewayBaseShould
         MockResponse(HttpStatusCode.NoContent);
         var mockedReport = Substitute.For<ICustomerReport>();
 
-        var serializer = new JsonSerializerFacadeV2();
+        var serializer = new JsonSerializerFacade();
 
         using var sut = new GatewayBaseStub(
             Settings,
@@ -98,7 +98,7 @@ public class GatewayInvoiceShould : GatewayBaseShould
         MockResponse(HttpStatusCode.OK);
         var mockedReport = Substitute.For<ICustomerReport>();
 
-        var serializer = new JsonSerializerFacadeV2();
+        var serializer = new JsonSerializerFacade();
 
         using var sut = new GatewayBaseStub(
             Settings,
@@ -124,7 +124,7 @@ public class GatewayInvoiceShould : GatewayBaseShould
         MockResponse(HttpStatusCode.NotFound);
         var mockedReport = Substitute.For<ICustomerReport>();
 
-        var serializer = new JsonSerializerFacadeV2();
+        var serializer = new JsonSerializerFacade();
 
         using var sut = new GatewayBaseStub(
             Settings,

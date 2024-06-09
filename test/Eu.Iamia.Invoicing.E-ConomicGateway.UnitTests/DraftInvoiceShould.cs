@@ -10,7 +10,7 @@ public class DraftInvoiceShould
     [Fact]
     public void FromJson_When_ValidJson_Expect_DraftInvoice()
     {
-        var invoice = new SerializerDraftInvoice(new JsonSerializerFacadeV2()).Deserialize(DraftInvoiceJson);
+        var invoice = new SerializerDraftInvoice(new JsonSerializerFacade()).Deserialize(DraftInvoiceJson);
 
         Assert.NotNull(invoice);
         Assert.Equal(368, invoice.DraftInvoiceNumber);
@@ -21,6 +21,6 @@ public class DraftInvoiceShould
     public void FromJson_When_InvalidJson_Throws_JsonException()
     {
         var invalidJson = DraftInvoiceJson.Replace("{", "[");
-        var ex = Assert.Throws<JsonException>(() => new SerializerDraftInvoice(new JsonSerializerFacadeV2()).Deserialize(invalidJson));
+        var ex = Assert.Throws<JsonException>(() => new SerializerDraftInvoice(new JsonSerializerFacade()).Deserialize(invalidJson));
     }
 }

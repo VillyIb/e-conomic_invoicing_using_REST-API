@@ -72,7 +72,7 @@ public class BookInvoicesShould
         Assert.NotNull(invoices);
         Assert.True(invoices.Any());
 
-        var serializer = new JsonSerializerFacadeV2();
+        var serializer = new JsonSerializerFacade();
 
         var gatewayInvoice = new GatewayBaseStub(
             SettingsDemo,
@@ -104,7 +104,7 @@ public class BookInvoicesShould
     [Fact]
     public async Task GivenRealAuthentication_ReadDraftInvoice_Successfully()
     {
-        var serializer = new JsonSerializerFacadeV2();
+        var serializer = new JsonSerializerFacade();
 
         var gatewayInvoice = new GatewayBaseStub(
             SettingsReal,

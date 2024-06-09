@@ -3,14 +3,14 @@ using System.Text.Json.Serialization;
 
 // ReSharper disable ConvertToAutoProperty
 
-namespace Eu.Iamia.Utils.UnitTests;
+namespace Eu.Iamia.Utils.UnitTests.InvestigateJsonSerializer;
 
 /// <summary>
 /// Investigate behaviour of System.Text.Json.JsonSerializer.Deserialize.
 /// </summary>
 public class JsonSerializerShould
 {
-    private readonly JsonSerializerOptions _options = new JsonSerializerOptions
+    private readonly JsonSerializerOptions _options = new()
     {
         PropertyNameCaseInsensitive = true,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
@@ -22,7 +22,9 @@ public class JsonSerializerShould
     [Fact]
     public void Given_DtoThrowsArgumentException_When_JsonSerializer_Deserialize_IsTransparent()
     {
-        var ex = Assert.Throws<ArgumentException>(() => JsonSerializer.Deserialize<TestSubjectDto>("{\"Subject\": \"\"}", _options));
+        // ReSharper disable once InconsistentNaming
+        var json_TestSubjectDtoThrowsArgumentException = "{\"Subject\": \"\"}";
+        var ex = Assert.Throws<ArgumentException>(() => JsonSerializer.Deserialize<TestSubjectDto>(json_TestSubjectDtoThrowsArgumentException, _options));
         Assert.NotNull(ex);
         Assert.Null(ex.InnerException);
     }

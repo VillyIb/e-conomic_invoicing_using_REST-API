@@ -64,7 +64,7 @@ public partial class GatewayBase
 
             var htmlBody = await GetHtmlBody(response);
 
-            var draftInvoice = new SerializerDraftInvoice(new JsonSerializerFacadeV2()).Deserialize(htmlBody);
+            var draftInvoice = new SerializerDraftInvoice(new JsonSerializerFacade()).Deserialize(htmlBody);
 
             Report.Info("PushInvoice", htmlBody);
 
@@ -107,7 +107,7 @@ public partial class GatewayBase
 
             var htmlBody = await GetHtmlBody(response);
 
-            var draftInvoice = new SerializerDraftInvoice(new JsonSerializerFacadeV2()).Deserialize(htmlBody);
+            var draftInvoice = new SerializerDraftInvoice(new JsonSerializerFacade()).Deserialize(htmlBody);
 
             Report.Info("PushInvoice", htmlBody);
 

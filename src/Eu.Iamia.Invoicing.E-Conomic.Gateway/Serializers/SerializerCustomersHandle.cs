@@ -6,9 +6,9 @@ namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
 
 public class SerializerCustomersHandle : ISerializerCustomersHandle
 {
-    private readonly IJsonSerializerFacadeV2 _serializer;
+    private readonly IJsonSerializerFacade _serializer;
 
-    public SerializerCustomersHandle(IJsonSerializerFacadeV2 serializer)
+    public SerializerCustomersHandle(IJsonSerializerFacade serializer)
     {
         _serializer = serializer;
     }

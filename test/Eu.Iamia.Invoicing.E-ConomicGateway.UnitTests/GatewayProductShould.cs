@@ -15,7 +15,7 @@ public class GatewayProductShould : GatewayBaseShould
         var mockedReport = Substitute.For<ICustomerReport>();
         var cts = new CancellationTokenSource();
 
-        var serializer = new JsonSerializerFacadeV2();
+        var serializer = new JsonSerializerFacade();
 
         using var sut = new GatewayBaseStub(
             Settings,
@@ -41,7 +41,7 @@ public class GatewayProductShould : GatewayBaseShould
         var mockedReport = Substitute.For<ICustomerReport>();
         var cts = new CancellationTokenSource();
 
-        var serializer = new JsonSerializerFacadeV2();
+        var serializer = new JsonSerializerFacade();
 
         using var sut = new GatewayBaseStub(
             Settings,
@@ -67,7 +67,7 @@ public class GatewayProductShould : GatewayBaseShould
         var mockedReport = Substitute.For<ICustomerReport>();
         var cts = new CancellationTokenSource();
 
-        var serializer = new JsonSerializerFacadeV2();
+        var serializer = new JsonSerializerFacade();
 
         using var sut = new GatewayBaseStub(
             Settings,
