@@ -1,6 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Eu.Iamia.ConfigBase;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Serializers;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
+using Eu.Iamia.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,9 +20,13 @@ public  class Setup : IHandlerSetup
     private static void AddHandlers(IServiceCollection services)
     {
         services.AddTransient<IEconomicGateway, GatewayBase>();
+        services.AddSingleton<IJsonSerializerFacade, JsonSerializerFacade>();
+        services.AddSingleton<ISerializerCustomersHandle, SerializerCustomersHandle>();
+        services.AddSingleton<ISerializerDraftInvoice, SerializerDraftInvoice>();
+        services.AddSingleton<ISerializerProductsHandle, SerializerProductsHandle>();
     }
 
-    private void AddSettings(Microsoft.Extensions.DependencyInjection.IServiceCollection services)
+    private void AddSettings(IServiceCollection services)
     {
         // see:https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-7.0
         // Binds Settings to the dependency injection container.
