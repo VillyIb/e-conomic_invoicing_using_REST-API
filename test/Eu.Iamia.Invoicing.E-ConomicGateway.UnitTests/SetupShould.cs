@@ -38,6 +38,12 @@ public class SetupShould : IDisposable
     }
 
     [Fact]
+    public void Instantiate_SerializerDeletedInvoices()
+    {
+        Assert.NotNull(_setup.GetService<ISerializerDeletedInvoices>());
+    }
+
+    [Fact]
     public void Instantiate_CustomerReport()
     {
         Assert.NotNull(_setup.GetService<ICustomerReport>());

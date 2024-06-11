@@ -11,10 +11,11 @@ internal class GatewayBaseStub : GatewayBase
     internal GatewayBaseStub(
         SettingsForEConomicGateway settings,
         ISerializerCustomersHandle serializerCustomersHandle,
+        ISerializerDeletedInvoices serializerDeletedInvoices,
         ISerializerDraftInvoice serializerDraftInvoice,
         ISerializerProductsHandle serializerProductsHandle,
         ICustomerReport report, HttpMessageHandler httpMessageHandler
-    ) : base(settings, serializerCustomersHandle, serializerDraftInvoice, serializerProductsHandle, report)
+    ) : base(settings, serializerCustomersHandle, serializerDeletedInvoices, serializerDraftInvoice, serializerProductsHandle, report)
     {
         _httpMessageHandler = httpMessageHandler;
     }

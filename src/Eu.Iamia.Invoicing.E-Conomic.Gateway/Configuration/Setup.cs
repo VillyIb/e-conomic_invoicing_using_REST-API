@@ -24,6 +24,7 @@ public  class Setup : IHandlerSetup
         services.AddSingleton<ISerializerCustomersHandle, SerializerCustomersHandle>();
         services.AddSingleton<ISerializerDraftInvoice, SerializerDraftInvoice>();
         services.AddSingleton<ISerializerProductsHandle, SerializerProductsHandle>();
+        services.AddSingleton<ISerializerDeletedInvoices, SerializerDeletedInvoices>();
     }
 
     private void AddSettings(IServiceCollection services)

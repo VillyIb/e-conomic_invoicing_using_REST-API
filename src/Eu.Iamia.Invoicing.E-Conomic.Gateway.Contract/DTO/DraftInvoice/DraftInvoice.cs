@@ -18,3 +18,22 @@ public class DraftInvoice : IDraftInvoice
     [JsonPropertyName("grossAmount")]
     public double GrossAmount { get; set; }
 }
+
+public class FailedInvoice : IDraftInvoice
+{
+    public int    DraftInvoiceNumber => -1;
+
+    public double GrossAmount        => 0.0;
+
+    private readonly string _errorMessage;
+
+    public FailedInvoice(string errorMessage)
+    {
+        _errorMessage = errorMessage;
+    }
+
+    public override string ToString()
+    {
+        return _errorMessage;
+    }
+}

@@ -12,6 +12,7 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
 {
     protected readonly ISerializerDraftInvoice SerializerDraftInvoice;
     protected readonly ISerializerCustomersHandle SerializerCustomersHandle;
+    protected readonly ISerializerDeletedInvoices SerializerDeletedInvoices;
     protected readonly ISerializerProductsHandle SerializerProductsHandle;
     protected readonly ICustomerReport Report;
     protected readonly SettingsForEConomicGateway Settings;
@@ -23,6 +24,7 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
     public GatewayBase(
     SettingsForEConomicGateway settings,
         ISerializerCustomersHandle serializerCustomersHandle,
+        ISerializerDeletedInvoices serializerDeletedInvoices,
         ISerializerDraftInvoice serializerDraftInvoice,
         ISerializerProductsHandle serializerProductsHandle,
         ICustomerReport report
@@ -30,6 +32,7 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
     {
         Settings = settings;
         SerializerCustomersHandle = serializerCustomersHandle;
+        SerializerDeletedInvoices = serializerDeletedInvoices;
         SerializerDraftInvoice = serializerDraftInvoice;
         SerializerProductsHandle = serializerProductsHandle;
         Report = report;
@@ -38,10 +41,11 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
     public GatewayBase(
         IOptions<SettingsForEConomicGateway> settings,
         ISerializerCustomersHandle serializerCustomersHandle,
+        ISerializerDeletedInvoices serializerDeletedInvoices,
         ISerializerDraftInvoice serializerDraftInvoice,
         ISerializerProductsHandle serializerProductsHandle,
         ICustomerReport report
-    ) : this(settings.Value, serializerCustomersHandle, serializerDraftInvoice, serializerProductsHandle, report)
+    ) : this(settings.Value, serializerCustomersHandle, serializerDeletedInvoices, serializerDraftInvoice, serializerProductsHandle, report)
     { }
 
     /// <summary>

@@ -22,7 +22,7 @@ public interface IEconomicGateway
 
 public interface IDraftInvoice
 {
-    int DraftInvoiceNumber { get; set; }
+    int DraftInvoiceNumber { get; }
 
-    double GrossAmount { get; set; }
+    double GrossAmount { get; }
 }

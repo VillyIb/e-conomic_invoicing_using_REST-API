@@ -1,8 +1,8 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
 
-namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests;
 
-public static class CachedCustomerStub 
+public static class CachedCustomerExtension 
 {
     public static CachedCustomer Valid()
     {
@@ -11,7 +11,7 @@ public static class CachedCustomerStub
             CustomerNumber = 99999,
             Address = "Customer1 address",
             City = "Customer 1 city",
-            Name = "Mocked Customer",
+            Name = "Stubbed Customer",
             PaymentTerms = 99999,
             Zip = "3390"
         };

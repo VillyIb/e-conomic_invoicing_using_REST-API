@@ -20,6 +20,7 @@ public class GatewayCustomerShould : GatewayBaseShould
         using var sut = new GatewayBaseStub(
             Settings,
             new SerializerCustomersHandle(serializer),
+            new SerializerDeletedInvoices(serializer),
             new SerializerDraftInvoice(serializer),
             new SerializerProductsHandle(serializer),
             mockedReport,
@@ -46,6 +47,7 @@ public class GatewayCustomerShould : GatewayBaseShould
         using var sut = new GatewayBaseStub(
             Settings,
             new SerializerCustomersHandle(serializer),
+            new SerializerDeletedInvoices(serializer),
             new SerializerDraftInvoice(serializer),
             new SerializerProductsHandle(serializer),
             mockedReport,

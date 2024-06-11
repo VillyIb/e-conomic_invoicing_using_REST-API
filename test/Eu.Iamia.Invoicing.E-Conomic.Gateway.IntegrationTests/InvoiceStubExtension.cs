@@ -3,29 +3,13 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests;
 
-public static class MockedCustomer 
+public static class InvoiceStubExtension
 {
-    public static CachedCustomer Valid()
+    public static InvoiceStub Valid(CachedCustomer customer)
     {
-        return new CachedCustomer()
-        {
-            CustomerNumber = 99999,
-            Address = "Customer1 address",
-            City = "Customer 1 city",
-            Name = "Mocked Customer",
-            PaymentTerms = 99999,
-            Zip = "3390"
-        };
-    }
-}
+        const string textLine1 = "TextLine1";
 
-public static class MockedInvoiceExtensions
-{
-    public static MockedInvoice Valid(CachedCustomer customer)
-    {
-        const string TextLine1 = "TextLine1";
-
-        return new MockedInvoice
+        return new InvoiceStub
         {
             Customer = new(customer.CustomerNumber),
             Date = DateTime.Today.ToString("yyyy-MM-dd"),
@@ -36,7 +20,7 @@ public static class MockedInvoiceExtensions
             Notes = new()
             {
                 Heading = $"#{customer.CustomerNumber} {customer.Name}",
-                TextLine1 = TextLine1,
+                TextLine1 = textLine1,
                 TextLine2 = null
             },
             Recipient = new()
@@ -91,11 +75,9 @@ public static class MockedInvoiceExtensions
         };
     }
 
-
-    public static MockedInvoice Invalid_PaymentTerm(this MockedInvoice value)
+    public static InvoiceStub Invalid_PaymentTerm(this InvoiceStub value)
     {
         value.SetPaymentTerms(4711);
         return value;
     }
-
 }

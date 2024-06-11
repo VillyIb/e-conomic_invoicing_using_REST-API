@@ -3,38 +3,26 @@
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests;
 public class GatewayCustomerShould
 {
-    private readonly IEconomicGateway sut;
+    private readonly IEconomicGateway _sut;
 
     public GatewayCustomerShould()
     {
         using var setup = new Setup();
-
-        sut = setup.GetService<IEconomicGateway>();
+        _sut = setup.GetService<IEconomicGateway>();
     }
 
     [Theory]
-    //[InlineData(0, 20)]
-    //[InlineData(1, 20)]
-    //[InlineData(2, 20)]
-    //[InlineData(3, 20)]
-    //[InlineData(4, 20)]
-    //[InlineData(5, 20)]
-    //[InlineData(6, 20)]
-    [InlineData(7, 20)]
-    //[InlineData(8, 20)]
-    //[InlineData(9, 20)]
-    //[InlineData(10, 20)]
-    //[InlineData(11, 20)]
-    //[InlineData(12, 20)]
-    //[InlineData(13, 20)]
-    //[InlineData(14, 20)]
+    [InlineData(0, 20)]
+    [InlineData(1, 20)]
     public async Task ReadCustomersPaged(int page, int pageSize)
     {
-        var result = await sut.ReadCustomersPaged(page, pageSize);
-
-        // TODO check.
-        //Assert.NotEmpty(result);
-
+        var cts = new CancellationTokenSource();
+        var result = await _sut.ReadCustomersPaged(page, pageSize, cts.Token);
+        Assert.NotNull(result);
+        Assert.NotEmpty(result.collection);
+        Assert.NotNull(result.metaData);
+        Assert.NotNull(result.pagination);
+        Assert.NotNull(result.self);
     }
 
     [Theory]
@@ -43,9 +31,12 @@ public class GatewayCustomerShould
     public async Task ReadProductsPaged(int page, int pageSize)
     {
         var cts = new CancellationTokenSource();
-        var result = await sut.ReadProductsPaged(page, pageSize, cts.Token);
+        var result = await _sut.ReadProductsPaged(page, pageSize, cts.Token);
 
+        Assert.NotNull(result);
         Assert.NotEmpty(result.collection);
-
+        Assert.NotNull(result.metaData);
+        Assert.NotNull(result.pagination);
+        Assert.NotNull(result.self);
     }
 }

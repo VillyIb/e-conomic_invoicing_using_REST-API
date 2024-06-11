@@ -1,4 +1,5 @@
-﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
+﻿using System.Net;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
 using Eu.Iamia.Invoicing.Loader.Contract;
 using System.Text;
 using System.Text.Json;
@@ -17,8 +18,19 @@ public partial class GatewayBase
 
     // TODO return Invoice make FromJson Async.
 
+    /// <summary>
+    /// {HttpStatusCode.NoContent}
+    /// </summary>
+    private static readonly HttpStatusCode[] FailCodes = 
+    {
+        HttpStatusCode.NoContent
+    };
+
+    [Obsolete]
     public async Task<string> ReadInvoice()
     {
+        const string reference = nameof(ReadInvoice);
+
         try
         {
             SetAuthenticationHeaders();
@@ -28,7 +40,7 @@ public partial class GatewayBase
             if (!response.IsSuccessStatusCode)
             {
                 var htmlBodyFail = await GetHtmlBody(response);
-                Report.Error("ReadInvoice", htmlBodyFail);
+                Report.Error(reference, htmlBodyFail);
 
                 response.EnsureSuccessStatusCode();
             }
@@ -42,8 +54,10 @@ public partial class GatewayBase
         }
     }
 
-    internal async Task<DraftInvoice?> PushInvoice(CachedCustomer customer, Invoice invoice, int sourceFileLineNumber)
+    internal async Task<IDraftInvoice> PushInvoice(CachedCustomer customer, Invoice invoice, int sourceFileLineNumber)
     {
+        const string reference = nameof(PushInvoice);
+
         try
         {
             SetAuthenticationHeaders();
@@ -57,40 +71,35 @@ public partial class GatewayBase
             if (!response.IsSuccessStatusCode)
             {
                 var htmlBodyFail = await GetHtmlBody(response);
-                Report.Error("PushInvoice", htmlBodyFail);
+                Report.Error(reference, htmlBodyFail);
 
                 response.EnsureSuccessStatusCode();
             }
 
+            if (FailCodes.Any(fc => fc == response.StatusCode))
+            {
+                Report.Info(reference, $"Response: {response.StatusCode}");
+                return new FailedInvoice($"Response {response.StatusCode}");
+            }
+
             var htmlBody = await GetHtmlBody(response);
 
-            var draftInvoice = new SerializerDraftInvoice(new JsonSerializerFacade()).Deserialize(htmlBody);
+            var draftInvoice = SerializerDraftInvoice.Deserialize(htmlBody);
 
-            Report.Info("PushInvoice", htmlBody);
+            Report.Info(reference, htmlBody);
 
             return draftInvoice;
         }
-        catch (HttpRequestException)
+        catch (HttpRequestException ex)
         {
-            return new DraftInvoice
-            {
-                DraftInvoiceNumber = -1,
-                GrossAmount = 0.0
-            };
-        }
-        catch (Exception ex)
-        {
-            Report.Error("PushInvoice", ex.Message);
-            return new DraftInvoice
-            {
-                DraftInvoiceNumber = -1,
-                GrossAmount = 0.0
-            };
+            return new FailedInvoice(ex.Message);
         }
     }
 
-    internal async Task<DraftInvoice> GetDraftInvoice(int invoiceNumber)
+    internal async Task<IDraftInvoice> GetDraftInvoice(int invoiceNumber)
     {
+        const string reference = nameof(GetDraftInvoice);
+
         try
         {
             SetAuthenticationHeaders();
@@ -100,40 +109,92 @@ public partial class GatewayBase
             if (!response.IsSuccessStatusCode)
             {
                 var htmlBodyFail = await GetHtmlBody(response);
-                Report.Error("PushInvoice", htmlBodyFail);
+                Report.Error(reference, htmlBodyFail);
 
                 response.EnsureSuccessStatusCode();
             }
 
+            if (FailCodes.Any(fc => fc == response.StatusCode))
+            {
+                Report.Info(reference, $"Response: {response.StatusCode}");
+                return new FailedInvoice($"Response {response.StatusCode}");
+            }
+
             var htmlBody = await GetHtmlBody(response);
 
-            var draftInvoice = new SerializerDraftInvoice(new JsonSerializerFacade()).Deserialize(htmlBody);
+            var draftInvoice = SerializerDraftInvoice.Deserialize(htmlBody);
 
-            Report.Info("PushInvoice", htmlBody);
+            Report.Info(reference
+                , htmlBody);
 
             return draftInvoice;
         }
-        catch (HttpRequestException)
+        catch (HttpRequestException ex)
         {
-            return new DraftInvoice
-            {
-                DraftInvoiceNumber = -1,
-                GrossAmount = 0.0
-            };
-        }
-        catch (JsonException)
-        {
-            return new DraftInvoice
-            {
-                DraftInvoiceNumber = -1,
-                GrossAmount = 0.0
-            };
+            return new FailedInvoice(ex.Message);
         }
     }
 
-    internal async Task DeleteInvoce(int invoiceNumber)
+    /// <summary>
+    /// Delete single invoice
+    /// </summary>
+    /// <param name="invoiceNumber"></param>
+    /// <returns></returns>
+    /// <seealso cref="https://restdocs.e-conomic.com/#delete-invoices-drafts-draftinvoicenumber"/>>
+    internal async Task<bool> DeleteInvoice(int invoiceNumber)
     {
-        // TODO implement.
+        const string reference = nameof(DeleteInvoice);
+
+        try
+        {
+            SetAuthenticationHeaders();
+
+            var response = await HttpClient.DeleteAsync($"https://restapi.e-conomic.com/invoices/drafts/{invoiceNumber}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var htmlBodyFail = await GetHtmlBody(response);
+                Report.Error(reference, htmlBodyFail);
+
+                response.EnsureSuccessStatusCode();
+            }
+
+            if (FailCodes.Any(fc => fc == response.StatusCode))
+            {
+                Report.Info(reference, $"Response: {response.StatusCode}");
+                return false;
+            }
+
+            var htmlBody = await GetHtmlBody(response);
+
+            /* Expected:
+            {
+               "message": "Deleted invoice."	
+               ,"deletedCount": 1
+               ,"deletedItems":
+               [
+               {
+               "draftInvoiceNumber": 403
+               ,"self": "https://restapi.e-conomic.com/invoices/drafts/403"
+               }
+               ]
+               }
+             */
+
+            var deletedInvoices = SerializerDeletedInvoices.Deserialize(htmlBody);
+
+            Report.Info(reference
+                , htmlBody);
+
+            return deletedInvoices.deletedCount == 1 
+                   &&
+                   deletedInvoices.deletedItems.Any(di => di.draftInvoiceNumber == invoiceNumber)
+                ;
+        }
+        catch (HttpRequestException)
+        {
+            return false;
+        }
     }
 
     private Mapper? _mapper;
@@ -142,6 +203,8 @@ public partial class GatewayBase
 
     public async Task<IDraftInvoice?> PushInvoice(IInputInvoice inputInvoice, int sourceFileLineNumber)
     {
+        const string reference = nameof(PushInvoice);
+
         Report.SetCustomer(new CachedCustomer { Name = "---- ----", CustomerNumber = inputInvoice.CustomerNumber });
 
         try
@@ -153,7 +216,7 @@ public partial class GatewayBase
         }
         catch (ApplicationException ex)
         {
-            Report.Error("PushInvoice", ex.Message);
+            Report.Error(reference, ex.Message);
 
             return new DraftInvoice
             {

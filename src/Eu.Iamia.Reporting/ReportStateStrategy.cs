@@ -3,12 +3,8 @@
 namespace Eu.Iamia.Reporting;
 public  class ReportStateStrategy
 {
-    private readonly ReportState _reportState;
-
     public ReportStateStrategy(ReportState reportState)
     {
-        _reportState = reportState;
-
         switch (reportState)
         {
             case ReportState.Info:

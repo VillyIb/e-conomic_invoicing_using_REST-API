@@ -9,30 +9,39 @@ public class GatewayInvoiceShould
     public GatewayInvoiceShould()
     {
         using var setup = new Setup();
-
         _sut = (GatewayBase)setup.GetService<IEconomicGateway>();
     }
 
-    //[Fact]
-    //public async Task GivenFaultyInputInvoice_When_PushInvoice_HandleError()
-    //{
-    //    IInputInvoice invalidInvoice = MockedInputInvoiceExtension.Valid;
-    //    var result = await sut.PushInvoice(invalidInvoice, 0);
-    //}
-
     [Fact]
-    public async Task PushInvoice_When_InvalidInvoice_Handle_XXXX()
+    public async Task PushInvoice_When_ValidInvoice_DraftInvoice_Exists()
     {
-        Invoice invalidInvoice = MockedInvoiceExtensions.Valid(MockedCustomer.Valid());
-        var result = await _sut.PushInvoice(MockedCustomer.Valid(), invalidInvoice, 1);
+        // Notice Creates a real invoice in e-conomic
+
+        Invoice invoiceStub = InvoiceStubExtension.Valid(CachedCustomerExtension.Valid());
+        var result = await _sut.PushInvoice(CachedCustomerExtension.Valid(), invoiceStub, 1);
         Assert.NotNull(result);
         Assert.True(result.DraftInvoiceNumber > 0);
+
+        var draftInvoice = await _sut.GetDraftInvoice(result.DraftInvoiceNumber);
+        Assert.NotNull(draftInvoice);
+        Assert.Equal(result.DraftInvoiceNumber, draftInvoice.DraftInvoiceNumber);
+
+        // Deletes draft invoice.
+        var status = await _sut.DeleteInvoice(result.DraftInvoiceNumber);
+        Assert.True(status);
+
+        // Verify draft invoice is deleted.
+        var emptyInvoice = await _sut.GetDraftInvoice(result.DraftInvoiceNumber);
+        Assert.NotNull(emptyInvoice);
+        Assert.True(emptyInvoice.DraftInvoiceNumber < 0);
     }
 
     [Fact]
     public async Task PushInvoice_When_Invoice_With_Invalid_PaymentTerm_Handle_Error()
     {
-        Invoice invalidInvoice = MockedInvoiceExtensions.Valid(MockedCustomer.Valid()).Invalid_PaymentTerm();
-        var result = await _sut.PushInvoice(MockedCustomer.Valid(), invalidInvoice, 1);
+        Invoice invalidInvoice = InvoiceStubExtension.Valid(CachedCustomerExtension.Valid()).Invalid_PaymentTerm();
+        var result = await _sut.PushInvoice(CachedCustomerExtension.Valid(), invalidInvoice, 1);
+        Assert.NotNull(result);
+        Assert.True(result.DraftInvoiceNumber == -1);
     }
 }

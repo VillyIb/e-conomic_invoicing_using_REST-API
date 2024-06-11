@@ -77,6 +77,7 @@ public class BookInvoicesShould
         var gatewayInvoice = new GatewayBaseStub(
             SettingsDemo,
             new SerializerCustomersHandle(serializer),
+            new SerializerDeletedInvoices(serializer),
             new SerializerDraftInvoice(serializer),
             new SerializerProductsHandle(serializer),
             CustomerReport,
@@ -93,6 +94,7 @@ public class BookInvoicesShould
 
             var invoice = mapper.From(inputInvoice);
 
+            // TODO fails, dont work on Demo Authentication...
             var response = await gatewayInvoice.PushInvoice(invoice.customer, invoice.ecInvoice, inputInvoice.SourceFileLineNumber);
 
             Assert.NotNull(response);
@@ -109,6 +111,7 @@ public class BookInvoicesShould
         var gatewayInvoice = new GatewayBaseStub(
             SettingsReal,
             new SerializerCustomersHandle(serializer),
+            new SerializerDeletedInvoices(serializer),
             new SerializerDraftInvoice(serializer),
             new SerializerProductsHandle(serializer),
             CustomerReport,
