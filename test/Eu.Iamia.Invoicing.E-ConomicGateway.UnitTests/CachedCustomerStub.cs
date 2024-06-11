@@ -2,7 +2,7 @@
 
 namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;
 
-public static class MockedCustomer 
+public static class CachedCustomerStub 
 {
     public static CachedCustomer Valid()
     {
