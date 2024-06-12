@@ -61,15 +61,22 @@ public class InvoicingHandler : IInvoicingHandler
         await _economicGateway.LoadProductCache();
 
         Console.WriteLine("");
-        
-        foreach (var inputInvoice in _loader.Invoices)
+
+        try
         {
-            inputInvoice.InvoiceDate = invoiceDate;
-            inputInvoice.Text1 = _loader.Text1!;
-            inputInvoice.InvoiceDate = invoiceDate;
-            inputInvoice.PaymentTerm = paymetTerm;
-            await _economicGateway.PushInvoice(inputInvoice, inputInvoice.SourceFileLineNumber);
-            Console.Write('.');
+            foreach (var inputInvoice in _loader.Invoices)
+            {
+                inputInvoice.InvoiceDate = invoiceDate;
+                inputInvoice.Text1 = _loader.Text1!;
+                inputInvoice.InvoiceDate = invoiceDate;
+                inputInvoice.PaymentTerm = paymetTerm;
+                await _economicGateway.PushInvoice(inputInvoice, inputInvoice.SourceFileLineNumber);
+                Console.Write('.');
+            }
+        }
+        catch (Exception ex)
+        {
+            // xxx
         }
 
         return new ExecutionStatus { Report = $"Report status {invoiceDate:yyyy-MM-dd}, {Environment.NewLine}Number of invoices: {_loader.Invoices.Count}", status = 0 };

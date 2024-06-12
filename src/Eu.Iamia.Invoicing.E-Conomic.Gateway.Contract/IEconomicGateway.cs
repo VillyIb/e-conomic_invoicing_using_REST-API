@@ -11,13 +11,18 @@ public interface IEconomicGateway
 
     Task<ProductsHandle> ReadProductsPaged(int page, int pageSize, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// PushInvoice contract.
+    /// </summary>
+    /// <param name="inputInvoice"></param>
+    /// <param name="sourceFileLineNumber"></param>
+    /// <returns></returns>
+    /// <exception cref="HttpRequestException"></exception>
     Task<IDraftInvoice?> PushInvoice(IInputInvoice inputInvoice, int sourceFileLineNumber);
 
     Task LoadCustomerCache(IList<int> customerGroupsToAccept);
 
     Task LoadProductCache();
-
-    Task<string> ReadInvoice();
 }
 
 public interface IDraftInvoice
