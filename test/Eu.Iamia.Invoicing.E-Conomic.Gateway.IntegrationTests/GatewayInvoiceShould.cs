@@ -5,6 +5,7 @@ namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests;
 public class GatewayInvoiceShould
 {
     private readonly GatewayBase _sut;
+    private readonly CancellationTokenSource _cts = new CancellationTokenSource();
 
     public GatewayInvoiceShould()
     {
@@ -18,7 +19,7 @@ public class GatewayInvoiceShould
         // Notice Creates and deletes a real draft-invoice in e-conomic
 
         Invoice invoiceStub = InvoiceStubExtension.Valid(CachedCustomerExtension.Valid());
-        var result = await _sut.PushInvoice(CachedCustomerExtension.Valid(), invoiceStub, 1);
+        var result = await _sut.PushInvoice(CachedCustomerExtension.Valid(), invoiceStub, 1, _cts.Token);
         Assert.NotNull(result);
         Assert.True(result.DraftInvoiceNumber > 0);
 
@@ -27,7 +28,7 @@ public class GatewayInvoiceShould
         Assert.Equal(result.DraftInvoiceNumber, draftInvoice.DraftInvoiceNumber);
 
         // Deletes draft invoice.
-        var status = await _sut.DeleteInvoice(result.DraftInvoiceNumber);
+        var status = await _sut.DeleteDraftInvoice(result.DraftInvoiceNumber);
         Assert.True(status);
 
         // Verify draft invoice is deleted.
@@ -38,6 +39,6 @@ public class GatewayInvoiceShould
     public async Task PushInvoice_When_Invoice_With_Invalid_PaymentTerm_Handle_Error()
     {
         Invoice invalidInvoice = InvoiceStubExtension.Valid(CachedCustomerExtension.Valid()).Invalid_PaymentTerm();
-        await Assert.ThrowsAsync<HttpRequestException>(() => _sut.PushInvoice(CachedCustomerExtension.Valid(), invalidInvoice, 1));
+        await Assert.ThrowsAsync<HttpRequestException>(() => _sut.PushInvoice(CachedCustomerExtension.Valid(), invalidInvoice, 1, _cts.Token));
     }
 }

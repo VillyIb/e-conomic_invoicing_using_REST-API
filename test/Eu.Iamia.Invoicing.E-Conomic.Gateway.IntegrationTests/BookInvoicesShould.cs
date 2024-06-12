@@ -11,6 +11,8 @@ using Eu.Iamia.Utils;
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests;
 public class BookInvoicesShould
 {
+    private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+
     private static readonly SettingsForEConomicGateway SettingsDemo = new SettingsForEConomicGateway
     {
         PaymentTerms = 1,
@@ -95,7 +97,7 @@ public class BookInvoicesShould
             var invoice = mapper.From(inputInvoice);
 
             // TODO fails, dont work on Demo Authentication...
-            var response = await gatewayInvoice.PushInvoice(invoice.customer, invoice.ecInvoice, inputInvoice.SourceFileLineNumber);
+            var response = await gatewayInvoice.PushInvoice(invoice.customer, invoice.ecInvoice, inputInvoice.SourceFileLineNumber, _cts.Token);
 
             Assert.NotNull(response);
 
