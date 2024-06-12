@@ -11,7 +11,7 @@ public abstract class SetupBase : IDisposable
     // NB Requires NuGet package Microsoft.Extensions.Options.ConfigurationExtensions
 
     protected IServiceProvider? ServiceProvider;
-    protected List<IHandlerSetup> SetupList = new();
+    protected List<IHandlerSetup> SetupList = [];
 
     protected IServiceProvider GetServiceProvider() => ServiceProvider.CheckForNull($"{nameof(SetupBase)}.{nameof(GetServiceProvider)}");
 
@@ -54,7 +54,7 @@ public abstract class SetupBase : IDisposable
             : result;
     }
 
-    public List<HelpMetaData> HelpMetaData = new();
+    public List<HelpMetaData> HelpMetaData = [];
 
     /// <summary>
     /// Extracts all HelpMetadataAttributes defined on Configuration Properties.

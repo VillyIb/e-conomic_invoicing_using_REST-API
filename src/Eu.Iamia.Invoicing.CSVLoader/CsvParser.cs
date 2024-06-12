@@ -10,7 +10,7 @@ public class CsvParser
 
     private int? _sourceFileLineNumber = 0;
 
-    private ILevel2Parsers _level2Parsers;
+    private readonly ILevel2Parsers _level2Parsers;
 
     public IList<IInputInvoice> Invoices => _level2Parsers.Invoices;
 

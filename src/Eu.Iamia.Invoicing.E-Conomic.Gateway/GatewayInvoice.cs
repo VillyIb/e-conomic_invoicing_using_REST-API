@@ -65,10 +65,10 @@ public partial class GatewayBase
             response.EnsureSuccessStatusCode();
         }
 
-        var expected = HttpStatusCode.OK;
+        const HttpStatusCode expected = HttpStatusCode.OK;
         if (expected != response.StatusCode)
         {
-            var message = $@"Response status code does not indicate {expected}: {response.StatusCode:D} ({response.ReasonPhrase})";
+            var message = @"Response status code does not indicate {expected}: {response.StatusCode:D} ({response.ReasonPhrase})";
             Report.Error(reference, message);
             throw new HttpRequestException(message, null, response.StatusCode);
         }

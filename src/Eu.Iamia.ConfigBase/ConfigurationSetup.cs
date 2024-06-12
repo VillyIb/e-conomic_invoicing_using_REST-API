@@ -31,7 +31,7 @@ public class ConfigurationSetup
 
         builder.AddEnvironmentVariables();
 
-        builder.AddCommandLine(args ?? Array.Empty<string>());
+        builder.AddCommandLine(args ?? []);
 
         IConfiguration config = builder.Build();
 

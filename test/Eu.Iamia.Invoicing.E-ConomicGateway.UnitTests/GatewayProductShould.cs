@@ -41,7 +41,7 @@ public class GatewayProductShould : GatewayBaseShould
         MockResponse(statusCode);
         using var sut = GetSut;
 
-        var _ = await Assert.ThrowsAsync<HttpRequestException>(() => sut.ReadProductsPaged(0, 20, Cts.Token));
+        _ = await Assert.ThrowsAsync<HttpRequestException>(() => sut.ReadProductsPaged(0, 20, Cts.Token));
 
         Mock.VerifyAll();
         MockedReport.Received(1).Error(Arg.Is<string>("ReadProductsPaged"), Arg.Any<string>());

@@ -48,30 +48,22 @@ public static class InvoiceStubExtension
                 Name = null,
                 PaymentTermsType = PaymentTermsType.net
             },
-            Lines = new()
-            {
+            Lines =
+            [
                 new Line
                 {
                     Unit = new Unit
                     {
                         Name = "stk", UnitNumber = 1
-                    },
-                    Description = "Desc",
-                    UnitNetPrice = 1.12,
-                    Product = new Product
+                    }
+                    , Description = "Desc", UnitNetPrice = 1.12, Product = new Product
                     {
                         ProductNumber = "99999"
-                    },
-                    Quantity = 1.23,
-                    DiscountPercentage = 0.0,
-                    LineNumber = 1,
-                    MarginInBaseCurrency = 100.0,
-                    MarginPercentage = 100.0,
-                    SortKey = 1,
-                    TotalNetAmount = 100.0,
-                    UnitCostPrice = 0.0
+                    }
+                    , Quantity = 1.23, DiscountPercentage = 0.0, LineNumber = 1, MarginInBaseCurrency = 100.0, MarginPercentage = 100.0, SortKey = 1, TotalNetAmount = 100.0
+                    , UnitCostPrice = 0.0
                 }
-            }
+            ]
         };
     }
 

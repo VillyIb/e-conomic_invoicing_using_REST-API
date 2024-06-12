@@ -5,7 +5,7 @@ namespace Eu.Iamia.ConfigBase;
 
 public class MetadataUtil
 {
-    public List<HelpMetaData> HelpMetaData = new();
+    public List<HelpMetaData> HelpMetaData = [];
 
     // TODO not used?
     public void ExtractSettingsHelpMetaData (IServiceProvider serviceProvider, IServiceCollection services)

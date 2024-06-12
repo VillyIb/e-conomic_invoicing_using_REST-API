@@ -12,7 +12,7 @@ public class CustomerReportShould
 
     private const string Bravo = "{'message':'Validation failed. 2 errors found.','errorCode':'E04300', 'developerHint':'Inspect validation errors and correct your request.', 'logId':'86d2a1f150c392bb-CPH', 'httpStatusCode':400,'errors':{ 'paymentTerms':{'errors':[{'propertyName':'paymentTerms','errorMessage':'PaymentTerms '4711' not found.','errorCode':'E07080','inputValue':4711,'developerHint':'Find a list of paymentTermss at https://restapi.e-conomic.com/payment-terms .'}]}, 'paymentTermsType':{'errors':[{'propertyName':'paymentTermsType','errorMessage':'Payment terms type does not match the type on the payment terms specified.', 'errorCode':'E07180','inputValue':'invoiceMonth','developerHint':'Either specify the matching payment terms type for the payment terms in question, or omit the property.'}]}},'logTime':'2024-03-31T21:09:13','errorCount':2}";
 
-    private ICustomer GetCustomer(int id = 99)
+    private static ICustomer GetCustomer(int id = 99)
     {
         return new MockedCustomer
         {
@@ -21,7 +21,7 @@ public class CustomerReportShould
         };
     }
 
-    private ICustomer GetCustomerWithoutName(int id = 9999)
+    private static ICustomer GetCustomerWithoutName(int id = 9999)
     {
         return new MockedCustomer
         {

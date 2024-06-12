@@ -53,7 +53,7 @@ public class GatewayInvoicePushInvoiceShould : GatewayBaseShould
             HttpMessageHandler
         );
 
-        var _ = await Assert.ThrowsAsync<HttpRequestException>(() => sut.PushInvoice(CachedCustomerExtension.Valid(), new Invoice(), -9, Cts.Token));
+        _ = await Assert.ThrowsAsync<HttpRequestException>(() => sut.PushInvoice(CachedCustomerExtension.Valid(), new Invoice(), -9, Cts.Token));
 
         Mock.VerifyAll();
         mockedReport.Received(1).Error(Arg.Is<string>("PushInvoice"), Arg.Any<string>());

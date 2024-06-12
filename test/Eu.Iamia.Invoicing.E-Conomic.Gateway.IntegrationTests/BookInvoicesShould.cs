@@ -23,7 +23,7 @@ public class BookInvoicesShould
         X_AppSecretToken = "Demo"
     };
 
-    private SettingsForEConomicGateway SettingsReal { get; init; }
+    private SettingsForEConomicGateway SettingsReal { get; }
 
     private static ICustomerReport CustomerReport => new MockedReport();
 
@@ -32,13 +32,13 @@ public class BookInvoicesShould
     private (IList<IInputInvoice> Invoices, IList<int> CustomerGroupsToAccept) LoadCSV()
     {
         var assembly = Assembly.GetExecutingAssembly();
-        var resourceName = "Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests.TestData.G1.csv";
+        const string resourceName = "Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests.TestData.G1.csv";
 
         using var stream = assembly.GetManifestResourceStream(resourceName);
 
         var loader = new CSVLoader.Loader();
 
-        var __ = loader.ParseCSV(stream!);
+        _ = loader.ParseCSV(stream!);
 
         return (loader.Invoices!, loader.CustomerGroupToAccept!);
     }

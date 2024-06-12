@@ -90,7 +90,7 @@ public class Mapper
 
         foreach (var inputLine in inputInvoice.InvoiceLines)
         {
-            var lineNumber = 1;
+            const int lineNumber = 1;
 
             var inputProduct = _productCache.GetInputProduct(inputLine.ProductNumber);
 

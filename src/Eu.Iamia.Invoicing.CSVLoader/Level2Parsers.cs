@@ -11,7 +11,7 @@ namespace Eu.Iamia.Invoicing.CSVLoader
 
         private List<IInputInvoice>? _invoices;
 
-        public IList<IInputInvoice> Invoices => _invoices ??= new List<IInputInvoice>();
+        public IList<IInputInvoice> Invoices => _invoices ??= [];
 
         public void ParseCustomerGroupRow(IList<string> columns)
         {

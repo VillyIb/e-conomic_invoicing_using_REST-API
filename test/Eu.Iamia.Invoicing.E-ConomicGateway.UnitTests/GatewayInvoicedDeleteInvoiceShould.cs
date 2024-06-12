@@ -41,7 +41,7 @@ public class GatewayInvoicedDeleteInvoiceShould : GatewayBaseShould
 
         using var sut = GetSut;
 
-        var _ = await Assert.ThrowsAsync<HttpRequestException>(() => sut.DeleteDraftInvoice(403));
+        _ = await Assert.ThrowsAsync<HttpRequestException>(() => sut.DeleteDraftInvoice(403));
 
         Mock.VerifyAll();
         MockedReport.Received(1).Error(Arg.Is<string>("DeleteDraftInvoice"), Arg.Any<string>());

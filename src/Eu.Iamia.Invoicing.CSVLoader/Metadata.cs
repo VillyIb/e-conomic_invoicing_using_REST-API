@@ -12,7 +12,7 @@ namespace Eu.Iamia.Invoicing.CSVLoader;
 
         private List<int>? _customerGroupToAccept;
 
-        public IList<int> CustomerGroupToAccept => _customerGroupToAccept ??= new List<int>();
+        public IList<int> CustomerGroupToAccept => _customerGroupToAccept ??= [];
 
         public string Text1 { get; set; } = string.Empty;
 

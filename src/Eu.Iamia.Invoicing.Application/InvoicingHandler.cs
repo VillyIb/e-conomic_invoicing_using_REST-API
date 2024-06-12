@@ -2,6 +2,7 @@
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
 using Eu.Iamia.Invoicing.Loader.Contract;
 using Microsoft.Extensions.Options;
+// ReSharper disable StringLiteralTypo
 
 namespace Eu.Iamia.Invoicing.Application;
 
@@ -42,19 +43,19 @@ public class InvoicingHandler : IInvoicingHandler
 
         if (!_loader.InvoiceDate.HasValue)
         {
-            throw new ApplicationException($"#Invoicedate/#Bilagsdato not specified");
+            throw new ApplicationException("#Invoicedate/#Bilagsdato not specified");
         }
         var invoiceDate = _loader.InvoiceDate.Value;
 
         if (!_loader.PaymentTerm.HasValue)
         {
-            throw new ApplicationException($"#Betalingsbetingelse/#PaymentTerm not specified");
+            throw new ApplicationException("#Betalingsbetingelse/#PaymentTerm not specified");
         }
         var paymetTerm = _loader.PaymentTerm.Value;
 
         if (_loader.CustomerGroupToAccept is null)
         {
-            throw new ApplicationException($"#Kundegrupper/#CustomerGroups not specified");
+            throw new ApplicationException("#Kundegrupper/#CustomerGroups not specified");
         }
 
         var customerGroupsToAccept = _loader.CustomerGroupToAccept;

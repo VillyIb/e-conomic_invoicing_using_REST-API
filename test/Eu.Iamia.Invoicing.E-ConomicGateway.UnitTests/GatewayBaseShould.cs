@@ -84,7 +84,7 @@ public class GatewayBaseShould
         }
 
         var apiMockedResponse =
-            setupApiRequest.ReturnsAsync(new HttpResponseMessage()
+            setupApiRequest.ReturnsAsync(new HttpResponseMessage
             {
                 StatusCode = httpStatusCode,
                 ReasonPhrase = Reason,

@@ -6,7 +6,7 @@ public static class CachedCustomerExtension
 {
     public static CachedCustomer Valid()
     {
-        return new CachedCustomer()
+        return new CachedCustomer
         {
             CustomerNumber = 99999,
             Address = "Customer1 address",

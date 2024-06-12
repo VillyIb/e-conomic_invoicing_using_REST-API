@@ -10,7 +10,7 @@ public class HelpMetaData
 
     public bool IsRequired { get; set; } = false;
 
-    public List<string> AliasList { get; set; } = new List<string>();
+    public List<string> AliasList { get; set; } = [];
 
     public override string ToString()
     {

@@ -24,7 +24,7 @@ public class JsonSerializerShould
     public void Given_DtoThrowsArgumentException_When_JsonSerializer_Deserialize_IsTransparent()
     {
         // ReSharper disable once InconsistentNaming
-        var json_TestSubjectDtoThrowsArgumentException = "{\"Subject\": \"\"}";
+        const string json_TestSubjectDtoThrowsArgumentException = "{\"Subject\": \"\"}";
         var ex = Assert.Throws<ArgumentException>(() => JsonSerializer.Deserialize<TestSubjectDto>(json_TestSubjectDtoThrowsArgumentException, _options));
         Assert.NotNull(ex);
         Assert.Null(ex.InnerException);

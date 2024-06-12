@@ -55,7 +55,7 @@ public static class StringExtensions
     /// <returns></returns>
     public static string TrimNumberToLength(this string? value, int length, char prefix = DefaultPreFix)
     {
-        var t1 = (value ?? string.Empty);
+        var t1 = value ?? string.Empty;
 
         var t2 = (t1.Length > length ? t1[..length] : t1).PadLeft(length, prefix);
 

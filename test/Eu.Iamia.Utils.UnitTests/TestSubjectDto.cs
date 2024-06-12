@@ -9,7 +9,7 @@ public class TestSubjectDto : IEquatable<TestSubjectDto>
         get => _subject;
         set
         {
-            if (String.IsNullOrWhiteSpace(value)) throw new ArgumentException("Please provide a value.", nameof(Subject));
+            if (string.IsNullOrWhiteSpace(value)) throw new ArgumentException("Please provide a value.", nameof(Subject));
             _subject = value;
         }
     }

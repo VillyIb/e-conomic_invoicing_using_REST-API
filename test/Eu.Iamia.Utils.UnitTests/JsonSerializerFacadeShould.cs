@@ -62,21 +62,21 @@ public class JsonSerializerFacadeShould
     public void Deserialize_Throws_ArgumentNullException_HandledOK()
     {
         var sut = new JsonSerializerFacadeStub_ArgumentNullException();
-        var _ = Assert.Throws<JsonException>(() => sut.Deserialize<TestSubjectDto>(null!));
+        _ = Assert.Throws<JsonException>(() => sut.Deserialize<TestSubjectDto>(null!));
     }
 
     [Fact]
     public void Deserialize_Throws_JsonException_HandledOK()
     {
         var sut = new JsonSerializerFacadeStub_JsonException();
-        var _ = Assert.Throws<JsonException>(() => sut.Deserialize<TestSubjectDto>(null!));
+        _ = Assert.Throws<JsonException>(() => sut.Deserialize<TestSubjectDto>(null!));
     }
 
     [Fact]
     public void Deserialize_Returns_Null_HandledOK()
     {
         var sut = new JsonSerializerFacadeStub_ReturnsNull();
-        var _ = Assert.Throws<JsonException>(() => sut.Deserialize<TestSubjectDto>(null!));
+        _ = Assert.Throws<JsonException>(() => sut.Deserialize<TestSubjectDto>(null!));
     }
 
     [Fact]
@@ -106,7 +106,7 @@ public class JsonSerializerFacadeShould
         await using var st = GenerateStreamFromString("{\"Subject\":\"subject\"}");
 
         var sut = new JsonSerializerFacadeStub_ArgumentNullException();
-        var _ = await Assert.ThrowsAsync<JsonException>(() => sut.DeserializeAsync<TestSubjectDto>(st));
+        _ = await Assert.ThrowsAsync<JsonException>(() => sut.DeserializeAsync<TestSubjectDto>(st));
     }
 
     [Fact]
@@ -115,7 +115,7 @@ public class JsonSerializerFacadeShould
         await using var st = GenerateStreamFromString("{\"Subject\":\"subject\"}");
 
         var sut = new JsonSerializerFacadeStub_JsonException();
-        var _ = await Assert.ThrowsAsync<JsonException>(() => sut.DeserializeAsync<TestSubjectDto>(st));
+        _ = await Assert.ThrowsAsync<JsonException>(() => sut.DeserializeAsync<TestSubjectDto>(st));
     }
 
     [Fact]
@@ -124,7 +124,7 @@ public class JsonSerializerFacadeShould
         await using var st = GenerateStreamFromString("{\"Subject\":\"subject\"}");
 
         var sut = new JsonSerializerFacadeStub_ReturnsNull();
-        var _ = await Assert.ThrowsAsync<JsonException>(() => sut.DeserializeAsync<TestSubjectDto>(st));
+        _ = await Assert.ThrowsAsync<JsonException>(() => sut.DeserializeAsync<TestSubjectDto>(st));
     }
 
     [Fact]

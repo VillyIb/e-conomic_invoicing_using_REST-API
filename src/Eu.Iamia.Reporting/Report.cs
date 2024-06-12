@@ -192,6 +192,4 @@ public class CustomerCustomerReport : ReportBase, ICustomerReport
 }
 
 public class AggregateReport : ReportBase
-{
-
-}
+{ }

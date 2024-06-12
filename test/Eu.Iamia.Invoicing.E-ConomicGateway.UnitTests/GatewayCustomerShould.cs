@@ -42,7 +42,7 @@ public class GatewayCustomerShould : GatewayBaseShould
 
         using var sut = GetSut;
 
-        var _ = await Assert.ThrowsAsync<HttpRequestException>(() => sut.ReadCustomersPaged(0, 20, Cts.Token));
+        _ = await Assert.ThrowsAsync<HttpRequestException>(() => sut.ReadCustomersPaged(0, 20, Cts.Token));
         MockedReport.Received(1).Error(Arg.Is<string>("ReadCustomersPaged"), Arg.Any<string>());
         MockedReport.Received(0).Info(Arg.Any<string>(), Arg.Any<string>());
 
