@@ -21,6 +21,6 @@ public class DraftInvoiceShould
     public void FromJson_When_InvalidJson_Throws_JsonException()
     {
         var invalidJson = DraftInvoiceJson.Replace("{", "[");
-        var ex = Assert.Throws<JsonException>(() => new SerializerDraftInvoice(new JsonSerializerFacade()).Deserialize(invalidJson));
+        var _ = Assert.Throws<JsonException>(() => new SerializerDraftInvoice(new JsonSerializerFacade()).Deserialize(invalidJson));
     }
 }

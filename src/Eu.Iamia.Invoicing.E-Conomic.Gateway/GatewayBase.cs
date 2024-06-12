@@ -1,8 +1,6 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Configuration;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Serializers;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
 using Eu.Iamia.Reporting.Contract;
 using Microsoft.Extensions.Options;
 
@@ -51,7 +49,7 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
     { }
 
     /// <summary>
-    /// Fails if token is null, whitespace of contain blanks.
+    /// Fails if token is null, whitespace or contain blanks.
     /// </summary>
     /// <param name="token"></param>
     /// <param name="name"></param>
@@ -92,21 +90,5 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
     {
         HttpClient.Dispose();
         Report.Dispose();
-    }
-
-    private CustomerCache? CustomerCache { get; set; }
-
-    public async Task LoadCustomerCache(IList<int> customerGroupsToAccept)
-    {
-        CustomerCache = new CustomerCache(this, customerGroupsToAccept);
-        await CustomerCache.LoadAllCustomers();
-    }
-
-    private ProductCache? ProductCache { get; set; }
-
-    public async Task LoadProductCache()
-    {
-        ProductCache = new ProductCache(this);
-        await ProductCache.LoadAllProducts();
     }
 }
