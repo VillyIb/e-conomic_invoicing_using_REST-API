@@ -23,7 +23,7 @@ public partial class GatewayBase
 
                 response.EnsureSuccessStatusCode();
             }
-            
+
             var customersHandle = await SerializerCustomersHandle.DeserializeAsync(
                 await response.Content.ReadAsStreamAsync(cancellationToken),
                 cancellationToken

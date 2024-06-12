@@ -31,6 +31,6 @@ internal class MockedReport : ICustomerReport
 
     public void Close()
     {
-        
+
     }
 }

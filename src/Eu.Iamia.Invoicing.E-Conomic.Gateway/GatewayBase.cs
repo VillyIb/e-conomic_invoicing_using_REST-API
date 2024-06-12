@@ -10,6 +10,8 @@ namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;
 
 public partial class GatewayBase : IEconomicGateway, IDisposable
 {
+    // see: https://restdocs.e-conomic.com/#http-status-codes
+
     protected readonly ISerializerDraftInvoice SerializerDraftInvoice;
     protected readonly ISerializerCustomersHandle SerializerCustomersHandle;
     protected readonly ISerializerDeletedInvoices SerializerDeletedInvoices;
@@ -19,7 +21,7 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
 
     protected HttpClient? HttpClientField;
 
-    protected virtual  HttpClient HttpClient => HttpClientField ??= new HttpClient();
+    protected virtual HttpClient HttpClient => HttpClientField ??= new HttpClient();
 
     public GatewayBase(
     SettingsForEConomicGateway settings,

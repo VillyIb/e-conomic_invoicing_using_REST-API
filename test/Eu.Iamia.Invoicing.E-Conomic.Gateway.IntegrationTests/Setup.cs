@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests;
 
-public  class Setup : SetupBase
+public class Setup : SetupBase
 {
     public Setup(string[]? args = null, IServiceCollection? services = null)
     {
