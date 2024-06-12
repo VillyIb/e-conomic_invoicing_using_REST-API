@@ -16,9 +16,10 @@ public interface IEconomicGateway
     /// </summary>
     /// <param name="inputInvoice"></param>
     /// <param name="sourceFileLineNumber"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     /// <exception cref="HttpRequestException"></exception>
-    Task<IDraftInvoice?> PushInvoice(IInputInvoice inputInvoice, int sourceFileLineNumber);
+    Task<IDraftInvoice?> PushInvoice(IInputInvoice inputInvoice, int sourceFileLineNumber, CancellationToken cancellationToken);
 
     Task LoadCustomerCache(IList<int> customerGroupsToAccept);
 

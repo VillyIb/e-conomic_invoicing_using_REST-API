@@ -2,10 +2,8 @@
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
 using Eu.Iamia.Invoicing.Loader.Contract;
 using System.Text;
-using System.Xml;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.DraftInvoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;
@@ -14,7 +12,7 @@ public partial class GatewayBase
 {
     // see:http://restdocs.e-conomic.com/#post-invoices-drafts
 
-    internal async Task<IDraftInvoice> PushInvoice(CachedCustomer customer, Invoice invoice, int sourceFileLineNumber)
+    internal async Task<IDraftInvoice> PushInvoice(CachedCustomer customer, Invoice invoice, int sourceFileLineNumber, CancellationToken cancellationToken)
     {
         const string reference = nameof(PushInvoice);
 
@@ -24,7 +22,7 @@ public partial class GatewayBase
         var json = invoice.ToJson();
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await HttpClient.PostAsync("https://restapi.e-conomic.com/invoices/drafts", content);
+        var response = await HttpClient.PostAsync("https://restapi.e-conomic.com/invoices/drafts", content, cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -85,14 +83,14 @@ public partial class GatewayBase
     }
 
     /// <summary>
-    /// Delete single invoice
+    /// Delete single draft invoice
     /// </summary>
     /// <param name="invoiceNumber"></param>
     /// <returns></returns>
     /// <seealso cref="https://restdocs.e-conomic.com/#delete-invoices-drafts-draftinvoicenumber"/>>
-    internal async Task<bool> DeleteInvoice(int invoiceNumber)
+    internal async Task<bool> DeleteDraftInvoice(int invoiceNumber)
     {
-        const string reference = nameof(DeleteInvoice);
+        const string reference = nameof(DeleteDraftInvoice);
 
         SetAuthenticationHeaders();
 
@@ -145,29 +143,17 @@ public partial class GatewayBase
 
     private Mapper Mapper => _mapper ??= new Mapper(Settings, CustomerCache!, ProductCache!);
 
-    public async Task<IDraftInvoice?> PushInvoice(IInputInvoice inputInvoice, int sourceFileLineNumber)
+    public async Task<IDraftInvoice?> PushInvoice(IInputInvoice inputInvoice, int sourceFileLineNumber, CancellationToken cancellationToken)
     {
-        const string reference = nameof(PushInvoice);
-
         Report.SetCustomer(new CachedCustomer { Name = "---- ----", CustomerNumber = inputInvoice.CustomerNumber });
 
         try
         {
             var converted = Mapper.From(inputInvoice);
 
-            var status = await PushInvoice(converted.customer, converted.ecInvoice, sourceFileLineNumber);
+            var status = await PushInvoice(converted.customer, converted.ecInvoice, sourceFileLineNumber, cancellationToken);
             return status;
         }
-        //catch (ApplicationException ex)
-        //{
-        //    Report.Error(reference, ex.Message);
-
-        //    return new DraftInvoice
-        //    {
-        //        DraftInvoiceNumber = -1,
-        //        GrossAmount = 0.0
-        //    };
-        //}
         finally
         {
             Report.Close();

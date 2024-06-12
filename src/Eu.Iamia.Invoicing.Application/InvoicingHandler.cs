@@ -16,6 +16,8 @@ public class InvoicingHandler : IInvoicingHandler
     private readonly ILoader _loader;
     private readonly SettingsForInvoicingApplication _settings;
 
+    protected CancellationTokenSource Cts = new CancellationTokenSource();
+
     public InvoicingHandler(
         IOptions<SettingsForInvoicingApplication> settings
         // csv reader
@@ -70,7 +72,7 @@ public class InvoicingHandler : IInvoicingHandler
                 inputInvoice.Text1 = _loader.Text1!;
                 inputInvoice.InvoiceDate = invoiceDate;
                 inputInvoice.PaymentTerm = paymetTerm;
-                await _economicGateway.PushInvoice(inputInvoice, inputInvoice.SourceFileLineNumber);
+                await _economicGateway.PushInvoice(inputInvoice, inputInvoice.SourceFileLineNumber, Cts.Token);
                 Console.Write('.');
             }
         }
