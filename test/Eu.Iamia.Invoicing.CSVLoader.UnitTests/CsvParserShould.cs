@@ -1,5 +1,6 @@
 ﻿namespace Eu.Iamia.Invoicing.CSVLoader.UnitTests
 {
+    [NCrunch.Framework.Category("Unit")]
     public class CsvParserShould
     {
         private readonly CsvParser sut;

@@ -3,6 +3,7 @@ using NSubstitute;
 
 namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;
 
+[NCrunch.Framework.Category("Unit")]
 public class GatewayInvoicedDeleteInvoiceShould : GatewayBaseShould
 {
     protected override string ResponseOK => "{\r\n\t\"message\": \"Deleted invoice.\",\r\n\t\"deletedCount\": 1,\r\n\t\"deletedItems\": [\r\n\t\t{\r\n\t\t\t\"draftInvoiceNumber\": 403,\r\n\t\t\t\"self\": \"https://restapi.e-conomic.com/invoices/drafts/403\"\r\n\t\t}\r\n\t]\r\n}";

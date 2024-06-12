@@ -2,6 +2,8 @@
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests;
+
+[NCrunch.Framework.Category("Integration")]
 public class GatewayInvoiceShould
 {
     private readonly GatewayBase _sut;

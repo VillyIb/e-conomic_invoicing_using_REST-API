@@ -53,6 +53,7 @@ public class JsonSerializerFacadeStub_ReturnsNull : JsonSerializerFacade
     }
 }
 
+[NCrunch.Framework.Category("Unit")]
 public class JsonSerializerFacadeShould
 {
     // synchronous 

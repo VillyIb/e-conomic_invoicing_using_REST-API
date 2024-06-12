@@ -1,6 +1,7 @@
 // ReSharper disable StringLiteralTypo
 namespace Eu.Iamia.Utils.UnitTests;
 
+[NCrunch.Framework.Category("Unit")]
 public class StringExtensionsShould
 {
     [Fact]

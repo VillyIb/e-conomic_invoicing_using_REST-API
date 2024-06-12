@@ -3,6 +3,7 @@ using System.Net;
 
 namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;
 
+[NCrunch.Framework.Category("Unit")]
 public class GatewayProductShould : GatewayBaseShould
 {
     protected override string ResponseOK => "{}";

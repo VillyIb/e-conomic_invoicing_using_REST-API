@@ -8,6 +8,7 @@ namespace Eu.Iamia.Utils.UnitTests.InvestigateJsonSerializer;
 /// <summary>
 /// Investigate behaviour of System.Text.Json.JsonSerializer.Deserialize.
 /// </summary>
+[NCrunch.Framework.Category("Unit")]
 public class JsonSerializerShould
 {
     private readonly JsonSerializerOptions _options = new()

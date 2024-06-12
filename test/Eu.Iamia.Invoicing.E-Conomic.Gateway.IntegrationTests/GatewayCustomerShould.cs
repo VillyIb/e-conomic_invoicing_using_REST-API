@@ -1,6 +1,8 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests;
+
+[NCrunch.Framework.Category("Integration")]
 public class GatewayCustomerShould
 {
     private readonly IEconomicGateway _sut;

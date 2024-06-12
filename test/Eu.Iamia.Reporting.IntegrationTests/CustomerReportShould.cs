@@ -3,6 +3,7 @@ using Eu.Iamia.Reporting.Contract;
 
 namespace Eu.Iamia.Reporting.IntegrationTests;
 
+[NCrunch.Framework.Category("Integration")]
 public class CustomerReportShould
 {
     private readonly CustomerReportForTesting _sut;

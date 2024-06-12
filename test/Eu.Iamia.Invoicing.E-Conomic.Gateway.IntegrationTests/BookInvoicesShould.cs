@@ -9,6 +9,8 @@ using Eu.Iamia.Reporting.Contract;
 using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests;
+
+[NCrunch.Framework.Category("Integration")]
 public class BookInvoicesShould
 {
     private readonly CancellationTokenSource _cts = new CancellationTokenSource();
@@ -63,6 +65,7 @@ public class BookInvoicesShould
         SettingsReal = setup.GetSetting<SettingsForEConomicGateway>();
     }
 
+    // TODO doesn't work on demo authentication.
     [Fact]
     public async Task GivenDemoAuthentication_BookInvoices_In_CsvFile()
     {

@@ -7,6 +7,7 @@ using NSubstitute;
 
 namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;
 
+[NCrunch.Framework.Category("Unit")]
 public class GatewayInvoicePushInvoiceShould : GatewayBaseShould
 {
     [Fact]

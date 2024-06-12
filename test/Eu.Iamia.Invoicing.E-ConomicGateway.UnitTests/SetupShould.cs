@@ -4,6 +4,8 @@ using Eu.Iamia.Reporting.Contract;
 using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;
+
+[NCrunch.Framework.Category("Unit")]
 public class SetupShould : IDisposable
 {
     private readonly Setup _setup;
