@@ -43,4 +43,62 @@ public class GatewayInvoiceShould
         Invoice invalidInvoice = InvoiceStubExtension.Valid(CachedCustomerExtension.Valid()).Invalid_PaymentTerm();
         await Assert.ThrowsAsync<HttpRequestException>(() => _sut.PushInvoice(CachedCustomerExtension.Valid(), invalidInvoice, 1, _cts.Token));
     }
+
+    [Theory]
+    [InlineData(0, 20)]
+    public async Task GetBookedInvoices(int page, int pageSize)
+    {
+        var x = await _sut.GetBookedInvoice(page, pageSize, _cts.Token);
+        Assert.NotNull(x);
+    }
+
+    [Fact]
+    public async Task GetBookedInvoices2()
+    {
+        const int pageSize = 140;
+        int page = 0;
+
+        var Invoices = new List<InvoiceX>();
+
+        while (true)
+        {
+            var x = await _sut.GetBookedInvoice(page++, pageSize, _cts.Token);
+
+            if (!x.collection.Any()) break;
+
+            foreach (var invoice in x.collection)
+            {
+                Invoices.Add(new InvoiceX { Customer = invoice.customer.customerNumber, Amount = invoice.grossAmount });
+            }
+        }
+        
+        var ordered = Invoices.OrderBy(entry => entry.Customer).ThenBy(entry => entry.Amount).ToList();
+
+        var duplicates = new List<InvoiceX>();
+
+        var initial = ordered.First();
+        foreach (var inv in ordered.Skip(1))
+        {
+            if (initial.Customer == inv.Customer)
+            {
+                duplicates.Add(initial);
+                duplicates.Add(inv);
+            }
+            initial = inv;
+        }
+
+    }
+
+}
+
+public class InvoiceX
+{
+    public int Customer { get; set; }
+
+    public double Amount { get; set; }
+
+    public override string ToString()
+    {
+        return $"{Customer} {Amount:00000.00}";
+    }
 }
