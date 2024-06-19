@@ -1,6 +1,13 @@
-﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.BookedInvoice;
+﻿// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+// ReSharper disable IdentifierTypo
+#pragma warning disable IDE1006
+#pragma warning disable IDE1006
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-public class Invoice
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.BookedInvoice;
+
+public class Invoices
 {
     public Collection[] collection { get; set; }
     public Pagination pagination { get; set; }
