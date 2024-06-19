@@ -14,13 +14,13 @@ public class SerializerBookedInvoice : ISerializerBookedInvoice
         _serializer = serializer;
     }
 
-    public Invoice Deserialize(string json)
+    public Invoices Deserialize(string json)
     {
-        return _serializer.Deserialize<Invoice>(json);
+        return _serializer.Deserialize<Invoices>(json);
     }
 
-    public async Task<Invoice> DeserializeAsync(Stream utf8Json, CancellationToken cancellationToken)
+    public async Task<Invoices> DeserializeAsync(Stream utf8Json, CancellationToken cancellationToken)
     {
-        return await _serializer.DeserializeAsync<Invoice>(utf8Json, cancellationToken);
+        return await _serializer.DeserializeAsync<Invoices>(utf8Json, cancellationToken);
     }
 }

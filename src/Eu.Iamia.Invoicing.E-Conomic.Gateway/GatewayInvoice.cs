@@ -84,7 +84,10 @@ public partial class GatewayBase
         return draftInvoice;
     }
 
-    internal async Task<Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.BookedInvoice.Invoice> GetBookedInvoice(int page, int pageSize, CancellationToken cancellationToken)
+    // TODO wrap paging and return full content.
+    // Specify date from, date to.
+
+    internal async Task<Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.BookedInvoice.Invoices> GetBookedInvoice(int page, int pageSize, CancellationToken cancellationToken)
     {
         const string reference = nameof(GetBookedInvoice);
 
