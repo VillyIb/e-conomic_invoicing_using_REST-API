@@ -21,15 +21,4 @@ public class HelpMetadataAttribute : Attribute
         Hide = hide;
         IsRequired = isRequired;
     }
-
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
-    public class HelpMetadataAliasAttribute : Attribute
-    {
-        public string Alias { get; }
-
-        public HelpMetadataAliasAttribute(string alias)
-        {
-            Alias = alias;
-        }
-    }
 }

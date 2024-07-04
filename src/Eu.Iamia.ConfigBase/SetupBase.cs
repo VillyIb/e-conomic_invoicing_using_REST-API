@@ -96,12 +96,8 @@ public abstract class SetupBase : IDisposable
             var option = new Option<string>(name: helpMetadata.Name, description: helpMetadata.Description)
             {
                 ArgumentHelpName = helpMetadata.ArgumentHelpName
+                , IsRequired = helpMetadata.IsRequired
             };
-
-            foreach (var alias in helpMetadata.AliasList)
-            {
-                option.AddAlias(alias);
-            }
 
             result.Add(option);
         }

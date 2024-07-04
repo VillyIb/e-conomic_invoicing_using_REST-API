@@ -18,13 +18,9 @@ public class Program
         {
             var option = new Option<string>(name: helpMetadata.Name, description: helpMetadata.Description)
             {
-                ArgumentHelpName = helpMetadata.ArgumentHelpName
+                ArgumentHelpName = helpMetadata.ArgumentHelpName,
+                IsRequired = helpMetadata.IsRequired,
             };
-
-            foreach (var alias in helpMetadata.AliasList)
-            {
-                option.AddAlias(alias);
-            }
 
             rootCommand.AddOption(option);
         }

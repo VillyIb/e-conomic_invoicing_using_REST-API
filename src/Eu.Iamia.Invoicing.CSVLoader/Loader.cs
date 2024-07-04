@@ -1,5 +1,7 @@
 ﻿using Eu.Iamia.Invoicing.Loader.Contract;
 // ReSharper disable StringLiteralTypo
+// ReSharper disable InconsistentNaming
+// ReSharper disable ConvertConstructorToMemberInitializers
 
 namespace Eu.Iamia.Invoicing.CSVLoader;
 

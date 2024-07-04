@@ -34,13 +34,7 @@ public abstract class SettingsBase
             if (helpMetadata is null) { continue; }
             if (helpMetadata.Hide) continue;
 
-            var helpMetaData = new HelpMetaData { Name = $"--{sectionName}:{property.Name}", Description = helpMetadata.Description, ArgumentHelpName = helpMetadata.ArgumentHelpName };
-
-            //var aliasList = property.GetCustomAttributes<HelpMetadataAttribute.HelpMetadataAliasAttribute>();
-            //foreach (var alias in aliasList)
-            //{
-            //    helpMetaData.AliasList.Add(alias.Alias);
-            //}
+            var helpMetaData = new HelpMetaData { Name = $"--{sectionName}:{property.Name}", Description = helpMetadata.Description, ArgumentHelpName = helpMetadata.ArgumentHelpName, IsRequired = helpMetadata.IsRequired};
 
             helpMetadataList.Add(helpMetaData);
 
