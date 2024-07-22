@@ -1,5 +1,7 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
+using Eu.Iamia.Utils;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests;
 
@@ -45,10 +47,18 @@ public class GatewayInvoiceShould
     }
 
     [Theory]
-    [InlineData(0, 20)]
-    public async Task GetBookedInvoices(int page, int pageSize)
+    [InlineData(0, 20, "2024-01-01", "2024-12-31")]
+    public async Task GetBookedInvoices(int page, int pageSize, string fromDate, string toDate)
     {
-        var x = await _sut.GetBookedInvoice(page, pageSize, _cts.Token);
+        var fd = DateTime.Parse(fromDate);
+        var td = DateTime.Parse(toDate);
+        var dateRange = Interval<DateTime>.Create(fd, td);
+        var x = await _sut.GetBookedInvoice(
+            page,
+            pageSize,
+            dateRange,
+            _cts.Token
+        );
         Assert.NotNull(x);
     }
 
@@ -57,38 +67,26 @@ public class GatewayInvoiceShould
     {
         const int pageSize = 140;
         int page = 0;
+        var fd = DateTime.Parse("2024-01-01");
+        var td = DateTime.Parse("2024-01-31");
+        var dateRange = Interval<DateTime>.Create(fd, td);
 
-        var Invoices = new List<InvoiceX>();
+        var invoices = new List<InvoiceX>();
 
         while (true)
         {
-            var x = await _sut.GetBookedInvoice(page++, pageSize, _cts.Token);
+            var x = await _sut.GetBookedInvoice(page++, pageSize, dateRange, _cts.Token);
 
             if (!x.collection.Any()) break;
 
             foreach (var invoice in x.collection)
             {
-                Invoices.Add(new InvoiceX { Customer = invoice.customer.customerNumber, Amount = invoice.grossAmount });
+                invoices.Add(new InvoiceX { Customer = invoice.customer.customerNumber, Amount = invoice.grossAmount });
             }
         }
-        
-        var ordered = Invoices.OrderBy(entry => entry.Customer).ThenBy(entry => entry.Amount).ToList();
 
-        var duplicates = new List<InvoiceX>();
-
-        var initial = ordered.First();
-        foreach (var inv in ordered.Skip(1))
-        {
-            if (initial.Customer == inv.Customer)
-            {
-                duplicates.Add(initial);
-                duplicates.Add(inv);
-            }
-            initial = inv;
-        }
-
+        Assert.Equal(140, invoices.Count);
     }
-
 }
 
 public class InvoiceX

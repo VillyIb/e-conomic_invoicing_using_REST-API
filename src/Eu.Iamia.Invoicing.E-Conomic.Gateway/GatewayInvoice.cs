@@ -85,16 +85,28 @@ public partial class GatewayBase
     }
 
     // TODO wrap paging and return full content.
-    // Specify date from, date to.
 
-    internal async Task<Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.BookedInvoice.Invoices> GetBookedInvoice(int page, int pageSize, CancellationToken cancellationToken)
+    internal async Task<Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.BookedInvoice.Invoices> GetBookedInvoice(
+        int page,
+        int pageSize,
+        Interval<DateTime> dateRange,
+        CancellationToken cancellationToken
+    )
     {
+        // see: https://restdocs.e-conomic.com/#get-invoices-booked
+
         const string reference = nameof(GetBookedInvoice);
 
         SetAuthenticationHeaders();
 
         // ReSharper disable once StringLiteralTypo
-        var response = await HttpClient.GetAsync($"https://restapi.e-conomic.com/invoices/booked?skippages={page}&pagesize={pageSize}&filter=date$gte:2024-01-01", cancellationToken);
+        _requestUri = $"https://restapi.e-conomic.com/invoices/booked?" +
+                     $"skippages={page}&pagesize={pageSize}" +
+                     $"&filter=" +
+                     $"date$gte:{dateRange.From:yyyy-MM-dd}&date$lte:{dateRange.To:yyyy-Mm-dd}"
+        ;
+
+        var response = await HttpClient.GetAsync(_requestUri, cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -115,11 +127,11 @@ public partial class GatewayBase
         var htmlBody = await GetHtmlBody(response);
 
         var serializer = new SerializerBookedInvoice(new JsonSerializerFacade());
-        var draftInvoice = serializer.Deserialize(htmlBody);
+        var draftInvoices = serializer.Deserialize(htmlBody);
 
         // Report.Info(reference, htmlBody);
 
-        return draftInvoice;
+        return draftInvoices;
     }
 
     /// <summary>
@@ -180,6 +192,7 @@ public partial class GatewayBase
     }
 
     private Mapper? _mapper;
+    private string _requestUri;
 
     private Mapper Mapper => _mapper ??= new Mapper(Settings, CustomerCache!, ProductCache!);
 
