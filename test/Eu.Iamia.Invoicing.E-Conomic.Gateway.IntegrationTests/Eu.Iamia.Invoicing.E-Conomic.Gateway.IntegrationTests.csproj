@@ -11,6 +11,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="BookInvoicesShould.cs" />
+    <Compile Remove="GatewayBaseStub.cs" />
+    <Compile Remove="GatewayCustomerShould.cs" />
+    <Compile Remove="GatewayInvoiceShould.cs" />
+    <Compile Remove="GatewayProductShould.cs" />
+    <Compile Remove="GlobalUsings.cs" />
+    <Compile Remove="InvoiceStub.cs" />
+    <Compile Remove="InvoiceStubExtension.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="TestData\G1.csv" />
   </ItemGroup>
 
