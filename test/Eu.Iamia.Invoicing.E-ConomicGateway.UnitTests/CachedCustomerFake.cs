@@ -2,7 +2,7 @@
 
 namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;
 
-public static class CachedCustomerExtension 
+public static class CachedCustomerFake 
 {
     public static CachedCustomer Valid()
     {

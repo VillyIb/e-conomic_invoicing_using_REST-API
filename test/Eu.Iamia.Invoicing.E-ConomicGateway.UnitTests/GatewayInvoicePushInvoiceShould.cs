@@ -16,7 +16,7 @@ public class GatewayInvoicePushInvoiceShould : GatewayBaseShould
         MockResponse(HttpStatusCode.Created);
         using var sut = GetSut;
 
-        var result = await sut.PushInvoice(CachedCustomerExtension.Valid(), new Invoice(), -9, Cts.Token);
+        var result = await sut.PushInvoice(CachedCustomerFake.Valid(), new Invoice(), -9, Cts.Token);
 
         Mock.VerifyAll();
         MockedReport.Received(0).Error(Arg.Any<string>(), Arg.Any<string>());
@@ -53,7 +53,7 @@ public class GatewayInvoicePushInvoiceShould : GatewayBaseShould
             HttpMessageHandler
         );
 
-        _ = await Assert.ThrowsAsync<HttpRequestException>(() => sut.PushInvoice(CachedCustomerExtension.Valid(), new Invoice(), -9, Cts.Token));
+        _ = await Assert.ThrowsAsync<HttpRequestException>(() => sut.PushInvoice(CachedCustomerFake.Valid(), new Invoice(), -9, Cts.Token));
 
         Mock.VerifyAll();
         mockedReport.Received(1).Error(Arg.Is<string>("PushInvoice"), Arg.Any<string>());

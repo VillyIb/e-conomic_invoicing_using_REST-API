@@ -1,23 +1,30 @@
-﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.JsonMapping;
+﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Product;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Utils;
+
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.JsonMapping;
 public partial class JsonMappingBase
 {
-    //public async Task<IEnumerable<Collection>> GetProductsPaged( CancellationToken cancellationToken)
-    //{
-    //    const int pageSize = 20;
-    //    var page = 0;
-    //    var products = new List<Collection>();
+    public async Task<IEnumerable<Collection>> GetAllProducts(CancellationToken cancellationToken)
+    {
+        const int pageSize = 20;
+        var serializer = new SerializerProductsHandle(new JsonSerializerFacade());
 
-    //    do
-    //    {
-    //        var htmlBody = _restMapping.GetProductsPaged(page++, pageSize, cancellationToken);
+        var page = 0;
+        var products = new List<Collection>();
 
-    //        var productsHandle = await SerializerProductsHandle.DeserializeAsync(
-    //            htmlBody,
-    //            cancellationToken
-    //        );
-    //    }
-    //    while ( products.Count > 0 ) {
+        ProductsHandle? productsHandle = null;
+        do
+        {
+            productsHandle = await serializer.DeserializeAsync(
+                await _restMapping.GetProductsPaged(page++, pageSize, cancellationToken),
+                cancellationToken
+            );
 
-    //    return products;
-    //}
+            products.AddRange(productsHandle.collection);
+
+        } while (productsHandle.collection.Count > 0);
+
+        return products;
+    }
 }
