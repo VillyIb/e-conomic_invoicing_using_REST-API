@@ -27,4 +27,8 @@
     <ProjectReference Include="..\..\src\Eu.Iamia.Utils\Eu.Iamia.Utils.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="InvestigateJsonSerializer\" />
+  </ItemGroup>
+
 </Project>

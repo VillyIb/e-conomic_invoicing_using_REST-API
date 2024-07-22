@@ -1,7 +1,9 @@
 ﻿using System.Text.Json;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Utils;
+
 // ReSharper disable InconsistentNaming
 
-namespace Eu.Iamia.Utils.UnitTests;
+namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;
 
 /// <summary>
 /// 

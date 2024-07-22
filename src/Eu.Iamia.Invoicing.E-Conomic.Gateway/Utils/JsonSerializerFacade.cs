@@ -1,13 +1,7 @@
 ﻿using System.Text.Json;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Utils;
 
-namespace Eu.Iamia.Utils;
-
-public interface IJsonSerializerFacade
-{
-    TValue Deserialize<TValue>(string json);
-
-    Task<TValue> DeserializeAsync<TValue>(Stream utf8Json, CancellationToken cancellationToken = default);
-}
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Utils;
 
 public class JsonSerializerFacade : IJsonSerializerFacade
 {

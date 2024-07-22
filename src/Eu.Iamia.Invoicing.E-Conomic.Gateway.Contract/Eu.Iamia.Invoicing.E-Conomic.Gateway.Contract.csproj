@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Eu.Iamia.Invoicing.Loader.Contract\Eu.Iamia.Invoicing.Loader.Contract.csproj" />
     <ProjectReference Include="..\Eu.Iamia.Reporting.Contract\Eu.Iamia.Reporting.Contract.csproj" />
+    <ProjectReference Include="..\Eu.Iamia.Utils.Contract\Eu.Iamia.Utils.Contract.csproj" />
   </ItemGroup>
 
   <ItemGroup>

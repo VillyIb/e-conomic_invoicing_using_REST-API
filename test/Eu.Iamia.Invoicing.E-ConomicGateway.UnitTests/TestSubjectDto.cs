@@ -1,4 +1,4 @@
-﻿namespace Eu.Iamia.Utils.UnitTests;
+﻿namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;
 
 public class TestSubjectDto : IEquatable<TestSubjectDto>
 {

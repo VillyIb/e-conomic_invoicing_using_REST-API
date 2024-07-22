@@ -1,7 +1,7 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Serializers;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Utils;
 using Eu.Iamia.Reporting.Contract;
-using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;
 

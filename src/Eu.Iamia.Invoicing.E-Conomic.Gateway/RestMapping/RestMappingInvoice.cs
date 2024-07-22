@@ -1,4 +1,5 @@
-﻿using Eu.Iamia.Utils;
+﻿using Eu.Iamia.Utils.Contract;
+
 // ReSharper disable StringLiteralTypo
 // ReSharper disable CommentTypo
 
@@ -6,9 +7,9 @@ namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.RestMapping;
 
 public partial class RestMappingBase
 {
-    internal virtual async Task<Stream> GetDraftInvoices(
-        int page, 
-        int pageSize, 
+    public async Task<Stream> GetDraftInvoices(
+        int page,
+        int pageSize,
         CancellationToken cancellationToken
     )
     {
@@ -16,16 +17,16 @@ public partial class RestMappingBase
 
         const string reference = nameof(GetDraftInvoices);
 
-        var requestUri = 
+        var requestUri =
             $"https://restapi.e-conomic.com/invoices/drafts?" +
-            $"skippages={page}&pagesize={pageSize}" 
+            $"skippages={page}&pagesize={pageSize}"
         ;
 
-        return await GetAny(requestUri, reference, cancellationToken);
+        return await ExecuteRestApiCall(requestUri, reference, cancellationToken);
     }
 
-    internal virtual async Task<Stream> GetDraftInvoice(
-        int invoiceNumber, 
+    public async Task<Stream> GetDraftInvoice(
+        int invoiceNumber,
         CancellationToken cancellationToken
     )
     {
@@ -34,14 +35,14 @@ public partial class RestMappingBase
         const string reference = nameof(GetDraftInvoice);
         var requestUri = $"https://restapi.e-conomic.com/invoices/drafts/{invoiceNumber}";
 
-        return await GetAny(requestUri, reference, cancellationToken);
+        return await ExecuteRestApiCall(requestUri, reference, cancellationToken);
     }
 
-    internal async Task<Stream> GetBookedInvoices
+    public async Task<Stream> GetBookedInvoices
     (
         int page,
         int pageSize,
-        Interval<DateTime> dateRange,
+        IInterval<DateTime> dateRange,
         CancellationToken cancellationToken
     )
     {
@@ -55,6 +56,6 @@ public partial class RestMappingBase
                          $"&filter=" +
                          $"date$gte:{dateRange.From:yyyy-MM-dd}&date$lte:{dateRange.To:yyyy-Mm-dd}"
             ;
-        return await GetAny(requestUri, reference,cancellationToken);
+        return await ExecuteRestApiCall(requestUri, reference, cancellationToken);
     }
 }

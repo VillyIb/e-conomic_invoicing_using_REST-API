@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 // ReSharper disable ConvertToAutoProperty
 
-namespace Eu.Iamia.Utils.UnitTests.InvestigateJsonSerializer;
+namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;
 
 /// <summary>
 /// Investigate behaviour of System.Text.Json.JsonSerializer.Deserialize.

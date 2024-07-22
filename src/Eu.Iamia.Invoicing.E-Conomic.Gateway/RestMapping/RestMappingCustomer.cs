@@ -10,11 +10,11 @@ public partial class RestMappingBase
 
         const string reference = nameof(GetCustomersPaged);
 
-        var requestUri = 
+        var requestUri =
             $"https://restapi.e-conomic.com/customers?" +
             $"skippages={page}&pagesize={pageSize}"
         ;
 
-        return await GetAny(requestUri, reference, cancellationToken);
+        return await ExecuteRestApiCall(requestUri, reference, cancellationToken);
     }
 }

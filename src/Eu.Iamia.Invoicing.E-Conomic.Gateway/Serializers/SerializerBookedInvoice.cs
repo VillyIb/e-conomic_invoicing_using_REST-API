@@ -1,7 +1,7 @@
-﻿using Eu.Iamia.Utils;
-
+﻿
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.BookedInvoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Serializers;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Utils;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
 

@@ -1,8 +1,8 @@
 using System.Net;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Configuration;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Utils;
 using Eu.Iamia.Reporting.Contract;
-using Eu.Iamia.Utils;
 using Moq;
 using Moq.Protected;
 using NSubstitute;

@@ -5,8 +5,7 @@ using System.Text;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
-using Eu.Iamia.Utils;
+using Eu.Iamia.Utils.Contract;
 
 // ReSharper disable InvalidXmlDocComment
 
@@ -53,22 +52,23 @@ public partial class GatewayBase
         return draftInvoice;
     }
 
-    internal async Task<string> GetDraftInvoices()
-    {
-        const string reference = nameof(GetDraftInvoices);
-        const string requestUri = $"https://restapi.e-conomic.com/invoices/drafts/";
+    //internal async Task<string> GetDraftInvoices()
+    //{
+    //    const string reference = nameof(GetDraftInvoices);
+    //    const string requestUri = $"https://restapi.e-conomic.com/invoices/drafts/";
 
-        return await GetAny(requestUri, reference);
-    }
+    //    return await GetAny(requestUri, reference);
+    //}
 
-    internal async Task<string> GetDraftInvoice(int invoiceNumber)
-    {
-        const string reference = nameof(GetDraftInvoice);
-        var requestUri = $"https://restapi.e-conomic.com/invoices/drafts/{invoiceNumber}";
-        
-        return await GetAny(requestUri, reference);
-    }
+    //internal async Task<string> GetDraftInvoice(int invoiceNumber)
+    //{
+    //    const string reference = nameof(GetDraftInvoice);
+    //    var requestUri = $"https://restapi.e-conomic.com/invoices/drafts/{invoiceNumber}";
 
+    //    return await GetAny(requestUri, reference);
+    //}
+
+    [Obsolete]
     internal async Task<IDraftInvoice> GetDraftInvoiceY(int invoiceNumber)
     {
         const string reference = nameof(GetDraftInvoiceY);
@@ -104,54 +104,26 @@ public partial class GatewayBase
 
     // TODO wrap paging and return full content.
 
-    internal async Task<Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.BookedInvoice.Invoices> GetBookedInvoices
-    (
-        int page,
-        int pageSize,
-        Interval<DateTime> dateRange,
-        CancellationToken cancellationToken
-    )
-    {
-        // see: https://restdocs.e-conomic.com/#get-invoices-booked
+    //internal async Task<string> GetBookedInvoices
+    //(
+    //    int page,
+    //    int pageSize,
+    //    IInterval<DateTime> dateRange,
+    //    CancellationToken cancellationToken
+    //)
+    //{
+    //    // see: https://restdocs.e-conomic.com/#get-invoices-booked
 
-        const string reference = nameof(GetBookedInvoices);
+    //    const string reference = nameof(GetBookedInvoices);
 
-        SetAuthenticationHeaders();
-
-        // ReSharper disable once StringLiteralTypo
-        _requestUri = $"https://restapi.e-conomic.com/invoices/booked?" +
-                     $"skippages={page}&pagesize={pageSize}" +
-                     $"&filter=" +
-                     $"date$gte:{dateRange.From:yyyy-MM-dd}&date$lte:{dateRange.To:yyyy-Mm-dd}"
-        ;
-
-        var response = await HttpClient.GetAsync(_requestUri, cancellationToken);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            var htmlBodyFail = await GetHtmlBody(response);
-            Report.Error(reference, htmlBodyFail);
-
-            response.EnsureSuccessStatusCode();
-        }
-
-        const HttpStatusCode expected = HttpStatusCode.OK;
-        if (expected != response.StatusCode)
-        {
-            var message = @"Response status code does not indicate {expected}: {response.StatusCode:D} ({response.ReasonPhrase})";
-            Report.Error(reference, message);
-            throw new HttpRequestException(message, null, response.StatusCode);
-        }
-
-        var htmlBody = await GetHtmlBody(response);
-
-        var serializer = new SerializerBookedInvoice(new JsonSerializerFacade());
-        var draftInvoices = serializer.Deserialize(htmlBody);
-
-        // Report.Info(reference, htmlBody);
-
-        return draftInvoices;
-    }
+    //    // ReSharper disable once StringLiteralTypo
+    //    var requestUri = $"https://restapi.e-conomic.com/invoices/booked?" +
+    //                 $"skippages={page}&pagesize={pageSize}" +
+    //                 $"&filter=" +
+    //                 $"date$gte:{dateRange.From:yyyy-MM-dd}&date$lte:{dateRange.To:yyyy-Mm-dd}"
+    //    ;
+    //    return await GetAny(requestUri, reference);
+    //}
 
 
     /// <summary>
@@ -160,32 +132,19 @@ public partial class GatewayBase
     /// <param name="invoiceNumber"></param>
     /// <returns></returns>
     /// <seealso cref="https://restdocs.e-conomic.com/#delete-invoices-drafts-draftinvoicenumber"/>>
+
+    internal virtual async Task<string> DeleteDraftInvoiceTransport(int invoiceNumber)
+    {
+        const string reference = nameof(DeleteDraftInvoiceTransport);
+        var requestUri = $"https://restapi.e-conomic.com/invoices/drafts/{invoiceNumber}";
+
+        return await GetAny(requestUri, reference);
+    }
+    
     internal async Task<bool> DeleteDraftInvoice(int invoiceNumber)
     {
-        const string reference = nameof(DeleteDraftInvoice);
-
-        SetAuthenticationHeaders();
-
-        var response = await HttpClient.DeleteAsync($"https://restapi.e-conomic.com/invoices/drafts/{invoiceNumber}");
-
-        if (!response.IsSuccessStatusCode)
-        {
-            var htmlBodyFail = await GetHtmlBody(response);
-            Report.Error(reference, htmlBodyFail);
-
-            response.EnsureSuccessStatusCode();
-        }
-
-        const HttpStatusCode expected = HttpStatusCode.OK;
-        if (expected != response.StatusCode)
-        {
-            var message = $@"Response status code does not indicate {expected}: {response.StatusCode:D} ({response.ReasonPhrase})";
-            Report.Error(reference, message);
-            throw new HttpRequestException(message, null, response.StatusCode);
-        }
-
-        var htmlBody = await GetHtmlBody(response);
-
+        var htmlBody = await DeleteDraftInvoiceTransport(invoiceNumber);
+        
         /* Expected:
         {
            "message": "Deleted invoice."	
@@ -201,9 +160,6 @@ public partial class GatewayBase
          */
 
         var deletedInvoices = SerializerDeletedInvoices.Deserialize(htmlBody);
-
-        Report.Info(reference
-            , htmlBody);
 
         return deletedInvoices.deletedCount == 1
                &&

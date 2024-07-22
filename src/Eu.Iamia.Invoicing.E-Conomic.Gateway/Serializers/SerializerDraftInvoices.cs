@@ -1,10 +1,5 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.DraftInvoice;
-using Eu.Iamia.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Utils;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
 public class SerializerDraftInvoices

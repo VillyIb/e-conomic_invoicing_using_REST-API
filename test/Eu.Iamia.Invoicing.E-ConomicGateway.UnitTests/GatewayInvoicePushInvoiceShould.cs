@@ -1,8 +1,8 @@
 ﻿using System.Net;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Utils;
 using Eu.Iamia.Reporting.Contract;
-using Eu.Iamia.Utils;
 using NSubstitute;
 
 namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;

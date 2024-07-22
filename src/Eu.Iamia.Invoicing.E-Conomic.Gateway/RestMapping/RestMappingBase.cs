@@ -1,11 +1,12 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Configuration;
 using System.Net;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
 using Microsoft.Extensions.Options;
 using Eu.Iamia.Reporting.Contract;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.RestMapping;
 
-public partial class RestMappingBase
+public partial class RestMappingBase : IRestMappingBase
 {
     protected readonly SettingsForEConomicGateway Settings;
     protected readonly ICustomerReport Report;
@@ -48,7 +49,7 @@ public partial class RestMappingBase
         }
     }
 
-    protected void SetAuthenticationHeaders()
+    private void SetAuthenticationHeaders()
     {
         CheckToken(Settings.X_AgreementGrantToken, nameof(Settings.X_AgreementGrantToken));
         CheckToken(Settings.X_AppSecretToken, nameof(Settings.X_AppSecretToken));
@@ -72,8 +73,7 @@ public partial class RestMappingBase
         return await response.Content.ReadAsStreamAsync(cancellationToken);
     }
 
-
-    protected async Task<Stream> GetAny(string requestUri, string reference, CancellationToken cancellationToken)
+    private async Task<Stream> ExecuteRestApiCall(string requestUri, string reference, CancellationToken cancellationToken)
     {
         SetAuthenticationHeaders();
 
@@ -94,7 +94,7 @@ public partial class RestMappingBase
             Report.Error(reference, message);
             throw new HttpRequestException(message, null, response.StatusCode);
         }
-        
-        return await GetPayload(response,cancellationToken);
+
+        return await GetPayload(response, cancellationToken);
     }
 }

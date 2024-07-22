@@ -25,12 +25,12 @@ public class GatewayInvoiceShould
         Assert.False(string.IsNullOrEmpty(draftInvoices));
     }
 
-    [Fact]
-    public async Task GetDraftInvoice()
-    {
-        var draftInvoices = await _sut.GetDraftInvoices();
-        var x = DraftInvoices.GetPage0Size20Text()
-    }
+    //[Fact]
+    //public async Task GetDraftInvoice()
+    //{
+    //    var draftInvoices = await _sut.GetDraftInvoices();
+    //    var x = DraftInvoices.GetPage0Size20Text()
+    //}
 
     // parse GetDraftInvoice....
 
@@ -63,51 +63,51 @@ public class GatewayInvoiceShould
         await Assert.ThrowsAsync<HttpRequestException>(() => _sut.PushInvoice(CachedCustomerExtension.Valid(), invalidInvoice, 1, _cts.Token));
     }
 
-    [Theory]
-    [InlineData(17, 0, 17, "2024-01-01", "2024-01-31")]
-    [InlineData(17, 1, 17, "2024-01-01", "2024-01-31")]
-    [InlineData(17, 7, 17, "2024-01-01", "2024-01-31")]
-    [InlineData(04, 8, 17, "2024-01-01", "2024-01-31")] 
-    public async Task GetBookedInvoices(int expectedCount, int page, int pageSize, string fromDate, string toDate)
-    {
-        var fd = DateTime.Parse(fromDate);
-        var td = DateTime.Parse(toDate);
-        var dateRange = Interval<DateTime>.Create(fd, td);
-        var x = await _sut.GetBookedInvoices(
-            page,
-            pageSize,
-            dateRange,
-            _cts.Token
-        );
-        Assert.NotNull(x);
-        Assert.Equal(expectedCount,x.collection.Length);
-    }
+    //[Theory]
+    //[InlineData(17, 0, 17, "2024-01-01", "2024-01-31")]
+    //[InlineData(17, 1, 17, "2024-01-01", "2024-01-31")]
+    //[InlineData(17, 7, 17, "2024-01-01", "2024-01-31")]
+    //[InlineData(04, 8, 17, "2024-01-01", "2024-01-31")] 
+    //public async Task GetBookedInvoices(int expectedCount, int page, int pageSize, string fromDate, string toDate)
+    //{
+    //    var fd = DateTime.Parse(fromDate);
+    //    var td = DateTime.Parse(toDate);
+    //    var dateRange = Interval<DateTime>.Create(fd, td);
+    //    var x = await _sut.GetBookedInvoices(
+    //        page,
+    //        pageSize,
+    //        dateRange,
+    //        _cts.Token
+    //    );
+    //    Assert.NotNull(x);
+    //    Assert.Equal(expectedCount,x.collection.Length);
+    //}
 
-    [Fact]
-    public async Task GetBookedInvoices2()
-    {
-        const int pageSize = 13;
-        int page = 0;
-        var fd = DateTime.Parse("2024-01-01");
-        var td = DateTime.Parse("2024-01-31");
-        var dateRange = Interval<DateTime>.Create(fd, td);
+    //[Fact]
+    //public async Task GetBookedInvoices2()
+    //{
+    //    const int pageSize = 13;
+    //    int page = 0;
+    //    var fd = DateTime.Parse("2024-01-01");
+    //    var td = DateTime.Parse("2024-01-31");
+    //    var dateRange = Interval<DateTime>.Create(fd, td);
 
-        var invoices = new List<InvoiceX>();
+    //    var invoices = new List<InvoiceX>();
 
-        while (true)
-        {
-            var x = await _sut.GetBookedInvoices(page++, pageSize, dateRange, _cts.Token);
+    //    while (true)
+    //    {
+    //        var x = await _sut.GetBookedInvoices(page++, pageSize, dateRange, _cts.Token);
 
-            if (!x.collection.Any()) break;
+    //        if (!x.collection.Any()) break;
 
-            foreach (var invoice in x.collection)
-            {
-                invoices.Add(new InvoiceX { Customer = invoice.customer.customerNumber, Amount = invoice.grossAmount });
-            }
-        }
+    //        foreach (var invoice in x.collection)
+    //        {
+    //            invoices.Add(new InvoiceX { Customer = invoice.customer.customerNumber, Amount = invoice.grossAmount });
+    //        }
+    //    }
 
-        Assert.Equal(140, invoices.Count);
-    }
+    //    Assert.Equal(140, invoices.Count);
+    //}
 }
 
 public class InvoiceX

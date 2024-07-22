@@ -1,6 +1,6 @@
-﻿using Eu.Iamia.Utils;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Utils;
 
 namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;
 
