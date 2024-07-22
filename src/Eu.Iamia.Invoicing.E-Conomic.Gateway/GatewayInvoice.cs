@@ -8,6 +8,8 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
 using Eu.Iamia.Utils;
 
+// ReSharper disable InvalidXmlDocComment
+
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;
 
 public partial class GatewayBase
@@ -133,6 +135,7 @@ public partial class GatewayBase
 
         return draftInvoices;
     }
+
 
     /// <summary>
     /// Delete single draft invoice

@@ -47,8 +47,11 @@ public class GatewayInvoiceShould
     }
 
     [Theory]
-    [InlineData(0, 20, "2024-01-01", "2024-12-31")]
-    public async Task GetBookedInvoices(int page, int pageSize, string fromDate, string toDate)
+    [InlineData(17, 0, 17, "2024-01-01", "2024-01-31")]
+    [InlineData(17, 1, 17, "2024-01-01", "2024-01-31")]
+    [InlineData(17, 7, 17, "2024-01-01", "2024-01-31")]
+    [InlineData(04, 8, 17, "2024-01-01", "2024-01-31")] 
+    public async Task GetBookedInvoices(int expectedCount, int page, int pageSize, string fromDate, string toDate)
     {
         var fd = DateTime.Parse(fromDate);
         var td = DateTime.Parse(toDate);
@@ -60,6 +63,7 @@ public class GatewayInvoiceShould
             _cts.Token
         );
         Assert.NotNull(x);
+        Assert.Equal(expectedCount,x.collection.Length);
     }
 
     [Fact]
