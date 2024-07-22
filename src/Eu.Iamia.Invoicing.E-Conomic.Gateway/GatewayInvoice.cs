@@ -53,32 +53,6 @@ public partial class GatewayBase
         return draftInvoice;
     }
 
-    private async Task<string> GetAny(string requestUri, string reference)
-    {
-        SetAuthenticationHeaders();
-
-        var response = await HttpClient.GetAsync(requestUri);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            var htmlBodyFail = await GetHtmlBody(response);
-            Report.Error(reference, htmlBodyFail);
-
-            response.EnsureSuccessStatusCode();
-        }
-
-        const HttpStatusCode expected = HttpStatusCode.OK;
-        if (expected != response.StatusCode)
-        {
-            var message = @"Response status code does not indicate {expected}: {response.StatusCode:D} ({response.ReasonPhrase})";
-            Report.Error(reference, message);
-            throw new HttpRequestException(message, null, response.StatusCode);
-        }
-
-        var htmlBody = await GetHtmlBody(response);
-        return htmlBody;
-    }
-    
     internal async Task<string> GetDraftInvoices()
     {
         const string reference = nameof(GetDraftInvoices);
