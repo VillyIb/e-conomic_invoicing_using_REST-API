@@ -53,6 +53,44 @@ public partial class GatewayBase
         return draftInvoice;
     }
 
+    internal async Task<string> GetDraftInvoices()
+    {
+        const string reference = nameof(GetDraftInvoice);
+
+        SetAuthenticationHeaders();
+
+        var response = await HttpClient.GetAsync($"https://restapi.e-conomic.com/invoices/drafts/");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var htmlBodyFail = await GetHtmlBody(response);
+            Report.Error(reference, htmlBodyFail);
+
+            response.EnsureSuccessStatusCode();
+        }
+
+        const HttpStatusCode expected = HttpStatusCode.OK;
+        if (expected != response.StatusCode)
+        {
+            var message = @"Response status code does not indicate {expected}: {response.StatusCode:D} ({response.ReasonPhrase})";
+            Report.Error(reference, message);
+            throw new HttpRequestException(message, null, response.StatusCode);
+        }
+
+        var htmlBody = await GetHtmlBody(response);
+
+        return htmlBody;
+
+        //var draftInvoice = SerializerDraftInvoice.Deserialize(htmlBody);
+
+        //Report.Info(reference, htmlBody);
+
+        //return draftInvoice;
+
+
+        //return new List<IDraftInvoice>();
+    }
+
     internal async Task<IDraftInvoice> GetDraftInvoice(int invoiceNumber)
     {
         const string reference = nameof(GetDraftInvoice);
@@ -88,7 +126,8 @@ public partial class GatewayBase
 
     // TODO wrap paging and return full content.
 
-    internal async Task<Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.BookedInvoice.Invoices> GetBookedInvoice(
+    internal async Task<Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.BookedInvoice.Invoices> GetBookedInvoices
+    (
         int page,
         int pageSize,
         Interval<DateTime> dateRange,
@@ -97,7 +136,7 @@ public partial class GatewayBase
     {
         // see: https://restdocs.e-conomic.com/#get-invoices-booked
 
-        const string reference = nameof(GetBookedInvoice);
+        const string reference = nameof(GetBookedInvoices);
 
         SetAuthenticationHeaders();
 

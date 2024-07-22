@@ -18,6 +18,16 @@ public class GatewayInvoiceShould
     }
 
     [Fact]
+    public async Task GetDraftInvoices_OK()
+    {
+        var draftInvoices = await _sut.GetDraftInvoices();
+        Assert.NotNull(draftInvoices);
+        Assert.False(string.IsNullOrEmpty(draftInvoices));
+    }
+
+    // parse GetDraftInvoice....
+
+    [Fact]
     public async Task PushInvoice_When_ValidInvoice_DraftInvoice_IsCreated()
     {
         // Notice Creates and deletes a real draft-invoice in e-conomic
@@ -56,7 +66,7 @@ public class GatewayInvoiceShould
         var fd = DateTime.Parse(fromDate);
         var td = DateTime.Parse(toDate);
         var dateRange = Interval<DateTime>.Create(fd, td);
-        var x = await _sut.GetBookedInvoice(
+        var x = await _sut.GetBookedInvoices(
             page,
             pageSize,
             dateRange,
@@ -69,7 +79,7 @@ public class GatewayInvoiceShould
     [Fact]
     public async Task GetBookedInvoices2()
     {
-        const int pageSize = 140;
+        const int pageSize = 13;
         int page = 0;
         var fd = DateTime.Parse("2024-01-01");
         var td = DateTime.Parse("2024-01-31");
@@ -79,7 +89,7 @@ public class GatewayInvoiceShould
 
         while (true)
         {
-            var x = await _sut.GetBookedInvoice(page++, pageSize, dateRange, _cts.Token);
+            var x = await _sut.GetBookedInvoices(page++, pageSize, dateRange, _cts.Token);
 
             if (!x.collection.Any()) break;
 
