@@ -125,7 +125,7 @@ public class BookInvoicesShould
         var customerCache = await GetCustomerCache(gatewayInvoice, new List<int> { 1, 3 });
         var productCache = await GetProductCache(gatewayInvoice);
 
-        var x = await gatewayInvoice.GetDraftInvoice(373);
+        var x = await gatewayInvoice.GetDraftInvoiceY(373);
 
 
     }

@@ -15,7 +15,7 @@ public class GatewayInvoicedReadInvoiceShould : GatewayBaseShould
 
         using var sut = GetSut;
 
-        var result = await sut.GetDraftInvoice(368);
+        var result = await sut.GetDraftInvoiceY(368);
 
         Mock.VerifyAll();
         MockedReport.Received(1).Info(Arg.Is<string>("GetDraftInvoice"), Arg.Any<string>());
@@ -42,7 +42,7 @@ public class GatewayInvoicedReadInvoiceShould : GatewayBaseShould
 
         using var sut = GetSut;
 
-        _ = await Assert.ThrowsAsync<HttpRequestException>(() => sut.GetDraftInvoice(999));
+        _ = await Assert.ThrowsAsync<HttpRequestException>(() => sut.GetDraftInvoiceY(999));
 
         Mock.VerifyAll();
         MockedReport.Received(1).Error(Arg.Is<string>("GetDraftInvoice"), Arg.Any<string>());

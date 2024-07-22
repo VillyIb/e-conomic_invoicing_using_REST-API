@@ -25,6 +25,13 @@ public class GatewayInvoiceShould
         Assert.False(string.IsNullOrEmpty(draftInvoices));
     }
 
+    [Fact]
+    public async Task GetDraftInvoice()
+    {
+        var draftInvoices = await _sut.GetDraftInvoices();
+        var x = DraftInvoices.GetPage0Size20Text()
+    }
+
     // parse GetDraftInvoice....
 
     [Fact]
@@ -37,7 +44,7 @@ public class GatewayInvoiceShould
         Assert.NotNull(result);
         Assert.True(result.DraftInvoiceNumber > 0);
 
-        var draftInvoice = await _sut.GetDraftInvoice(result.DraftInvoiceNumber);
+        var draftInvoice = await _sut.GetDraftInvoiceY(result.DraftInvoiceNumber);
         Assert.NotNull(draftInvoice);
         Assert.Equal(result.DraftInvoiceNumber, draftInvoice.DraftInvoiceNumber);
 
@@ -46,7 +53,7 @@ public class GatewayInvoiceShould
         Assert.True(status);
 
         // Verify draft invoice is deleted.
-        await Assert.ThrowsAsync<HttpRequestException>(() => _sut.GetDraftInvoice(result.DraftInvoiceNumber));
+        await Assert.ThrowsAsync<HttpRequestException>(() => _sut.GetDraftInvoiceY(result.DraftInvoiceNumber));
     }
 
     [Fact]

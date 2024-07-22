@@ -53,13 +53,11 @@ public partial class GatewayBase
         return draftInvoice;
     }
 
-    internal async Task<string> GetDraftInvoices()
+    private async Task<string> GetAny(string requestUri, string reference)
     {
-        const string reference = nameof(GetDraftInvoice);
-
         SetAuthenticationHeaders();
 
-        var response = await HttpClient.GetAsync($"https://restapi.e-conomic.com/invoices/drafts/");
+        var response = await HttpClient.GetAsync(requestUri);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -78,22 +76,28 @@ public partial class GatewayBase
         }
 
         var htmlBody = await GetHtmlBody(response);
-
         return htmlBody;
+    }
+    
+    internal async Task<string> GetDraftInvoices()
+    {
+        const string reference = nameof(GetDraftInvoices);
+        const string requestUri = $"https://restapi.e-conomic.com/invoices/drafts/";
 
-        //var draftInvoice = SerializerDraftInvoice.Deserialize(htmlBody);
-
-        //Report.Info(reference, htmlBody);
-
-        //return draftInvoice;
-
-
-        //return new List<IDraftInvoice>();
+        return await GetAny(requestUri, reference);
     }
 
-    internal async Task<IDraftInvoice> GetDraftInvoice(int invoiceNumber)
+    internal async Task<string> GetDraftInvoice(int invoiceNumber)
     {
         const string reference = nameof(GetDraftInvoice);
+        var requestUri = $"https://restapi.e-conomic.com/invoices/drafts/{invoiceNumber}";
+        
+        return await GetAny(requestUri, reference);
+    }
+
+    internal async Task<IDraftInvoice> GetDraftInvoiceY(int invoiceNumber)
+    {
+        const string reference = nameof(GetDraftInvoiceY);
 
         SetAuthenticationHeaders();
 
@@ -235,6 +239,7 @@ public partial class GatewayBase
 
     private Mapper? _mapper;
     private string _requestUri;
+    //private string? requestUri;
 
     private Mapper Mapper => _mapper ??= new Mapper(Settings, CustomerCache!, ProductCache!);
 
