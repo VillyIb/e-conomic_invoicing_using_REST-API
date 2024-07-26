@@ -15,6 +15,6 @@ public partial class RestApiBase
             $"skippages={page}&pagesize={pageSize}"
         ;
 
-        return await ExecuteRestApiCall(requestUri, reference, cancellationToken);
+        return await GetAsync(requestUri, reference, cancellationToken);
     }
 }

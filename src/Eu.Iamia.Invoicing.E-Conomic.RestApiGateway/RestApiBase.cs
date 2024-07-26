@@ -65,7 +65,7 @@ public partial class RestApiBase : IRestApiGateway
         return await response.Content.ReadAsStreamAsync(cancellationToken);
     }
 
-    private async Task<Stream> ExecuteRestApiCall(string requestUri, string reference, CancellationToken cancellationToken)
+    private async Task<Stream> GetAsync(string requestUri, string reference, CancellationToken cancellationToken)
     {
         SetAuthenticationHeaders();
 

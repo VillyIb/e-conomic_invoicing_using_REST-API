@@ -24,7 +24,7 @@ public partial class RestApiBase
             $"skippages={page}&pagesize={pageSize}"
         ;
 
-        return await ExecuteRestApiCall(requestUri, reference, cancellationToken);
+        return await GetAsync(requestUri, reference, cancellationToken);
     }
 
     public async Task<Stream> GetDraftInvoice(
@@ -37,7 +37,7 @@ public partial class RestApiBase
         const string reference = nameof(GetDraftInvoice);
         var requestUri = $"https://restapi.e-conomic.com/invoices/drafts/{invoiceNumber}";
 
-        return await ExecuteRestApiCall(requestUri, reference, cancellationToken);
+        return await GetAsync(requestUri, reference, cancellationToken);
     }
 
     public async Task<Stream> GetBookedInvoices
@@ -58,7 +58,7 @@ public partial class RestApiBase
                          $"&filter=" +
                          $"date$gte:{dateRange.From:yyyy-MM-dd}&date$lte:{dateRange.To:yyyy-MM-dd}"
             ;
-        return await ExecuteRestApiCall(requestUri, reference, cancellationToken);
+        return await GetAsync(requestUri, reference, cancellationToken);
     }
 
     public async Task<Stream> GetBookedInvoice(
@@ -70,7 +70,15 @@ public partial class RestApiBase
 
         const string reference = nameof(GetBookedInvoices);
 
-        var requestUri = $"https://restapi.e-conomic.com/invoices/booked{invoiceNumber}";
-        return await ExecuteRestApiCall(requestUri, reference, cancellationToken);
+        var requestUri = $"https://restapi.e-conomic.com/invoices/booked/{invoiceNumber}";
+        return await GetAsync(requestUri, reference, cancellationToken);
+    }
+
+    public async Task<Stream> PushInvoice(
+        StringContent content, 
+        CancellationToken cancellationToken
+    )
+    {
+
     }
 }

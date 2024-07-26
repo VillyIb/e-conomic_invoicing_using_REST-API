@@ -16,6 +16,19 @@ public partial class RestApiBase
             $"skippages={page}&pagesize={pageSize}"
         ;
 
-        return await ExecuteRestApiCall(requestUrl, reference, cancellationToken);
+        return await GetAsync(requestUrl, reference, cancellationToken);
+    }
+
+    public async Task<Stream> GetProduct(
+        int productNumber,
+        CancellationToken cancellationToken
+    )
+    {
+        // see: https://restdocs.e-conomic.com/#get-invoices-booked-bookedinvoicenumber
+
+        const string reference = nameof(GetBookedInvoices);
+
+        var requestUri = $"https://restapi.e-conomic.com/products/{productNumber}";
+        return await GetAsync(requestUri, reference, cancellationToken);
     }
 }

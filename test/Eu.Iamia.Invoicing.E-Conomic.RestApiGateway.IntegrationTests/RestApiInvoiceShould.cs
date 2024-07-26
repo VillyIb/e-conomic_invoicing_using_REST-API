@@ -32,15 +32,45 @@ public class RestApiInvoiceShould
         Assert.False(string.IsNullOrEmpty(text));
     }
 
+    [Theory(Skip="Requires draft invoice to exist")]
+    [InlineData(000)]
+    public async Task GetDraftInvoice(int invoiceNo)
+    {
+        var stream = await _sut.GetDraftInvoice(invoiceNo, _cts.Token);
+
+        Assert.NotNull(stream);
+
+        var reade = new StreamReader(stream);
+        var text = await reade.ReadToEndAsync(_cts.Token);
+
+        Assert.NotNull(text);
+        Assert.False(string.IsNullOrEmpty(text));
+    }
+
     [Theory]
     [InlineData(0, 20)]
     [InlineData(1, 20)]
-    public async Task GetX(int page, int pageSize)
+    public async Task GetBookedInvoicesPaged(int page, int pageSize)
     {
         var from = DateTime.Parse("2024-01-01");
         var to = DateTime.Parse("2024-01-31");
         var dateRange = Interval<DateTime>.Create(from, to);
         var stream = await _sut.GetBookedInvoices(page, pageSize, dateRange, _cts.Token);
+        Assert.NotNull(stream);
+
+        var reade = new StreamReader(stream);
+        var text = await reade.ReadToEndAsync(_cts.Token);
+
+        Assert.NotNull(text);
+        Assert.False(string.IsNullOrEmpty(text));
+    }
+
+    [Theory]
+    [InlineData(18)]
+    public async Task GetBookedInvoice(int invoiceNo)
+    {
+        var stream = await _sut.GetBookedInvoice(invoiceNo, _cts.Token);
+
         Assert.NotNull(stream);
 
         var reade = new StreamReader(stream);

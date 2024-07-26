@@ -35,6 +35,11 @@ public interface IRestApiGateway
         CancellationToken cancellationToken
     );
 
+    Task<Stream> GetProduct(
+        int productNumber,
+        CancellationToken cancellationToken
+    );
+
     Task<Stream> GetBookedInvoice(
         int invoiceNumber,
         CancellationToken cancellationToken
