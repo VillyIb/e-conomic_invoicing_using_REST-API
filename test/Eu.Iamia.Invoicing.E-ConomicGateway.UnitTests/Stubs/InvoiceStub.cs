@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime;
-using System.Text;
-using System.Threading.Tasks;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.BookedInvoice;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Product;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
+﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
 using Unit = Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice.Unit;
 
 namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests.Stubs;
+
+/// <summary>
+/// Used to create json to manually inject into RestApiInvoiceShould.
+/// </summary>
 public  class InvoiceStub
 {
     public static Line GetLine(int lineNumber)
