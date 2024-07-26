@@ -88,4 +88,27 @@ public partial class RestApiBase : IRestApiGateway
         return await GetPayload(response, cancellationToken);
     }
 
+    private async Task<Stream> PostAsync(string requestUri, StringContent content, string reference, CancellationToken cancellationToken)
+    {
+        SetAuthenticationHeaders();
+
+        var response = await HttpClient.PostAsync(requestUri, content, cancellationToken);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var htmlBodyFail = await GetHtmlBody(response);
+
+            response.EnsureSuccessStatusCode();
+        }
+
+        const HttpStatusCode expected = HttpStatusCode.Created;
+        if (expected != response.StatusCode)
+        {
+            var message = @"Response status code does not indicate {expected}: {response.StatusCode:D} ({response.ReasonPhrase})";
+            throw new HttpRequestException(message, null, response.StatusCode);
+        }
+
+        return await GetPayload(response, cancellationToken);
+    }
+
 }

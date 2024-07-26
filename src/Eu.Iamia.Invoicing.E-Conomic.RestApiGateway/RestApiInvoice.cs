@@ -79,6 +79,11 @@ public partial class RestApiBase
         CancellationToken cancellationToken
     )
     {
+        // see: https://restdocs.e-conomic.com/#post-invoices-drafts-draftinvoicenumber-lines
 
+        const string reference = nameof(PushInvoice);
+
+        var reqestUri = "https://restapi.e-conomic.com//invoices/drafts";
+        return await PostAsync(reqestUri, content, reference, cancellationToken);
     }
 }

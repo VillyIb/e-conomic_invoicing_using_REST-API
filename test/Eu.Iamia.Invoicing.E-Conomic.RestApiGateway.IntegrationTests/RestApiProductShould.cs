@@ -32,7 +32,7 @@ public class RestApiProductShould
     }
 
     [Theory]
-    [InlineData(18)]
+    [InlineData(99999)]
     public async Task GetProduct(int productNumber)
     {
         var stream = await _sut.GetProduct(productNumber, _cts.Token);

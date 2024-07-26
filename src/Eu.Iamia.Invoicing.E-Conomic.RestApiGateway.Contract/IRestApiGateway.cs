@@ -23,6 +23,11 @@ public interface IRestApiGateway
         CancellationToken cancellationToken
     );
 
+    Task<Stream> PushInvoice(
+        StringContent content,
+        CancellationToken cancellationToken
+    );
+
     Task<Stream> GetCustomersPaged(
         int page, 
         int pageSize, 
