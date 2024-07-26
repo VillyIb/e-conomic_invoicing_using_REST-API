@@ -10,7 +10,7 @@ public partial class RestMappingBase : IRestMappingBase
 {
     protected readonly SettingsForEConomicGateway Settings;
     protected readonly ICustomerReport Report;
-    private readonly IRestMappingBase _restMappingBase;
+    //private readonly IRestMappingBase _restMappingBase;
 
     protected HttpClient? HttpClientField;
 
@@ -18,20 +18,22 @@ public partial class RestMappingBase : IRestMappingBase
 
     public RestMappingBase(
         SettingsForEConomicGateway settings,
-        ICustomerReport report,
-        IRestMappingBase restMappingBase
+        ICustomerReport report
+        //,
+        //IRestMappingBase restMappingBase // looks strange self..
         )
     {
         Settings = settings;
         Report = report;
-        _restMappingBase = restMappingBase;
+        //_restMappingBase = restMappingBase;
     }
 
     public RestMappingBase(
         IOptions<SettingsForEConomicGateway> settings,
-        ICustomerReport report,
-        IRestMappingBase restMappingBase
-    ) : this(settings.Value, report, restMappingBase)
+        ICustomerReport report
+        //,
+        //IRestMappingBase restMappingBase
+    ) : this(settings.Value, report)
     { }
 
     /// <summary>

@@ -5,7 +5,6 @@ using System.Text;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
-using Eu.Iamia.Utils.Contract;
 
 // ReSharper disable InvalidXmlDocComment
 

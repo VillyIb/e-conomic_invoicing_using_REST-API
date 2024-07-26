@@ -17,7 +17,7 @@ public class RestMappingProductShould
         var customerReport = new MockedReport();
         _cts = new CancellationTokenSource();
 
-        _sut = new RestMappingBase(settings, customerReport);
+        _sut = new RestMappingBase(settings,  customerReport);
     }
 
     [Fact]
