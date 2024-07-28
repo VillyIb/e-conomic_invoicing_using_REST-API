@@ -20,16 +20,24 @@ public class InvoicingHandler : IInvoicingHandler
     protected CancellationTokenSource Cts = new CancellationTokenSource();
 
     public InvoicingHandler(
-        IOptions<SettingsForInvoicingApplication> settings
+        SettingsForInvoicingApplication settings
         // csv reader
         , IEconomicGateway economicGateway
         , ILoader loader
     )
     {
+        _settings = settings;
         _economicGateway = economicGateway;
         _loader = loader;
-        _settings = settings.Value;
     }
+
+    public InvoicingHandler(
+        IOptions<SettingsForInvoicingApplication> settings
+        // csv reader
+        , IEconomicGateway economicGateway
+        , ILoader loader
+    ) : this(settings.Value, economicGateway, loader)
+    { }
 
     public async Task<ExecutionStatus> LoadInvoices()
     {
