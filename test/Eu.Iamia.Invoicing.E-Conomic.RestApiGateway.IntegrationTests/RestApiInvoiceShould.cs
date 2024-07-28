@@ -33,8 +33,8 @@ public class RestApiInvoiceShould
         Assert.False(string.IsNullOrEmpty(text));
     }
 
-    [Theory(Skip = "Requires draft invoice to exist")]
-    //[Theory]
+    //[Theory(Skip = "Requires draft invoice to exist")]
+    [Theory]
     [InlineData(417)]
     public async Task GetDraftInvoice(int invoiceNo)
     {
@@ -82,8 +82,8 @@ public class RestApiInvoiceShould
         Assert.False(string.IsNullOrEmpty(text));
     }
 
-    [Fact(Skip = "Notice! Leaves draft invoice")]
-    //[Fact]
+    //[Fact(Skip = "Notice! Leaves draft invoice")]
+    [Fact]
     public async Task PostDraftInvoice()
     {
         // Notice leaves draft invoice.
