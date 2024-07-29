@@ -139,11 +139,11 @@ public partial class GatewayBase
 
         return await GetAny(requestUri, reference);
     }
-    
+
     internal async Task<bool> DeleteDraftInvoice(int invoiceNumber)
     {
         var htmlBody = await DeleteDraftInvoiceTransport(invoiceNumber);
-        
+
         /* Expected:
         {
            "message": "Deleted invoice."	

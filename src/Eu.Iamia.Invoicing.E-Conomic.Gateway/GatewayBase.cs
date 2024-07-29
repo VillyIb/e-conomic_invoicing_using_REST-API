@@ -23,7 +23,7 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
     protected virtual HttpClient HttpClient => HttpClientField ??= new HttpClient();
 
     public GatewayBase(
-    SettingsForEConomicGateway settings,
+        SettingsForEConomicGateway settings,
         ISerializerCustomersHandle serializerCustomersHandle,
         ISerializerDeletedInvoices serializerDeletedInvoices,
         ISerializerDraftInvoice serializerDraftInvoice,

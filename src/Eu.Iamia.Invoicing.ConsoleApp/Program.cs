@@ -2,6 +2,7 @@
 using System.CommandLine.Parsing;
 using Eu.Iamia.ConfigBase;
 using Eu.Iamia.Invoicing.Application;
+using Eu.Iamia.Invoicing.Application.Contract;
 using JetBrains.Annotations;
 
 namespace Eu.Iamia.Invoicing.ConsoleApp;
@@ -50,18 +51,18 @@ public class Program
             Console.WriteLine();
             Console.WriteLine($"{result.Report}");
 
-            if (result.status == 0)
+            if (result.Status == 0)
             {
                 Console.WriteLine($"Successful");
             }
             else
             {
-                Console.WriteLine($"Failed with status: {result.status}");
+                Console.WriteLine($"Failed with status: {result.Status}");
             }
 
             Console.WriteLine();
 
-            return result.status;
+            return result.Status;
         }
 
         return -19;
@@ -92,7 +93,7 @@ public class Program
             return new ExecutionStatus
             {
                 Report = "The operation was aborted",
-                status = -3
+                Status = -3
             };
         }
     }
