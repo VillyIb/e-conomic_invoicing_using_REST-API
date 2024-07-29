@@ -11,6 +11,7 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 
 using System.Text;
+using Eu.Iamia.Invoicing.Application.Contract.DTO;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
@@ -47,11 +48,11 @@ public class GatewayV2 : IEconomicGatewayV2
 
     public CustomerCache CustomerCache { get; set; }
 
-    public ProductCache ProductCache { get; set; }
+    //public ProductCache ProductCache { get; set; }
 
-    private Mapper? _mapper;
+    //private Mapper? _mapper;
 
-    private Mapper Mapper => _mapper ??= new Mapper(new SettingsForEConomicGateway { LayoutNumber = _settings.LayoutNumber }, CustomerCache!, ProductCache!);
+    //private Mapper Mapper => _mapper ??= new Mapper(new SettingsForEConomicGateway { LayoutNumber = _settings.LayoutNumber }, CustomerCache!, ProductCache!);
 
 
     public Task<CustomersHandle> ReadCustomersPaged(int page, int pageSize, CancellationToken cancellationToken = default)
@@ -105,51 +106,12 @@ public class GatewayV2 : IEconomicGatewayV2
         throw new NotImplementedException();
     }
 
-    private readonly IList<InputProduct> _inputProducts = new List<InputProduct>();
 
-    public InputProduct? GetInputProduct(string? productNumber)
-    {
-        return _inputProducts.FirstOrDefault(cus => cus.ProductNumber.Equals(productNumber, StringComparison.InvariantCultureIgnoreCase));
-    }
-
-    public InputProduct Map(Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Product.Collection product)
-    {
-        var result = new InputProduct
-        {
-            Description = product.description,
-            Name = product.name,
-            ProductNumber = product.productNumber,
-        };
-
-        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-        if (product.unit is not null)
-        {
-            result.Unit = new InputUnit
-            {
-                Name = product.unit.name,
-                UnitNumber = product.unit.unitNumber
-            };
-        }
-
-        return result;
-    }
-
-    public bool AddProducts(Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Product.ProductsHandle? productsHandle)
-    {
-        if (productsHandle is null) return false;
-
-        foreach (var product in productsHandle.collection)
-        {
-            var inputProduct = Map(product);
-            _inputProducts.Add(inputProduct);
-        }
-
-        return productsHandle.collection.Count() >= productsHandle.pagination.pageSize;
-    }
+    private List<ProductDto> ProductsCache = new List<ProductDto>();
 
     public async Task LoadProductCache()
     {
-        _inputProducts.Clear();
+        ProductsCache.Clear();
 
         var cts = new CancellationTokenSource();
         bool @continue = true;
@@ -157,7 +119,12 @@ public class GatewayV2 : IEconomicGatewayV2
         while (@continue)
         {
             var productsHandle = await ReadProductsPaged(page, 20, cts.Token);
-            @continue = AddProducts(productsHandle) && page < 100;
+            foreach (var collection in productsHandle.collection)
+            {
+                var productDto = Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Mappings.Mapping.ToProductDto(collection);
+                ProductsCache.Add(productDto);
+            }
+            @continue = productsHandle.collection.Any() && page < 100;
             page++;
         }
     }
