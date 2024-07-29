@@ -71,7 +71,11 @@ public class CustomerCustomerReport : ReportBase, ICustomerReport
 
     private bool IsSameCustomer(ICustomer customer)
     {
-        return customer.CustomerNumber.Equals(CustomerNumber);
+        return
+            CustomerNumber == customer.CustomerNumber 
+            &&
+            CustomerName == customer.Name
+        ;
     }
 
     //public ICustomerReport SetTime(DateTime timestamp)
