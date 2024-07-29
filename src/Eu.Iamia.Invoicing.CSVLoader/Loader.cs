@@ -11,7 +11,7 @@ namespace Eu.Iamia.Invoicing.CSVLoader;
 /// </summary>
 public partial class Loader : ILoader
 {
-    private Metadata? Metadata { get; set; }
+    private Metadata? Metadata => _csvParser!.Metadata;
 
     public string? Text1 => Metadata?.Text1;
 
