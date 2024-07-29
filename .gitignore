@@ -403,3 +403,4 @@ FodyWeavers.xsd
 appsettings.*.json
 launchSettings.json
 test/Eu.Iamia.Reporting.IntegrationTests/Testdata/*
+*_InvoiceReport.txt
