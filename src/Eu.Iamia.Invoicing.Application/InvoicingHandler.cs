@@ -1,20 +1,18 @@
 ﻿using Eu.Iamia.Invoicing.Application.Configuration;
+using Eu.Iamia.Invoicing.Application.Contract;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
 using Eu.Iamia.Invoicing.Loader.Contract;
+using Eu.Iamia.Reporting.Contract;
 using Microsoft.Extensions.Options;
 // ReSharper disable StringLiteralTypo
 
 namespace Eu.Iamia.Invoicing.Application;
 
-public interface IInvoicingHandler
-{
-    Task<ExecutionStatus> LoadInvoices();
-}
-
 public class InvoicingHandler : IInvoicingHandler
 {
     private readonly IEconomicGateway _economicGateway;
     private readonly ILoader _loader;
+    private readonly ICustomerReport _customerReport;
     private readonly SettingsForInvoicingApplication _settings;
 
     protected CancellationTokenSource Cts = new CancellationTokenSource();
@@ -24,11 +22,13 @@ public class InvoicingHandler : IInvoicingHandler
         // csv reader
         , IEconomicGateway economicGateway
         , ILoader loader
+        , ICustomerReport customerReport
     )
     {
         _settings = settings;
         _economicGateway = economicGateway;
         _loader = loader;
+        _customerReport = customerReport;
     }
 
     public InvoicingHandler(
@@ -36,7 +36,8 @@ public class InvoicingHandler : IInvoicingHandler
         // csv reader
         , IEconomicGateway economicGateway
         , ILoader loader
-    ) : this(settings.Value, economicGateway, loader)
+        , ICustomerReport customerReport
+    ) : this(settings.Value, economicGateway, loader, customerReport)
     { }
 
     public async Task<ExecutionStatus> LoadInvoices()
@@ -73,6 +74,7 @@ public class InvoicingHandler : IInvoicingHandler
 
         Console.WriteLine("");
 
+        var countFails = 0;
         try
         {
             foreach (var inputInvoice in _loader.Invoices)
@@ -87,16 +89,10 @@ public class InvoicingHandler : IInvoicingHandler
         }
         catch (Exception ex)
         {
+            countFails++;
             // xxx
         }
 
-        return new ExecutionStatus { Report = $"Report status {invoiceDate:yyyy-MM-dd}, {Environment.NewLine}Number of invoices: {_loader.Invoices.Count}", status = 0 };
+        return new ExecutionStatus { Report = $"Report status {invoiceDate:yyyy-MM-dd}, {Environment.NewLine}Number of invoices: {_loader.Invoices.Count}", Status = 0, CountFails = countFails };
     }
-}
-
-public class ExecutionStatus
-{
-    public int status { get; set; } = 0;
-
-    public string Report { get; set; } = string.Empty;
 }
