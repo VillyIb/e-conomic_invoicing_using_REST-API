@@ -3,10 +3,12 @@ using Unit = Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice.Unit;
 
 namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests.Stubs;
 
+
 /// <summary>
 /// Used to create json to manually inject into RestApiInvoiceShould.
 /// </summary>
-public  class InvoiceStub
+[NCrunch.Framework.Category("Unit")]
+public class InvoiceStub
 {
     public static Line GetLine(int lineNumber)
     {
