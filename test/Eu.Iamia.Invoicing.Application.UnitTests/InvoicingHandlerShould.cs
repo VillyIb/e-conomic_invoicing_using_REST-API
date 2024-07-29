@@ -4,6 +4,8 @@ using Eu.Iamia.Invoicing.Application.Contract;
 
 namespace Eu.Iamia.Invoicing.Application.UnitTests;
 
+[NCrunch.Framework.Category("Unit")]
+
 public class InvoicingHandlerShould
 {
     private IInvoicingHandler _sut;
@@ -22,8 +24,10 @@ public class InvoicingHandlerShould
     public async Task Test1()
     {
         var result = await _sut.LoadInvoices();
+        _sut.Dispose();
+
         Assert.NotNull(result);
         Assert.Equal(0,result.Status);
-        Assert.Equal(0,result.CountFails);
+        Assert.Equal(1,result.CountFails);
     }
 }

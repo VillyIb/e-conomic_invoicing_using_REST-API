@@ -1,6 +1,6 @@
 ﻿namespace Eu.Iamia.Invoicing.Application.Contract;
 
-public interface IInvoicingHandler
+public interface IInvoicingHandler : IDisposable
 {
     Task<ExecutionStatus> LoadInvoices();
 }

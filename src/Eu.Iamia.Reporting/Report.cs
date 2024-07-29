@@ -153,6 +153,7 @@ public class CustomerCustomerReport : ReportBase, ICustomerReport
         var p2 = message.JsonPrettify();
 
         EnsureOpenReport().Write($"{Environment.NewLine}Error: {reference}{Environment.NewLine}{p2}{Environment.NewLine}");
+        EnsureOpenReport().Flush();
         ReportState = ReportState.Error;
         return this;
     }
