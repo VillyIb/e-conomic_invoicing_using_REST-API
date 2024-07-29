@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DTO\DraftInvoices\**" />
+    <EmbeddedResource Remove="DTO\DraftInvoices\**" />
+    <None Remove="DTO\DraftInvoices\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="IProduct.cs" />
   </ItemGroup>
 
@@ -15,10 +21,6 @@
     <ProjectReference Include="..\Eu.Iamia.Invoicing.Loader.Contract\Eu.Iamia.Invoicing.Loader.Contract.csproj" />
     <ProjectReference Include="..\Eu.Iamia.Reporting.Contract\Eu.Iamia.Reporting.Contract.csproj" />
     <ProjectReference Include="..\Eu.Iamia.Utils.Contract\Eu.Iamia.Utils.Contract.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DTO\DraftInvoices\" />
   </ItemGroup>
 
 </Project>

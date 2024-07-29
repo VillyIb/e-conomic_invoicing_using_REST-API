@@ -2,7 +2,6 @@
 using Eu.Iamia.Invoicing.Application.Contract;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2;
 using Eu.Iamia.Invoicing.Loader.Contract;
 using Eu.Iamia.Reporting.Contract;
@@ -20,7 +19,7 @@ public class InvoicingHandler : IInvoicingHandler
     private readonly SettingsForInvoicingApplication _settings;
 
     protected CancellationTokenSource Cts = new CancellationTokenSource();
-    private IList<IInputInvoice> _loaderInvoices;
+    //private IList<IInputInvoice> _loaderInvoices;
 
     public InvoicingHandler(
         SettingsForInvoicingApplication settings
@@ -68,7 +67,7 @@ public class InvoicingHandler : IInvoicingHandler
         {
             throw new ApplicationException("#Betalingsbetingelse/#PaymentTerm not specified");
         }
-        var paymetTerm = _loader.PaymentTerm.Value;
+        var paymentTerm = _loader.PaymentTerm.Value;
 
         if (_loader.CustomerGroupToAccept is null)
         {
@@ -88,17 +87,17 @@ public class InvoicingHandler : IInvoicingHandler
         ((GatewayV2)_economicGatewayV2).ProductCache = ((GatewayBase)_economicGateway).ProductCache;
         await _economicGatewayV2.LoadProductCache();
 
-        _loaderInvoices = _loader.Invoices ?? Array.Empty<IInputInvoice>();
-        foreach (var inputInvoice in _loaderInvoices)
+        var loaderInvoices = _loader.Invoices ?? Array.Empty<IInputInvoice>();
+        foreach (var inputInvoice in loaderInvoices)
         {
             try
             {
                 inputInvoice.InvoiceDate = invoiceDate;
                 inputInvoice.Text1 = _loader.Text1!;
                 inputInvoice.InvoiceDate = invoiceDate;
-                inputInvoice.PaymentTerm = paymetTerm;
+                inputInvoice.PaymentTerm = paymentTerm;
                 //await _economicGateway.PushInvoice(inputInvoice, inputInvoice.SourceFileLineNumber, Cts.Token);
-                await _economicGatewayV2.PushInvoice(inputInvoice, inputInvoice.SourceFileLineNumber, Cts.Token);
+                _ = await _economicGatewayV2.PushInvoice(inputInvoice, inputInvoice.SourceFileLineNumber, Cts.Token);
                 Console.Write('.');
             }
             catch (Exception ex)
@@ -109,7 +108,7 @@ public class InvoicingHandler : IInvoicingHandler
             }
         }
 
-        return new ExecutionStatus { Report = $"Report status {invoiceDate:yyyy-MM-dd}, {Environment.NewLine}Number of invoices: {_loaderInvoices.Count}", Status = 0, CountFails = countFails };
+        return new ExecutionStatus { Report = $"Report status {invoiceDate:yyyy-MM-dd}, {Environment.NewLine}Number of invoices: {loaderInvoices.Count}", Status = 0, CountFails = countFails };
     }
 
     public void Dispose()
