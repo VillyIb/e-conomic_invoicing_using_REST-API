@@ -1,4 +1,4 @@
-﻿
+﻿// Remote REST API data definition.
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable UnusedMember.Global

@@ -21,7 +21,8 @@ public class Mapper
 
     private CachedCustomer CustomerMustExist(int customerNumber, int sourceFileLineNumber)
     {
-        return _customerCache.GetInputCustomer(customerNumber)! ?? throw new ApplicationException($"Customer does not exist: '{customerNumber}', Source file line: {sourceFileLineNumber}");
+        return _customerCache.GetInputCustomer(customerNumber)! 
+               ?? throw new ApplicationException($"Customer does not exist: '{customerNumber}', Source file line: {sourceFileLineNumber}");
     }
 
     /// <summary>

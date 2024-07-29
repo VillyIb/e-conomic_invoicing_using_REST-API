@@ -86,6 +86,7 @@ public class InvoicingHandler : IInvoicingHandler
 
         ((GatewayV2)_economicGatewayV2).CustomerCache = ((GatewayBase)_economicGateway).CustomerCache;
         ((GatewayV2)_economicGatewayV2).ProductCache = ((GatewayBase)_economicGateway).ProductCache;
+        await _economicGatewayV2.LoadProductCache();
 
         _loaderInvoices = _loader.Invoices ?? Array.Empty<IInputInvoice>();
         foreach (var inputInvoice in _loaderInvoices)

@@ -54,6 +54,7 @@ public class ProductCache
         return productsHandle.collection.Count() >= productsHandle.pagination.pageSize;
     }
 
+    // TODO Does NOT belong to a simple class. 
     public async Task LoadAllProducts()
     {
         var cts = new CancellationTokenSource();
@@ -68,6 +69,9 @@ public class ProductCache
     }
 }
 
+/// <summary>
+/// Local representation of product.
+/// </summary>
 public class InputProduct
 {
     public string Description { get; set; } = string.Empty;

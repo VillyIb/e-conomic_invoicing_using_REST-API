@@ -17,6 +17,9 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Utils;
 
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Product;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.BookedInvoice;
+
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2;
 public class GatewayV2 : IEconomicGatewayV2
 {
@@ -56,20 +59,28 @@ public class GatewayV2 : IEconomicGatewayV2
         throw new NotImplementedException();
     }
 
-    public Task<ProductsHandle> ReadProductsPaged(int page, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<ProductsHandle> ReadProductsPaged(int page, int pageSize, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var stream = await _restApiGateway.GetProductsPaged(page, pageSize, cancellationToken);
+
+        var serializer = new JsonSerializerFacade();
+        var serializerProductsHandle = new SerializerProductsHandle(serializer);
+
+        var productsHandle = await serializerProductsHandle.DeserializeAsync(stream, cancellationToken);
+
+        return productsHandle;
     }
 
-    public async Task<IDraftInvoice?> PushInvoice(IInputInvoice inputInvoice, int sourceFileLineNumber, CancellationToken cancellationToken)
+    public async Task<IDraftInvoice?> PushInvoice ( IInputInvoice inputInvoice, int sourceFileLineNumber, CancellationToken cancellationToken)
     {
-        _report.SetCustomer(new CachedCustomer { Name = "---- ----", CustomerNumber = inputInvoice.CustomerNumber });
-
         const string reference = nameof(PushInvoice);
 
-        var converted = Mapper.From(inputInvoice);
+        _report.SetCustomer(new CachedCustomer { Name = "---- ----", CustomerNumber = inputInvoice.CustomerNumber });
 
-        var json = converted.ecInvoice.ToJson();
+        var restContract = Mapper.From(inputInvoice);
+        _report.SetCustomer(restContract.customer);
+
+        var json = restContract.ecInvoice.ToJson();
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
         var stream = await _restApiGateway.PushInvoice(content, cancellationToken);
@@ -94,8 +105,60 @@ public class GatewayV2 : IEconomicGatewayV2
         throw new NotImplementedException();
     }
 
-    public Task LoadProductCache()
+    private readonly IList<InputProduct> _inputProducts = new List<InputProduct>();
+
+    public InputProduct? GetInputProduct(string? productNumber)
     {
-        throw new NotImplementedException();
+        return _inputProducts.FirstOrDefault(cus => cus.ProductNumber.Equals(productNumber, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    public InputProduct Map(Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Product.Collection product)
+    {
+        var result = new InputProduct
+        {
+            Description = product.description,
+            Name = product.name,
+            ProductNumber = product.productNumber,
+        };
+
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+        if (product.unit is not null)
+        {
+            result.Unit = new InputUnit
+            {
+                Name = product.unit.name,
+                UnitNumber = product.unit.unitNumber
+            };
+        }
+
+        return result;
+    }
+
+    public bool AddProducts(Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Product.ProductsHandle? productsHandle)
+    {
+        if (productsHandle is null) return false;
+
+        foreach (var product in productsHandle.collection)
+        {
+            var inputProduct = Map(product);
+            _inputProducts.Add(inputProduct);
+        }
+
+        return productsHandle.collection.Count() >= productsHandle.pagination.pageSize;
+    }
+
+    public async Task LoadProductCache()
+    {
+        _inputProducts.Clear();
+
+        var cts = new CancellationTokenSource();
+        bool @continue = true;
+        var page = 0;
+        while (@continue)
+        {
+            var productsHandle = await ReadProductsPaged(page, 20, cts.Token);
+            @continue = AddProducts(productsHandle) && page < 100;
+            page++;
+        }
     }
 }
