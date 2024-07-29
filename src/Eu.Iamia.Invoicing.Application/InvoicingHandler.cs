@@ -16,6 +16,7 @@ public class InvoicingHandler : IInvoicingHandler
     private readonly SettingsForInvoicingApplication _settings;
 
     protected CancellationTokenSource Cts = new CancellationTokenSource();
+    private IList<IInputInvoice> _loaderInvoices;
 
     public InvoicingHandler(
         SettingsForInvoicingApplication settings
@@ -75,9 +76,11 @@ public class InvoicingHandler : IInvoicingHandler
         Console.WriteLine("");
 
         var countFails = 0;
-        try
+
+        _loaderInvoices = _loader.Invoices ?? Array.Empty<IInputInvoice>();
+        foreach (var inputInvoice in _loaderInvoices)
         {
-            foreach (var inputInvoice in _loader.Invoices)
+            try
             {
                 inputInvoice.InvoiceDate = invoiceDate;
                 inputInvoice.Text1 = _loader.Text1!;
@@ -86,13 +89,20 @@ public class InvoicingHandler : IInvoicingHandler
                 await _economicGateway.PushInvoice(inputInvoice, inputInvoice.SourceFileLineNumber, Cts.Token);
                 Console.Write('.');
             }
-        }
-        catch (Exception ex)
-        {
-            countFails++;
-            // xxx
+            catch (Exception ex)
+            {
+                countFails++;
+                _customerReport.Error("PushInvoice", ex.Message);
+                _customerReport.Close();
+            }
         }
 
-        return new ExecutionStatus { Report = $"Report status {invoiceDate:yyyy-MM-dd}, {Environment.NewLine}Number of invoices: {_loader.Invoices.Count}", Status = 0, CountFails = countFails };
+        return new ExecutionStatus { Report = $"Report status {invoiceDate:yyyy-MM-dd}, {Environment.NewLine}Number of invoices: {_loaderInvoices.Count}", Status = 0, CountFails = countFails };
+    }
+
+    public void Dispose()
+    {
+        _customerReport.Dispose();
+        Cts.Dispose();
     }
 }
