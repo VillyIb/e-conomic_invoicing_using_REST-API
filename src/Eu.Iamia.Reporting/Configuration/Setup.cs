@@ -17,7 +17,7 @@ public  class Setup : IHandlerSetup
 
     private static void AddHandlers(IServiceCollection services)
     {
-        services.AddTransient<ICustomerReport, CustomerCustomerReport>();
+        services.AddSingleton<ICustomerReport, CustomerCustomerReport>();
     }
 
     private void AddSettings(Microsoft.Extensions.DependencyInjection.IServiceCollection services)
