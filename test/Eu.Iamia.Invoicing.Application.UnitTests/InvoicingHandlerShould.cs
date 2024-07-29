@@ -1,6 +1,6 @@
+using System.Reflection;
 using Eu.Iamia.Invoicing.Application.Configuration;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
-using Eu.Iamia.Invoicing.Loader.Contract;
+using Eu.Iamia.Invoicing.Application.Contract;
 
 namespace Eu.Iamia.Invoicing.Application.UnitTests;
 
@@ -10,10 +10,12 @@ public class InvoicingHandlerShould
 
     public InvoicingHandlerShould()
     {
-        var settingsForInvoicingApplication = new SettingsForInvoicingApplication { CsvFile = "xyz.csv" };
-        IEconomicGateway economicGateway = null;
-        ILoader loader = null;
-        _sut = new InvoicingHandler(settingsForInvoicingApplication, economicGateway, loader);
+        var executingDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory!.FullName;
+
+        using var setup = new Setup();
+        var settingsForInvoicingApplication = setup.GetSetting<SettingsForInvoicingApplication>();
+        settingsForInvoicingApplication.CsvFile = Path.Combine(executingDirectory, "TestData", "G1.csv");
+        _sut = setup.GetService<IInvoicingHandler>();
     }
 
     [Fact]
@@ -21,5 +23,7 @@ public class InvoicingHandlerShould
     {
         var result = await _sut.LoadInvoices();
         Assert.NotNull(result);
+        Assert.Equal(0,result.Status);
+        Assert.Equal(0,result.CountFails);
     }
 }
