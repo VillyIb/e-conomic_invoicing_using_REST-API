@@ -47,7 +47,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eu.Iamia.Invoicing.E_Conomi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eu.Iamia.Invoicing.Application.UnitTests", "test\Eu.Iamia.Invoicing.Application.UnitTests\Eu.Iamia.Invoicing.Application.UnitTests.csproj", "{2AE37A79-4412-442F-8EBE-373F785AE1CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eu.Iamia.Invoicing.Application.Contract", "src\Eu.Iamia.Invoicing.Application.Contract\Eu.Iamia.Invoicing.Application.Contract.csproj", "{17B1AD1E-6747-4539-B434-81A21090333D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eu.Iamia.Invoicing.Application.Contract", "src\Eu.Iamia.Invoicing.Application.Contract\Eu.Iamia.Invoicing.Application.Contract.csproj", "{17B1AD1E-6747-4539-B434-81A21090333D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eu.Iamia.Invoicing.E-Conomic.Gateway.V2", "src\Eu.Iamia.Invoicing.E-Conomic.Gateway.V2\Eu.Iamia.Invoicing.E-Conomic.Gateway.V2.csproj", "{34336B0E-E652-4831-930A-337802752611}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -139,6 +141,10 @@ Global
 		{17B1AD1E-6747-4539-B434-81A21090333D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17B1AD1E-6747-4539-B434-81A21090333D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17B1AD1E-6747-4539-B434-81A21090333D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34336B0E-E652-4831-930A-337802752611}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34336B0E-E652-4831-930A-337802752611}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34336B0E-E652-4831-930A-337802752611}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34336B0E-E652-4831-930A-337802752611}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -165,6 +171,7 @@ Global
 		{59B39E63-B2CA-4FA7-B4C9-397E3CA0CAB9} = {5DA775E7-8B00-4C4F-A9F1-51CB654ACB44}
 		{2AE37A79-4412-442F-8EBE-373F785AE1CB} = {5DA775E7-8B00-4C4F-A9F1-51CB654ACB44}
 		{17B1AD1E-6747-4539-B434-81A21090333D} = {2DAF952C-CA92-4F32-9401-2B75DF2CEAE0}
+		{34336B0E-E652-4831-930A-337802752611} = {2DAF952C-CA92-4F32-9401-2B75DF2CEAE0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8DFD028F-A269-4D03-AC4E-9C9305496793}
