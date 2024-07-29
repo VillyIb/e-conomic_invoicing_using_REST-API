@@ -1,6 +1,9 @@
 ﻿using Eu.Iamia.Invoicing.Application.Configuration;
 using Eu.Iamia.Invoicing.Application.Contract;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2;
 using Eu.Iamia.Invoicing.Loader.Contract;
 using Eu.Iamia.Reporting.Contract;
 using Microsoft.Extensions.Options;
@@ -11,6 +14,7 @@ namespace Eu.Iamia.Invoicing.Application;
 public class InvoicingHandler : IInvoicingHandler
 {
     private readonly IEconomicGateway _economicGateway;
+    private readonly IEconomicGatewayV2 _economicGatewayV2;
     private readonly ILoader _loader;
     private readonly ICustomerReport _customerReport;
     private readonly SettingsForInvoicingApplication _settings;
@@ -22,12 +26,14 @@ public class InvoicingHandler : IInvoicingHandler
         SettingsForInvoicingApplication settings
         // csv reader
         , IEconomicGateway economicGateway
+        , IEconomicGatewayV2 economicGatewayV2
         , ILoader loader
         , ICustomerReport customerReport
     )
     {
         _settings = settings;
         _economicGateway = economicGateway;
+        _economicGatewayV2 = economicGatewayV2;
         _loader = loader;
         _customerReport = customerReport;
     }
@@ -36,9 +42,10 @@ public class InvoicingHandler : IInvoicingHandler
         IOptions<SettingsForInvoicingApplication> settings
         // csv reader
         , IEconomicGateway economicGateway
+        , IEconomicGatewayV2 economicGatewayV2
         , ILoader loader
         , ICustomerReport customerReport
-    ) : this(settings.Value, economicGateway, loader, customerReport)
+    ) : this(settings.Value, economicGateway, economicGatewayV2, loader, customerReport)
     { }
 
     public async Task<ExecutionStatus> LoadInvoices()
@@ -77,6 +84,9 @@ public class InvoicingHandler : IInvoicingHandler
 
         var countFails = 0;
 
+        ((GatewayV2)_economicGatewayV2).CustomerCache = ((GatewayBase)_economicGateway).CustomerCache;
+        ((GatewayV2)_economicGatewayV2).ProductCache = ((GatewayBase)_economicGateway).ProductCache;
+
         _loaderInvoices = _loader.Invoices ?? Array.Empty<IInputInvoice>();
         foreach (var inputInvoice in _loaderInvoices)
         {
@@ -86,7 +96,8 @@ public class InvoicingHandler : IInvoicingHandler
                 inputInvoice.Text1 = _loader.Text1!;
                 inputInvoice.InvoiceDate = invoiceDate;
                 inputInvoice.PaymentTerm = paymetTerm;
-                await _economicGateway.PushInvoice(inputInvoice, inputInvoice.SourceFileLineNumber, Cts.Token);
+                //await _economicGateway.PushInvoice(inputInvoice, inputInvoice.SourceFileLineNumber, Cts.Token);
+                await _economicGatewayV2.PushInvoice(inputInvoice, inputInvoice.SourceFileLineNumber, Cts.Token);
                 Console.Write('.');
             }
             catch (Exception ex)

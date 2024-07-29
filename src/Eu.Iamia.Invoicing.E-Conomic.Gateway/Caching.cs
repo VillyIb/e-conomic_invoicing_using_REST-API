@@ -4,7 +4,7 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;
 public partial class GatewayBase
 {
-    private CustomerCache? CustomerCache { get; set; }
+    public CustomerCache? CustomerCache { get; private set; }
 
     public async Task LoadCustomerCache(IList<int> customerGroupsToAccept)
     {
@@ -12,7 +12,7 @@ public partial class GatewayBase
         await CustomerCache.LoadAllCustomers();
     }
 
-    private ProductCache? ProductCache { get; set; }
+    public ProductCache? ProductCache { get; private set; }
 
     public async Task LoadProductCache()
     {

@@ -18,7 +18,9 @@ public class Setup : SetupBase
             new E_Conomic.Gateway.Configuration.Setup(configuration),
             new CSVLoader.Configuration.Setup(configuration),
             new Reporting.Configuration.Setup(configuration), 
-            new Application.Configuration.Setup(configuration)
+            new Application.Configuration.Setup(configuration),
+            new Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.Configuration.Setup(configuration),
+        new Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Configuration.Setup(configuration)
         );
 
         ServiceProvider = services.BuildServiceProvider();

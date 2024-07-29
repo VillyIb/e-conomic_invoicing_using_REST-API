@@ -15,6 +15,7 @@
     <ProjectReference Include="..\Eu.Iamia.ConfigBase\Eu.Iamia.ConfigBase.csproj" />
     <ProjectReference Include="..\Eu.Iamia.Invoicing.E-Conomic.Gateway.Contract\Eu.Iamia.Invoicing.E-Conomic.Gateway.Contract.csproj" />
     <ProjectReference Include="..\Eu.Iamia.Invoicing.E-Conomic.Gateway\Eu.Iamia.Invoicing.E-Conomic.Gateway.csproj" />
+    <ProjectReference Include="..\Eu.Iamia.Invoicing.E-Conomic.RestApiGateway.Contract\Eu.Iamia.Invoicing.E-Conomic.RestApiGateway.Contract.csproj" />
     <ProjectReference Include="..\Eu.Iamia.Reporting.Contract\Eu.Iamia.Reporting.Contract.csproj" />
   </ItemGroup>
 
