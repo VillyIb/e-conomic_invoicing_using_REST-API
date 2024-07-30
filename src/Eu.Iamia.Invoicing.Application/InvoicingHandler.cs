@@ -4,6 +4,7 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2;
 using Eu.Iamia.Invoicing.Loader.Contract;
+using Eu.Iamia.Invoicing.Mapping;
 using Eu.Iamia.Reporting.Contract;
 using Microsoft.Extensions.Options;
 // ReSharper disable StringLiteralTypo
@@ -12,6 +13,7 @@ namespace Eu.Iamia.Invoicing.Application;
 
 public class InvoicingHandler : IInvoicingHandler
 {
+    private readonly IMappingService _mappingService;
     private readonly IEconomicGateway _economicGateway;
     private readonly IEconomicGatewayV2 _economicGatewayV2;
     private readonly ILoader _loader;
@@ -42,10 +44,13 @@ public class InvoicingHandler : IInvoicingHandler
         // csv reader
         , IEconomicGateway economicGateway
         , IEconomicGatewayV2 economicGatewayV2
+        , IMappingService mappingService
         , ILoader loader
         , ICustomerReport customerReport
     ) : this(settings.Value, economicGateway, economicGatewayV2, loader, customerReport)
-    { }
+    {
+        _mappingService = mappingService;
+    }
 
     public async Task<ExecutionStatus> LoadInvoices()
     {
@@ -79,8 +84,12 @@ public class InvoicingHandler : IInvoicingHandler
         //await _economicGateway.LoadCustomerCache(customerGroupsToAccept);
         //await _economicGateway.LoadProductCache();
 
-        await _economicGatewayV2.LoadCustomerCache(customerGroupsToAccept);
-        await _economicGatewayV2.LoadProductCache();
+        //await _economicGatewayV2.LoadCustomerCache(customerGroupsToAccept);
+        //await _economicGatewayV2.LoadProductCache();
+
+        // TODO call above on the MappingService.
+        await _mappingService.LoadCustomerCache(customerGroupsToAccept);
+        await _mappingService.LoadProductCache();
 
         Console.WriteLine("");
 

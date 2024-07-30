@@ -1,6 +1,5 @@
-﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Guards;
+﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Guards;
 
-[Obsolete("moved to contract")]
 public static class InvoiceGuards
 {
     public static void CustomerNumber(int customerNumber)

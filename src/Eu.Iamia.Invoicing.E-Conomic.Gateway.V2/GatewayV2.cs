@@ -20,6 +20,7 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway.Utils;
 
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Product;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.BookedInvoice;
+using Invoice = Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Invoice.Invoice;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2;
 public class GatewayV2 : IEconomicGatewayV2
@@ -79,54 +80,14 @@ public class GatewayV2 : IEconomicGatewayV2
         return productsHandle;
     }
 
-    public async Task<IDraftInvoice?> PushInvoice ( IInputInvoice inputInvoice, int sourceFileLineNumber, CancellationToken cancellationToken)
+    public async Task<IDraftInvoice?> PushInvoice(Invoice restApiInvoice, int sourceFileNumber, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<IDraftInvoice?> PushInvoice(E_Conomic.Gateway.DTO.Invoice.Invoice restApiInvoice, int sourceFileNumber, CancellationToken cancellationToken)
     {
         const string reference = nameof(PushInvoice);
-
-        var customerDto = CustomersCache.GetCustomer(inputInvoice.CustomerNumber);
-
-        _report.SetCustomer(new CachedCustomer
-        {
-            Name = customerDto is null  ? "---- ----" : customerDto.Name, 
-            CustomerNumber = inputInvoice.CustomerNumber
-        });
-
-        if (customerDto is null)
-        {
-            throw new ApplicationException($"Customer does not exist: '{inputInvoice.CustomerNumber}', Source file line: {sourceFileLineNumber}");
-        }
-
-        var invoiceDto = new InvoiceDto
-        {
-            CustomerNumber = inputInvoice.CustomerNumber,
-            InvoiceDate = inputInvoice.InvoiceDate,
-            SourceFileLineNumber = sourceFileLineNumber,
-            PaymentTerm = inputInvoice.PaymentTerm,
-            Text1 = inputInvoice.Text1
-        };
-        foreach (var inputLine in inputInvoice.InvoiceLines)
-        {
-            invoiceDto.InvoiceLines.Add(
-                new InvoiceLineDto
-                {
-                    UnitNumber = inputLine.UnitNumber,
-                    ProductNumber = inputLine.ProductNumber,
-                    SourceFileLineNumber =sourceFileLineNumber,
-                    Description = inputLine.Description,
-                    Quantity = inputLine.Quantity,
-                    UnitNetPrice = inputLine.UnitNetPrice,
-                    UnitText = inputLine.UnitText
-                }    
-            );
-        }
-
-        var restApiInvoice = Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Mappings.Mapping.ToRestApiInvoice(
-             customerDto, 
-             invoiceDto, 
-             ProductsCache, 
-             _settings.LayoutNumber
-        );
-
 
         var json = restApiInvoice.ToJson();
         var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -148,49 +109,121 @@ public class GatewayV2 : IEconomicGatewayV2
         return draftInvoice;
     }
 
-    private CustomerDtoCache CustomersCache = new();
+    public async Task<IDraftInvoice?> PushInvoice ( IInputInvoice inputInvoice, int sourceFileLineNumber, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+
+        //const string reference = nameof(PushInvoice);
+
+        //var customerDto = CustomersCache.GetCustomer(inputInvoice.CustomerNumber);
+
+        //_report.SetCustomer(new CachedCustomer
+        //{
+        //    Name = customerDto is null  ? "---- ----" : customerDto.Name, 
+        //    CustomerNumber = inputInvoice.CustomerNumber
+        //});
+
+        //if (customerDto is null)
+        //{
+        //    throw new ApplicationException($"Customer does not exist: '{inputInvoice.CustomerNumber}', Source file line: {sourceFileLineNumber}");
+        //}
+
+        //var invoiceDto = new InvoiceDto
+        //{
+        //    CustomerNumber = inputInvoice.CustomerNumber,
+        //    InvoiceDate = inputInvoice.InvoiceDate,
+        //    SourceFileLineNumber = sourceFileLineNumber,
+        //    PaymentTerm = inputInvoice.PaymentTerm,
+        //    Text1 = inputInvoice.Text1
+        //};
+        //foreach (var inputLine in inputInvoice.InvoiceLines)
+        //{
+        //    invoiceDto.InvoiceLines.Add(
+        //        new InvoiceLineDto
+        //        {
+        //            UnitNumber = inputLine.UnitNumber,
+        //            ProductNumber = inputLine.ProductNumber,
+        //            SourceFileLineNumber =sourceFileLineNumber,
+        //            Description = inputLine.Description,
+        //            Quantity = inputLine.Quantity,
+        //            UnitNetPrice = inputLine.UnitNetPrice,
+        //            UnitText = inputLine.UnitText
+        //        }    
+        //    );
+        //}
+
+        //var restApiInvoice = Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Mappings.Mapping.ToRestApiInvoice(
+        //     customerDto, 
+        //     invoiceDto, 
+        //     ProductsCache, 
+        //     _settings.LayoutNumber
+        //);
+
+
+        //var json = restApiInvoice.ToJson();
+        //var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        //var stream = await _restApiGateway.PushInvoice(content, cancellationToken);
+
+
+        //var serializer = new JsonSerializerFacade();
+        //var serializerDraftInvoice = new SerializerDraftInvoice(serializer);
+
+        //var draftInvoice = await serializerDraftInvoice.DeserializeAsync(stream, cancellationToken);
+
+        //stream.Position = 0;
+        //using var streamReader = new StreamReader(stream);
+        //string htmlBody = await streamReader.ReadToEndAsync(cancellationToken);
+        //_report.Info(reference, htmlBody);
+        //_report.Close();
+
+        //return draftInvoice;
+    }
 
     public async Task LoadCustomerCache(IList<int> customerGroupsToAccept)
     {
-        CustomersCache.Clear();
+        throw new NotImplementedException();
 
-        var cts = new CancellationTokenSource();
-        bool @continue = true;
-        var page = 0;
-        while (@continue)
-        {
-            var customersHandle = await ReadCustomersPaged(page, 20, cts.Token);
-            foreach (var collection in customersHandle.collection)
-            {
-                if(!customerGroupsToAccept.Any(cg => cg.Equals(collection.customerGroup.customerGroupNumber))) continue;
+        //CustomersCache.Clear();
 
-                var customerDto = Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Mappings.Mapping.ToCustomerDto(collection);
-                CustomersCache.Add(customerDto);
-            }
-            @continue = customersHandle.collection.Any() && page < 100;
-            page++;
-        }
+        //var cts = new CancellationTokenSource();
+        //bool @continue = true;
+        //var page = 0;
+        //while (@continue)
+        //{
+        //    var customersHandle = await ReadCustomersPaged(page, 20, cts.Token);
+        //    foreach (var collection in customersHandle.collection)
+        //    {
+        //        if(!customerGroupsToAccept.Any(cg => cg.Equals(collection.customerGroup.customerGroupNumber))) continue;
+
+        //        var customerDto = Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Mappings.Mapping.ToCustomerDto(collection);
+        //        CustomersCache.Add(customerDto);
+        //    }
+        //    @continue = customersHandle.collection.Any() && page < 100;
+        //    page++;
+        //}
     }
 
-    private ProductDtoCache ProductsCache = new();
 
     public async Task LoadProductCache()
     {
-        ProductsCache.Clear();
+        throw new NotImplementedException();
 
-        var cts = new CancellationTokenSource();
-        bool @continue = true;
-        var page = 0;
-        while (@continue)
-        {
-            var productsHandle = await ReadProductsPaged(page, 20, cts.Token);
-            foreach (var collection in productsHandle.collection)
-            {
-                var productDto = Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Mappings.Mapping.ToProductDto(collection);
-                ProductsCache.Add(productDto);
-            }
-            @continue = productsHandle.collection.Any() && page < 100;
-            page++;
-        }
+        //ProductsCache.Clear();
+
+        //var cts = new CancellationTokenSource();
+        //bool @continue = true;
+        //var page = 0;
+        //while (@continue)
+        //{
+        //    var productsHandle = await ReadProductsPaged(page, 20, cts.Token);
+        //    foreach (var collection in productsHandle.collection)
+        //    {
+        //        var productDto = Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Mappings.Mapping.ToProductDto(collection);
+        //        ProductsCache.Add(productDto);
+        //    }
+        //    @continue = productsHandle.collection.Any() && page < 100;
+        //    page++;
+        //}
     }
 }

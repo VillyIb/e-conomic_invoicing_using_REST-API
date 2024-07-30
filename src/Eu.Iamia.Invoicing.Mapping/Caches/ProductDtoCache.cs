@@ -1,4 +1,6 @@
-﻿namespace Eu.Iamia.Invoicing.Application.Contract.DTO;
+﻿using Eu.Iamia.Invoicing.Application.Contract.DTO;
+
+namespace Eu.Iamia.Invoicing.Mapping.Caches;
 
 public class ProductDtoCache : List<ProductDto>
 {

@@ -7,9 +7,9 @@ using Eu.Iamia.Invoicing.Loader.Contract;
 
 public interface IEconomicGateway
 {
-    Task<CustomersHandle> ReadCustomersPaged(int page, int pageSize, CancellationToken cancellationToken = default);
+    //Task<CustomersHandle> ReadCustomersPaged(int page, int pageSize, CancellationToken cancellationToken = default);
 
-    Task<ProductsHandle> ReadProductsPaged(int page, int pageSize, CancellationToken cancellationToken = default);
+    //Task<ProductsHandle> ReadProductsPaged(int page, int pageSize, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// PushInvoice contract.

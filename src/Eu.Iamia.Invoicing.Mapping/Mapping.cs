@@ -1,8 +1,9 @@
 ﻿using Eu.Iamia.Invoicing.Application.Contract.DTO;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
+using Eu.Iamia.Invoicing.Mapping.Caches;
+// ReSharper disable RedundantNameQualifier
 
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Mappings;
+namespace Eu.Iamia.Invoicing.Mapping;
 
 /// <summary>
 /// Mapping between Application data definition and RestApiData definition.
@@ -26,7 +27,7 @@ public static class Mapping
             }
         ;
 
-        return new Eu.Iamia.Invoicing.Application.Contract.DTO.ProductDto
+        return new Application.Contract.DTO.ProductDto
         {
             Description = restApiProduct.description,
             ProductNumber = restApiProduct.productNumber,
@@ -43,7 +44,7 @@ public static class Mapping
     /// <returns></returns>
     public static Application.Contract.DTO.CustomerDto ToCustomerDto(this E_Conomic.Gateway.Contract.DTO.Customer.Collection restApiCustomer)
     {
-        return new Eu.Iamia.Invoicing.Application.Contract.DTO.CustomerDto
+        return new Application.Contract.DTO.CustomerDto
         {
             Name = restApiCustomer.name,
             Address = restApiCustomer.address,
@@ -133,9 +134,9 @@ public static class Mapping
                 throw new ApplicationException($"Product: '{invoiceLineDto.ProductNumber}' not found in e-conomic, Source file line: {invoiceLineDto.SourceFileLineNumber}");
             }
 
-            var unit = productDto!.Unit is null
+            var unit = productDto.Unit is null
                 ? null
-                : new DTO.Invoice.Unit(
+                : new E_Conomic.Gateway.DTO.Invoice.Unit(
                     name: productDto.Unit.Name,
                     unitNumber: productDto.Unit.UnitNumber
                 );
@@ -144,7 +145,7 @@ public static class Mapping
             {
                 Description = invoiceLineDto.Description,
                 LineNumber = lineNumber,
-                Product = new DTO.Invoice.Product()
+                Product = new E_Conomic.Gateway.DTO.Invoice.Product()
                 {
                     ProductNumber = invoiceLineDto.ProductNumber
                 },
