@@ -23,10 +23,10 @@ public class CustomerDto : ValueObject<CustomerDto>
     {
         yield return CustomerNumber;
         yield return PaymentTerms;
-        yield return Address;
-        yield return City;
-        yield return Name;
-        yield return Zip;
+        yield return Address ?? string.Empty;
+        yield return City ?? string.Empty;
+        yield return Name ?? string.Empty;
+        yield return Zip ?? string.Empty;
 
     }
 }

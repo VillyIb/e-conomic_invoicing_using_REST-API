@@ -55,9 +55,16 @@ public class GatewayV2 : IEconomicGatewayV2
     //private Mapper Mapper => _mapper ??= new Mapper(new SettingsForEConomicGateway { LayoutNumber = _settings.LayoutNumber }, CustomerCache!, ProductCache!);
 
 
-    public Task<CustomersHandle> ReadCustomersPaged(int page, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<CustomersHandle> ReadCustomersPaged(int page, int pageSize, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var stream = await _restApiGateway.GetCustomersPaged(page, pageSize, cancellationToken);
+
+        var serializer = new JsonSerializerFacade();
+        var serializerCustomersHandle = new SerializerCustomersHandle(serializer);
+
+        var customersHandle = await serializerCustomersHandle.DeserializeAsync(stream, cancellationToken);
+
+        return customersHandle;
     }
 
     public async Task<ProductsHandle> ReadProductsPaged(int page, int pageSize, CancellationToken cancellationToken = default)
@@ -76,12 +83,52 @@ public class GatewayV2 : IEconomicGatewayV2
     {
         const string reference = nameof(PushInvoice);
 
-        _report.SetCustomer(new CachedCustomer { Name = "---- ----", CustomerNumber = inputInvoice.CustomerNumber });
+        var customerDto = CustomersCache.GetCustomer(inputInvoice.CustomerNumber);
 
-        var restContract = Mapper.From(inputInvoice);
-        _report.SetCustomer(restContract.customer);
+        _report.SetCustomer(new CachedCustomer
+        {
+            Name = customerDto is null  ? "---- ----" : customerDto.Name, 
+            CustomerNumber = inputInvoice.CustomerNumber
+        });
 
-        var json = restContract.ecInvoice.ToJson();
+        if (customerDto is null)
+        {
+            throw new ApplicationException($"Customer does not exist: '{inputInvoice.CustomerNumber}', Source file line: {sourceFileLineNumber}");
+        }
+
+        var invoiceDto = new InvoiceDto
+        {
+            CustomerNumber = inputInvoice.CustomerNumber,
+            InvoiceDate = inputInvoice.InvoiceDate,
+            SourceFileLineNumber = sourceFileLineNumber,
+            PaymentTerm = inputInvoice.PaymentTerm,
+            Text1 = inputInvoice.Text1
+        };
+        foreach (var inputLine in inputInvoice.InvoiceLines)
+        {
+            invoiceDto.InvoiceLines.Add(
+                new InvoiceLineDto
+                {
+                    UnitNumber = inputLine.UnitNumber,
+                    ProductNumber = inputLine.ProductNumber,
+                    SourceFileLineNumber =sourceFileLineNumber,
+                    Description = inputLine.Description,
+                    Quantity = inputLine.Quantity,
+                    UnitNetPrice = inputLine.UnitNetPrice,
+                    UnitText = inputLine.UnitText
+                }    
+            );
+        }
+
+        var restApiInvoice = Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Mappings.Mapping.ToRestApiInvoice(
+             customerDto, 
+             invoiceDto, 
+             ProductsCache, 
+             _settings.LayoutNumber
+        );
+
+
+        var json = restApiInvoice.ToJson();
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
         var stream = await _restApiGateway.PushInvoice(content, cancellationToken);
@@ -101,13 +148,31 @@ public class GatewayV2 : IEconomicGatewayV2
         return draftInvoice;
     }
 
-    public Task LoadCustomerCache(IList<int> customerGroupsToAccept)
+    private CustomerDtoCache CustomersCache = new();
+
+    public async Task LoadCustomerCache(IList<int> customerGroupsToAccept)
     {
-        throw new NotImplementedException();
+        CustomersCache.Clear();
+
+        var cts = new CancellationTokenSource();
+        bool @continue = true;
+        var page = 0;
+        while (@continue)
+        {
+            var customersHandle = await ReadCustomersPaged(page, 20, cts.Token);
+            foreach (var collection in customersHandle.collection)
+            {
+                if(!customerGroupsToAccept.Any(cg => cg.Equals(collection.customerGroup.customerGroupNumber))) continue;
+
+                var customerDto = Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Mappings.Mapping.ToCustomerDto(collection);
+                CustomersCache.Add(customerDto);
+            }
+            @continue = customersHandle.collection.Any() && page < 100;
+            page++;
+        }
     }
 
-
-    private List<ProductDto> ProductsCache = new List<ProductDto>();
+    private ProductDtoCache ProductsCache = new();
 
     public async Task LoadProductCache()
     {

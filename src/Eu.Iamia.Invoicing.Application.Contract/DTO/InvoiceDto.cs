@@ -1,6 +1,6 @@
 ﻿namespace Eu.Iamia.Invoicing.Application.Contract.DTO;
 
-public class InvoiceDto : IInvoiceDto
+public class InvoiceDto : ValueObject<InvoiceDto>
 {
     public DateTime InvoiceDate { get; set; }
 
@@ -10,64 +10,27 @@ public class InvoiceDto : IInvoiceDto
 
     public string Text1 { get; set; } = string.Empty;
 
-    private IList<IInvoiceLineDto>? _invoiceLines;
+    private IList<InvoiceLineDto>? _invoiceLines;
 
     public int SourceFileLineNumber { get; set; } = -1;
 
-    public IList<IInvoiceLineDto> InvoiceLines
+    public IList<InvoiceLineDto> InvoiceLines
     {
-        get => _invoiceLines ??= new List<IInvoiceLineDto>();
+        get => _invoiceLines ??= new List<InvoiceLineDto>();
         set => _invoiceLines = value;
     }
-}
 
-public interface IInvoiceDto
-{
-    DateTime InvoiceDate { get; set; }
-
-    int CustomerNumber { get; set; }
-
-    int PaymentTerm { get; set; }
-
-    string Text1 { get; set; }
-
-    int SourceFileLineNumber { get; set; }
-
-    IList<IInvoiceLineDto> InvoiceLines { get; set; }
-}
-
-public class InvoiceLineDto : IInvoiceLineDto
-{
-    public string? UnitText { get; set; }
-
-    public int UnitNumber { get; set; }
-
-    public string? ProductNumber { get; set; }
-
-    public double? Quantity { get; set; }
-
-    public double? UnitNetPrice { get; set; }
-
-    public string? Description { get; set; }
-
-    public int? SourceFileLineNumber { get; set; }
-
-    public int SourceFileLine { get; set; }
-}
-
-public interface IInvoiceLineDto
-{
-    string? UnitText { get; set; }
-
-    string? ProductNumber { get; set; }
-
-    int UnitNumber { get; set; }
-
-    double? Quantity { get; set; }
-
-    double? UnitNetPrice { get; set; }
-
-    string? Description { get; set; }
-
-    int? SourceFileLineNumber { get; set; }
+    protected override IEnumerable<object?> GetEqualityComponents()
+    {
+        yield return InvoiceDate;
+        yield return CustomerNumber;
+        yield return PaymentTerm;
+        yield return Text1;
+        yield return InvoiceLines;
+        yield return SourceFileLineNumber;
+        foreach (var invoiceLine in InvoiceLines)
+        {
+            yield return invoiceLine;
+        }
+    }
 }

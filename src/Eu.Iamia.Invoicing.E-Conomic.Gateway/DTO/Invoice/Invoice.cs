@@ -474,7 +474,7 @@ public class Product : ValueObject<Product>
     [JsonPropertyName("productNumber")]
     public string? ProductNumber { get; init; }
 
-    public static Product? NullProduct => new();
+    public static Product NullProduct => new();
 
     protected override IEnumerable<object?> GetEqualityComponents()
     {

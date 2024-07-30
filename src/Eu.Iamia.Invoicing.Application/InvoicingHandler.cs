@@ -76,16 +76,18 @@ public class InvoicingHandler : IInvoicingHandler
 
         var customerGroupsToAccept = _loader.CustomerGroupToAccept;
 
-        await _economicGateway.LoadCustomerCache(customerGroupsToAccept);
-        await _economicGateway.LoadProductCache();
+        //await _economicGateway.LoadCustomerCache(customerGroupsToAccept);
+        //await _economicGateway.LoadProductCache();
+
+        await _economicGatewayV2.LoadCustomerCache(customerGroupsToAccept);
+        await _economicGatewayV2.LoadProductCache();
 
         Console.WriteLine("");
 
         var countFails = 0;
 
-        ((GatewayV2)_economicGatewayV2).CustomerCache = ((GatewayBase)_economicGateway).CustomerCache;
-        ((GatewayV2)_economicGatewayV2).ProductCache = ((GatewayBase)_economicGateway).ProductCache;
-        await _economicGatewayV2.LoadProductCache();
+        //((GatewayV2)_economicGatewayV2).CustomerCache = ((GatewayBase)_economicGateway).CustomerCache;
+        //((GatewayV2)_economicGatewayV2).ProductCache = ((GatewayBase)_economicGateway).ProductCache;
 
         var loaderInvoices = _loader.Invoices ?? Array.Empty<IInputInvoice>();
         foreach (var inputInvoice in loaderInvoices)

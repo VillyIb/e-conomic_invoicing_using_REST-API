@@ -26,12 +26,14 @@ public  class ProductDto : ValueObject<ProductDto>
             yield return Name;
             yield return UnitNumber;
         }
+
+        public static UnitDto Null => new();
     }
 
     protected override IEnumerable<object?> GetEqualityComponents()
     {
         yield return Description;
-        yield return Unit;
+        yield return Unit ?? UnitDto.Null;
         yield return Name;
         yield return ProductNumber;
     }
