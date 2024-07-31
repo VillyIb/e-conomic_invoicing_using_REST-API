@@ -6,6 +6,7 @@ using Eu.Iamia.Invoicing.Loader.Contract;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 
+[Obsolete("", true)]
 public class Mapper
 {
     private readonly SettingsForEConomicGateway _settings;

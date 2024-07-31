@@ -37,14 +37,8 @@ public class GatewayV2 : IEconomicGatewayV2
     ) : this(settings.Value, restApiGateway, report)
     { }
 
+    [Obsolete("", true)]
     public CustomerCache CustomerCache { get; set; }
-
-    //public ProductCache ProductCache { get; set; }
-
-    //private Mapper? _mapper;
-
-    //private Mapper Mapper => _mapper ??= new Mapper(new SettingsForEConomicGateway { LayoutNumber = _settings.LayoutNumber }, CustomerCache!, ProductCache!);
-
 
     public async Task<CustomersHandle> ReadCustomersPaged(int page, int pageSize, CancellationToken cancellationToken = default)
     {
@@ -68,12 +62,6 @@ public class GatewayV2 : IEconomicGatewayV2
         var productsHandle = await serializerProductsHandle.DeserializeAsync(stream, cancellationToken);
 
         return productsHandle;
-    }
-
-    [Obsolete("Must go trough Mapper")]
-    public async Task<IDraftInvoice?> PushInvoice(Application.Contract.DTO.InvoiceDto restApiInvoice, int sourceFileNumber, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
     }
 
     public async Task<IDraftInvoice?> PushInvoice(Contract.DTO.Invoice.Invoice restApiInvoice, int sourceFileNumber, CancellationToken cancellationToken)

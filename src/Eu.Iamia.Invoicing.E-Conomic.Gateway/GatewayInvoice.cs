@@ -166,10 +166,12 @@ public partial class GatewayBase
             ;
     }
 
+    [Obsolete("", true)]
     private Mapper? _mapper;
     private string _requestUri;
     //private string? requestUri;
 
+    [Obsolete("", true)]
     private Mapper Mapper => _mapper ??= new Mapper(Settings, CustomerCache!, ProductCache!);
 
     [Obsolete]

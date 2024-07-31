@@ -4,6 +4,7 @@ using Eu.Iamia.Reporting.Contract;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
 
+[Obsolete("", true)]
 public class CustomerCache
 {
     private readonly GatewayBase _gateway;
