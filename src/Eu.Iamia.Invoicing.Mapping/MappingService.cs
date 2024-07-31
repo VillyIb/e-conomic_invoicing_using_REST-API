@@ -13,14 +13,14 @@ public interface IMappingService
     Task LoadProductCache();
 
     Task<IDraftInvoice?> PushInvoice(
-        Application.Contract.DTO.InvoiceDto invoiceDto, 
-        int layoutNumber, 
-        int sourceFileLineNumber, 
+        Application.Contract.DTO.InvoiceDto invoiceDto,
+        int layoutNumber,
+        int sourceFileLineNumber,
         CancellationToken cancellationToken
     );
 }
 
-public  class MappingService : IMappingService
+public class MappingService : IMappingService
 {
     private readonly IEconomicGatewayV2 _economicGateway;
     private readonly ICustomerReport _report;
@@ -34,7 +34,7 @@ public  class MappingService : IMappingService
         _report = report;
     }
 
-    private readonly CustomerDtoCache _customersCache = new ();
+    private readonly CustomerDtoCache _customersCache = new();
 
     public async Task LoadCustomerCache(IList<int> customerGroupsToAccept)
     {
@@ -96,12 +96,10 @@ public  class MappingService : IMappingService
         int layoutNumber
         )
     {
-        var inputInvoiceInvoiceDate = DateTime.MaxValue;
-
         var invoice = new E_Conomic.Gateway.Contract.DTO.Invoice.Invoice
         {
             Customer = new E_Conomic.Gateway.Contract.DTO.Invoice.Customer(customerDto.CustomerNumber),
-            Date = inputInvoiceInvoiceDate.ToString("yyyy-MM-dd"),
+            Date = invoiceDto.InvoiceDate.ToString("yyyy-MM-dd"),
             //ExchangeRate = 100,
             //Delivery = new(
             //"delivery-address"
@@ -186,7 +184,6 @@ public  class MappingService : IMappingService
         return invoice;
     }
 
-
     public async Task<IDraftInvoice?> PushInvoice(Application.Contract.DTO.InvoiceDto invoiceDto, int layoutNumber, int sourceFileLineNumber, CancellationToken cancellationToken)
     {
         const string reference = nameof(PushInvoice);
@@ -204,7 +201,7 @@ public  class MappingService : IMappingService
             throw new ApplicationException($"Customer does not exist: '{invoiceDto.CustomerNumber}', Source file line: {sourceFileLineNumber}");
         }
 
-        var restApiInvoice =     ToRestApiInvoice(
+        var restApiInvoice = ToRestApiInvoice(
 
              customerDto,
              invoiceDto,
