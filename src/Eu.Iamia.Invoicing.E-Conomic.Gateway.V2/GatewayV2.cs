@@ -1,25 +1,15 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Configuration;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Customer;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Product;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Configuration;
-using Eu.Iamia.Invoicing.Loader.Contract;
 using Eu.Iamia.Reporting.Contract;
 using Microsoft.Extensions.Options;
 using Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.Contract;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
-
 using System.Text;
-using Eu.Iamia.Invoicing.Application.Contract.DTO;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Mapping;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Product;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Utils;
-
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Product;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.BookedInvoice;
 
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2;
@@ -90,7 +80,8 @@ public class GatewayV2 : IEconomicGatewayV2
     {
         const string reference = nameof(PushInvoice);
 
-        var json = E_Conomic.Gateway.Contract.DTO.Invoice.InvoiceExtension.ToJson(restApiInvoice);
+        var json = Contract.DTO.Invoice.InvoiceExtension.ToJson(restApiInvoice);
+
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
         var stream = await _restApiGateway.PushInvoice(content, cancellationToken);

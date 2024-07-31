@@ -1,11 +1,4 @@
-﻿using System.Net;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Utils;
-using Eu.Iamia.Reporting.Contract;
-using NSubstitute;
-
-namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;
+﻿namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;
 
 [NCrunch.Framework.Category("Unit")]
 public class GatewayInvoicePushInvoiceShould : GatewayBaseShould

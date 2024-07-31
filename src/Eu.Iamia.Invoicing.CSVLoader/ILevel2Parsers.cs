@@ -1,6 +1,4 @@
-﻿using Eu.Iamia.Invoicing.Loader.Contract;
-
-namespace Eu.Iamia.Invoicing.CSVLoader
+﻿namespace Eu.Iamia.Invoicing.CSVLoader
 {
     public interface ILevel2Parsers
     {

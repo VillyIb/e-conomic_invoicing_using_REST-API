@@ -1,8 +1,6 @@
 ﻿using Eu.Iamia.Invoicing.Application.Configuration;
 using Eu.Iamia.Invoicing.Application.Contract;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2;
 using Eu.Iamia.Invoicing.Loader.Contract;
 using Eu.Iamia.Invoicing.Mapping;
 using Eu.Iamia.Reporting.Contract;

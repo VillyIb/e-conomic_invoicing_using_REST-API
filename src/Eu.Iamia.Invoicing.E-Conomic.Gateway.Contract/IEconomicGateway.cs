@@ -1,9 +1,4 @@
-﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Customer;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Product;
-
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
-
-using Eu.Iamia.Invoicing.Loader.Contract;
+﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
 
 public interface IEconomicGateway
 {

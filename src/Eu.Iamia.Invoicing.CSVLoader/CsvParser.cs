@@ -1,7 +1,5 @@
 ﻿// ReSharper disable StringLiteralTypo
 
-using Eu.Iamia.Invoicing.Loader.Contract;
-
 namespace Eu.Iamia.Invoicing.CSVLoader;
 
 public class CsvParser

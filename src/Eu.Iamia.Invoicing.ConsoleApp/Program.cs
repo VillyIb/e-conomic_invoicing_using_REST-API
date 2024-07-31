@@ -1,7 +1,6 @@
 ﻿using System.CommandLine;
 using System.CommandLine.Parsing;
 using Eu.Iamia.ConfigBase;
-using Eu.Iamia.Invoicing.Application;
 using Eu.Iamia.Invoicing.Application.Contract;
 using JetBrains.Annotations;
 

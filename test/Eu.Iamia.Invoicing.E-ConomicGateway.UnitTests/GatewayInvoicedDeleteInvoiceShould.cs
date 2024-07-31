@@ -1,7 +1,4 @@
-﻿using System.Net;
-using NSubstitute;
-
-namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;
+﻿namespace Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests;
 
 [NCrunch.Framework.Category("Unit")]
 public class GatewayInvoicedDeleteInvoiceShould : GatewayBaseShould
