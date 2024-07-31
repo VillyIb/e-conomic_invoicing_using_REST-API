@@ -1,5 +1,5 @@
 ﻿namespace Eu.Iamia.Invoicing.Loader.Contract;
-
+[Obsolete("Use Application.Contract.DTO.InvoiceDto", true)]
 public interface IInputInvoice
 {
     DateTime InvoiceDate { get; set; }

@@ -5,7 +5,7 @@ namespace Eu.Iamia.Invoicing.CSVLoader
     public interface ILevel2Parsers
     {
         int _sourceFileLineNumber { get; set; }
-        IList<IInputInvoice> Invoices { get; }
+        IList<Application.Contract.DTO.InvoiceDto> Invoices { get; }
         Metadata? Metadata { get; set; }
 
         void ParseCustomerGroupRow(IList<string> columns);

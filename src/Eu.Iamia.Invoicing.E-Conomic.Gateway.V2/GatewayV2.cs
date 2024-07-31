@@ -20,7 +20,7 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway.Utils;
 
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Product;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.BookedInvoice;
-using Invoice = Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Invoice.Invoice;
+
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2;
 public class GatewayV2 : IEconomicGatewayV2
@@ -80,11 +80,37 @@ public class GatewayV2 : IEconomicGatewayV2
         return productsHandle;
     }
 
-    public async Task<IDraftInvoice?> PushInvoice(Invoice restApiInvoice, int sourceFileNumber, CancellationToken cancellationToken)
+    [Obsolete("Must go trough Mapper")]
+    public async Task<IDraftInvoice?> PushInvoice(Application.Contract.DTO.InvoiceDto restApiInvoice, int sourceFileNumber, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
+    public async Task<IDraftInvoice?> PushInvoice(Contract.DTO.Invoice.Invoice restApiInvoice, int sourceFileNumber, CancellationToken cancellationToken)
+    {
+        const string reference = nameof(PushInvoice);
+
+        var json = E_Conomic.Gateway.Contract.DTO.Invoice.InvoiceExtension.ToJson(restApiInvoice);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var stream = await _restApiGateway.PushInvoice(content, cancellationToken);
+
+
+        var serializer = new JsonSerializerFacade();
+        var serializerDraftInvoice = new SerializerDraftInvoice(serializer);
+
+        var draftInvoice = await serializerDraftInvoice.DeserializeAsync(stream, cancellationToken);
+
+        stream.Position = 0;
+        using var streamReader = new StreamReader(stream);
+        string htmlBody = await streamReader.ReadToEndAsync(cancellationToken);
+        _report.Info(reference, htmlBody);
+        _report.Close();
+
+        return draftInvoice;
+    }
+
+    [Obsolete]
     public async Task<IDraftInvoice?> PushInvoice(E_Conomic.Gateway.DTO.Invoice.Invoice restApiInvoice, int sourceFileNumber, CancellationToken cancellationToken)
     {
         const string reference = nameof(PushInvoice);
@@ -109,7 +135,8 @@ public class GatewayV2 : IEconomicGatewayV2
         return draftInvoice;
     }
 
-    public async Task<IDraftInvoice?> PushInvoice ( IInputInvoice inputInvoice, int sourceFileLineNumber, CancellationToken cancellationToken)
+    [Obsolete]
+    public async Task<IDraftInvoice?> PushInvoice ( Application.Contract.DTO.InvoiceLineDto inputInvoice, int sourceFileLineNumber, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
 

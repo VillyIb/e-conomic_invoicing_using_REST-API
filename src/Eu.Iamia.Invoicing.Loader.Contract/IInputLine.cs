@@ -1,5 +1,6 @@
 ﻿namespace Eu.Iamia.Invoicing.Loader.Contract;
 
+[Obsolete("Use Application.Contract.DTO.InvoiceLineDto", true)]
 public interface IInputLine
 {
     string? UnitText { get; set; }

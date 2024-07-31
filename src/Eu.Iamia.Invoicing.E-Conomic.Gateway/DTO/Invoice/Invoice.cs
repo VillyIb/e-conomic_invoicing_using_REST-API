@@ -26,6 +26,7 @@ public class InvoiceComparer : IEqualityComparer<Invoice>
 /// </summary>
 /// <see cref="https://restapi.e-conomic.com/schema/invoices.drafts.post.schema.json"/>
 /// see:https://restdocs.e-conomic.com/#post-invoices-drafts
+[Obsolete]
 public class Invoice : ValueObject<Invoice>
 {
     /// <summary>

@@ -172,6 +172,7 @@ public partial class GatewayBase
 
     private Mapper Mapper => _mapper ??= new Mapper(Settings, CustomerCache!, ProductCache!);
 
+    [Obsolete]
     public async Task<IDraftInvoice?> PushInvoice(IInputInvoice inputInvoice, int sourceFileLineNumber, CancellationToken cancellationToken)
     {
         Report.SetCustomer(new CachedCustomer { Name = "---- ----", CustomerNumber = inputInvoice.CustomerNumber });

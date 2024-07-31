@@ -98,7 +98,7 @@ public class InvoicingHandler : IInvoicingHandler
         //((GatewayV2)_economicGatewayV2).CustomerCache = ((GatewayBase)_economicGateway).CustomerCache;
         //((GatewayV2)_economicGatewayV2).ProductCache = ((GatewayBase)_economicGateway).ProductCache;
 
-        var loaderInvoices = _loader.Invoices ?? Array.Empty<IInputInvoice>();
+        var loaderInvoices = _loader.Invoices ?? Array.Empty<Application.Contract.DTO.InvoiceDto>();
         foreach (var inputInvoice in loaderInvoices)
         {
             try
@@ -107,8 +107,8 @@ public class InvoicingHandler : IInvoicingHandler
                 inputInvoice.Text1 = _loader.Text1!;
                 inputInvoice.InvoiceDate = invoiceDate;
                 inputInvoice.PaymentTerm = paymentTerm;
-                //await _economicGateway.PushInvoice(inputInvoice, inputInvoice.SourceFileLineNumber, Cts.Token);
-                _ = await _economicGatewayV2.PushInvoice(inputInvoice, inputInvoice.SourceFileLineNumber, Cts.Token);
+                var layoutNumber = 21; // TODO get from settings
+                _ = await _mappingService.PushInvoice(inputInvoice, layoutNumber, inputInvoice.SourceFileLineNumber, Cts.Token);
                 Console.Write('.');
             }
             catch (Exception ex)

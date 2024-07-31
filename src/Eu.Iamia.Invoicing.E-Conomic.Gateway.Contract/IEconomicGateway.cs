@@ -19,7 +19,7 @@ public interface IEconomicGateway
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     /// <exception cref="HttpRequestException"></exception>
-    Task<IDraftInvoice?> PushInvoice(IInputInvoice inputInvoice, int sourceFileLineNumber, CancellationToken cancellationToken);
+    Task<IDraftInvoice?> PushInvoice(Application.Contract.DTO.InvoiceDto inputInvoice, int sourceFileLineNumber, CancellationToken cancellationToken);
 
     Task LoadCustomerCache(IList<int> customerGroupsToAccept);
 

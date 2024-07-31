@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Eu.Iamia.Invoicing.Application.Contract\Eu.Iamia.Invoicing.Application.Contract.csproj" />
+  </ItemGroup>
+
 </Project>

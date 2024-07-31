@@ -9,9 +9,9 @@ namespace Eu.Iamia.Invoicing.CSVLoader
 
         public int _sourceFileLineNumber { get; set; }
 
-        private List<IInputInvoice>? _invoices;
+        private List<Application.Contract.DTO.InvoiceDto>? _invoices;
 
-        public IList<IInputInvoice> Invoices => _invoices ??= [];
+        public IList<Application.Contract.DTO.InvoiceDto> Invoices => _invoices ??= [];
 
         public void ParseCustomerGroupRow(IList<string> columns)
         {
@@ -39,7 +39,7 @@ namespace Eu.Iamia.Invoicing.CSVLoader
         {
             if (!int.TryParse(columns[Metadata.CustomerNumberColumn], out var customerNumber) || customerNumber <= 0) return;
 
-            var invoice = new InputInvoice
+            var invoice = new Application.Contract.DTO.InvoiceDto
             {
                 CustomerNumber = customerNumber,
                 SourceFileLineNumber = _sourceFileLineNumber
@@ -52,7 +52,7 @@ namespace Eu.Iamia.Invoicing.CSVLoader
                     continue;
                 }
 
-                var inputLine = new InputLine
+                var inputLine = new Application.Contract.DTO.InvoiceLineDto
                 {
                     UnitNetPrice = productMetadata.UnitPrice,
                     Description = productMetadata.InvoiceLineText,
@@ -60,7 +60,7 @@ namespace Eu.Iamia.Invoicing.CSVLoader
                     UnitText = productMetadata.UnitText,
                     UnitNumber = productMetadata.UnitNumber,
                     Quantity = quantity,
-                    SourceFileLine = _sourceFileLineNumber
+                    SourceFileLineNumber = _sourceFileLineNumber
                 };
 
                 invoice.InvoiceLines.Add(inputLine);

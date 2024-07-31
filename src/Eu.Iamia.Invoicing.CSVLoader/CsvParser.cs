@@ -12,7 +12,7 @@ public class CsvParser
 
     private readonly ILevel2Parsers _level2Parsers;
 
-    public IList<IInputInvoice> Invoices => _level2Parsers.Invoices;
+    public IList<Application.Contract.DTO.InvoiceDto> Invoices => _level2Parsers.Invoices;
 
     public CsvParser(ILevel2Parsers level2Parsers)
     {

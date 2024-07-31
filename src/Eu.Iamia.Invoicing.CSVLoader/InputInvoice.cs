@@ -2,6 +2,7 @@
 
 namespace Eu.Iamia.Invoicing.CSVLoader;
 
+[Obsolete]
 public class InputInvoice : IInputInvoice
 {
     public DateTime InvoiceDate { get; set; }

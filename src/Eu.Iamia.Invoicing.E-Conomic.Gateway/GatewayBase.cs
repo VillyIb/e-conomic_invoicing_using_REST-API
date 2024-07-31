@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Eu.Iamia.Invoicing.Application.Contract.DTO;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Configuration;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Serializers;
@@ -117,5 +118,10 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
 
         var htmlBody = await GetHtmlBody(response);
         return htmlBody;
+    }
+
+    public async Task<IDraftInvoice?> PushInvoice(InvoiceDto inputInvoice, int sourceFileLineNumber, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 }

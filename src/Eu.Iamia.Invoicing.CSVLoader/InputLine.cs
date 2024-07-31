@@ -2,6 +2,7 @@
 
 namespace Eu.Iamia.Invoicing.CSVLoader;
 
+[Obsolete]
 public class InputLine : IInputLine
 {
     public string? UnitText { get; set; }

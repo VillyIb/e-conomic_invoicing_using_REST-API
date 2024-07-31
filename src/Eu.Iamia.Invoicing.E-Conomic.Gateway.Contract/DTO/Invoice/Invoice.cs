@@ -484,7 +484,7 @@ public class Product : ValueObject<Product>
 
 public static class InvoiceExtension
 {
-    public static string ToJson(this Invoice invoice)
+    public static string ToJson(this Contract.DTO.Invoice.Invoice invoice)
     {
         var options = new JsonSerializerOptions
         {

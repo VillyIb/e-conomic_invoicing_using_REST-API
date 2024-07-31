@@ -21,7 +21,7 @@ public partial class Loader : ILoader
 
     public IList<int>? CustomerGroupToAccept => _csvParser?.Metadata?.CustomerGroupToAccept;
 
-    public IList<IInputInvoice>? Invoices => _csvParser?.Invoices;
+    public IList<Application.Contract.DTO.InvoiceDto>? Invoices => _csvParser?.Invoices;
 
     private readonly CsvParser? _csvParser;
 
