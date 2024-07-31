@@ -19,4 +19,9 @@
     <ProjectReference Include="..\Eu.Iamia.Reporting.Contract\Eu.Iamia.Reporting.Contract.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Guards\" />
+    <Folder Include="Mapping\" />
+  </ItemGroup>
+
 </Project>
