@@ -1,6 +1,5 @@
 ﻿using Eu.Iamia.Invoicing.Application.Configuration;
 using Eu.Iamia.Invoicing.Application.Contract;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
 using Eu.Iamia.Invoicing.Loader.Contract;
 using Eu.Iamia.Invoicing.Mapping;
 using Eu.Iamia.Reporting.Contract;
@@ -12,45 +11,32 @@ namespace Eu.Iamia.Invoicing.Application;
 public class InvoicingHandler : IInvoicingHandler
 {
     private readonly IMappingService _mappingService;
-    private readonly IEconomicGateway _economicGateway;
-    private readonly IEconomicGatewayV2 _economicGatewayV2;
     private readonly ILoader _loader;
     private readonly ICustomerReport _customerReport;
     private readonly SettingsForInvoicingApplication _settings;
 
-    protected CancellationTokenSource Cts = new CancellationTokenSource();
-    //private IList<IInputInvoice> _loaderInvoices;
-
     public InvoicingHandler(
         SettingsForInvoicingApplication settings
-        // csv reader
-        , IEconomicGateway economicGateway
-        , IEconomicGatewayV2 economicGatewayV2
+        , IMappingService mappingService
         , ILoader loader
         , ICustomerReport customerReport
     )
     {
         _settings = settings;
-        _economicGateway = economicGateway;
-        _economicGatewayV2 = economicGatewayV2;
+        _mappingService = mappingService;
         _loader = loader;
         _customerReport = customerReport;
     }
 
     public InvoicingHandler(
         IOptions<SettingsForInvoicingApplication> settings
-        // csv reader
-        , IEconomicGateway economicGateway
-        , IEconomicGatewayV2 economicGatewayV2
         , IMappingService mappingService
         , ILoader loader
         , ICustomerReport customerReport
-    ) : this(settings.Value, economicGateway, economicGatewayV2, loader, customerReport)
-    {
-        _mappingService = mappingService;
-    }
+    ) : this(settings.Value,  mappingService,loader, customerReport)
+    { }
 
-    public async Task<ExecutionStatus> LoadInvoices()
+    public async Task<ExecutionStatus> LoadInvoices(CancellationToken cancellationToken)
     {
         var csvFile = new FileInfo(_settings.CsvFile);
         if (!csvFile.Exists)
@@ -106,7 +92,7 @@ public class InvoicingHandler : IInvoicingHandler
                 inputInvoice.InvoiceDate = invoiceDate;
                 inputInvoice.PaymentTerm = paymentTerm;
                 var layoutNumber = 21; // TODO get from settings
-                _ = await _mappingService.PushInvoice(inputInvoice, layoutNumber, inputInvoice.SourceFileLineNumber, Cts.Token);
+                _ = await _mappingService.PushInvoice(inputInvoice, layoutNumber, inputInvoice.SourceFileLineNumber, cancellationToken);
                 Console.Write('.');
             }
             catch (Exception ex)
@@ -123,6 +109,5 @@ public class InvoicingHandler : IInvoicingHandler
     public void Dispose()
     {
         _customerReport.Dispose();
-        Cts.Dispose();
     }
 }

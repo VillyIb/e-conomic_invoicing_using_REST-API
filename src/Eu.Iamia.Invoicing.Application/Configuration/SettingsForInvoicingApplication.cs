@@ -8,6 +8,6 @@ public class SettingsForInvoicingApplication : SettingsBase
 
     public SettingsForInvoicingApplication() : base(SectionName) { }
 
-    [HelpMetadata(description:"Full path to .csv file", argumentHelpName: "path.csv", true)]
+    [HelpMetadata(description:"Full path to .csv file", argumentHelpName: "path.csv", false)]
     public string CsvFile { get; set; } = string.Empty;
 }

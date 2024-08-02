@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 
 namespace Eu.Iamia.Invoicing.ConsoleApp;
 
-public class Program
+public class Program 
 {
     private static async Task<int> Main(string[] args)
     {
@@ -29,12 +29,14 @@ public class Program
 
         ExecutionStatus? result = null;
 
-
         rootCommand.SetHandler(async (context) =>
             {
                 var cancellationToken = context.GetCancellationToken();
                 // ReSharper disable once AccessToDisposedClosure
-                result = await DefaultHandler(setup, setupBase => setupBase.GetService<IInvoicingHandler>(), cancellationToken);
+                result = await DefaultHandler(
+                    setup, 
+                    cancellationToken
+                );
             }
         );
 
@@ -74,21 +76,25 @@ public class Program
 
     private static async Task<ExecutionStatus> DefaultHandler(
         [InstantHandle] SetupBase setup,
-        Func<SetupBase, IInvoicingHandler> getService,
         // ReSharper disable once UnusedParameter.Local
         CancellationToken cancellationToken
     )
     {
         try
         {
-            var invoicingHandler = getService.Invoke(setup);
-            var status = await invoicingHandler.LoadInvoices();
+            var invoicingHandler = setup.GetService<IInvoicingHandler>();
+            var status = await invoicingHandler.LoadInvoices(cancellationToken);
             return status;
+        }
+        catch (ApplicationException ex)
+        {
+            return new ExecutionStatus
+            {
+                Report = ex.Message, Status = -9
+            };
         }
         catch (OperationCanceledException)
         {
-            await Console.Error.WriteLineAsync("The operation was aborted");
-
             return new ExecutionStatus
             {
                 Report = "The operation was aborted",

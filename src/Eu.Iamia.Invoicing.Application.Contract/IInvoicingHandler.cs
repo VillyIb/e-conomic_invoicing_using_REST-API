@@ -2,5 +2,5 @@
 
 public interface IInvoicingHandler : IDisposable
 {
-    Task<ExecutionStatus> LoadInvoices();
+    Task<ExecutionStatus> LoadInvoices(CancellationToken cancellationToken);
 }
