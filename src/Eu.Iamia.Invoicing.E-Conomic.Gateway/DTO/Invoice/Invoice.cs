@@ -1,32 +1,14 @@
 ﻿using System.Text.Json.Serialization;
-using System.Text.Json;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Guards;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
-
-public class InvoiceComparer : IEqualityComparer<Invoice>
-{
-    public bool Equals(Invoice? x, Invoice? y)
-    {
-        if (x == null && y == null) return true;
-        if (x == null && y != null) return false;
-        if (x != null && y == null) return false;
-
-        return x == y;
-    }
-
-    public int GetHashCode(Invoice obj)
-    {
-        return 0;
-    }
-}
 
 /// <summary>
 /// 
 /// </summary>
 /// <see cref="https://restapi.e-conomic.com/schema/invoices.drafts.post.schema.json"/>
 /// see:https://restdocs.e-conomic.com/#post-invoices-drafts
-[Obsolete]
+[Obsolete("", true)]
 public class Invoice : ValueObject<Invoice>
 {
     /// <summary>
@@ -480,32 +462,5 @@ public class Product : ValueObject<Product>
     protected override IEnumerable<object?> GetEqualityComponents()
     {
         yield return ProductNumber ?? string.Empty;
-    }
-}
-
-public static class InvoiceExtension
-{
-    public static string ToJson(this Invoice invoice)
-    {
-        var options = new JsonSerializerOptions
-        {
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
-            Converters = { new JsonStringEnumConverter() }
-        };
-
-        var json = JsonSerializer.Serialize(invoice, options);
-        return json;
-    }
-
-    public static Invoice? FromJson(string json)
-    {
-        var options = new JsonSerializerOptions
-        {
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
-            Converters = { new JsonStringEnumConverter() },
-        };
-
-        var invoice = JsonSerializer.Deserialize<Invoice>(json, options);
-        return invoice;
     }
 }

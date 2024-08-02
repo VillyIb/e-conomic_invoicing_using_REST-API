@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway;
 
-public partial class GatewayBase : IEconomicGateway, IDisposable
+public partial class GatewayBase : IDisposable
 {
     // see: https://restdocs.e-conomic.com/#http-status-codes
 
@@ -118,10 +118,5 @@ public partial class GatewayBase : IEconomicGateway, IDisposable
 
         var htmlBody = await GetHtmlBody(response);
         return htmlBody;
-    }
-
-    public async Task<IDraftInvoice?> PushInvoice(InvoiceDto inputInvoice, int sourceFileLineNumber, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
     }
 }

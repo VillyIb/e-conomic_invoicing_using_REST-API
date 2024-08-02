@@ -51,12 +51,6 @@ public class SetupShould : IDisposable
         Assert.NotNull(_setup.GetService<ICustomerReport>());
     }
 
-    [Fact]
-    public void Instantiate_EconomicGateway()
-    {
-        Assert.NotNull(_setup.GetService<IEconomicGateway>());
-    }
-
     public void Dispose()
     {
         _setup.Dispose();

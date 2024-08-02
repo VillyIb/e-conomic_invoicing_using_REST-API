@@ -15,6 +15,8 @@ public class InvoicingHandler : IInvoicingHandler
     private readonly ICustomerReport _customerReport;
     private readonly SettingsForInvoicingApplication _settings;
 
+    protected CancellationTokenSource Cts = new ();
+
     public InvoicingHandler(
         SettingsForInvoicingApplication settings
         , IMappingService mappingService
@@ -23,9 +25,9 @@ public class InvoicingHandler : IInvoicingHandler
     )
     {
         _settings = settings;
-        _mappingService = mappingService;
         _loader = loader;
         _customerReport = customerReport;
+        _mappingService = mappingService;
     }
 
     public InvoicingHandler(
@@ -33,7 +35,7 @@ public class InvoicingHandler : IInvoicingHandler
         , IMappingService mappingService
         , ILoader loader
         , ICustomerReport customerReport
-    ) : this(settings.Value,  mappingService,loader, customerReport)
+    ) : this(settings.Value, mappingService, loader, customerReport)
     { }
 
     public async Task<ExecutionStatus> LoadInvoices(CancellationToken cancellationToken)
@@ -65,22 +67,12 @@ public class InvoicingHandler : IInvoicingHandler
 
         var customerGroupsToAccept = _loader.CustomerGroupToAccept;
 
-        //await _economicGateway.LoadCustomerCache(customerGroupsToAccept);
-        //await _economicGateway.LoadProductCache();
-
-        //await _economicGatewayV2.LoadCustomerCache(customerGroupsToAccept);
-        //await _economicGatewayV2.LoadProductCache();
-
-        // TODO call above on the MappingService.
         await _mappingService.LoadCustomerCache(customerGroupsToAccept);
         await _mappingService.LoadProductCache();
 
         Console.WriteLine("");
 
         var countFails = 0;
-
-        //((GatewayV2)_economicGatewayV2).CustomerCache = ((GatewayBase)_economicGateway).CustomerCache;
-        //((GatewayV2)_economicGatewayV2).ProductCache = ((GatewayBase)_economicGateway).ProductCache;
 
         var loaderInvoices = _loader.Invoices ?? Array.Empty<Application.Contract.DTO.InvoiceDto>();
         foreach (var inputInvoice in loaderInvoices)

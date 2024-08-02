@@ -20,7 +20,6 @@ public  class Setup : IHandlerSetup
 
     private static void AddHandlers(IServiceCollection services)
     {
-        services.AddTransient<IEconomicGateway, GatewayBase>();
         services.AddSingleton<IJsonSerializerFacade, JsonSerializerFacade>();
         services.AddSingleton<ISerializerCustomersHandle, SerializerCustomersHandle>();
         services.AddSingleton<ISerializerDraftInvoice, SerializerDraftInvoice>();

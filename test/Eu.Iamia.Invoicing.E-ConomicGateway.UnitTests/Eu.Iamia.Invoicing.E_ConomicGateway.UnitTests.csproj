@@ -32,4 +32,8 @@
     <ProjectReference Include="..\Eu.Iamia.Reporting.IntegrationTests\Eu.Iamia.Reporting.IntegrationTests.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Stubs\" />
+  </ItemGroup>
+
 </Project>

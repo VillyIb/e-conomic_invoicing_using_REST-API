@@ -1,7 +1,4 @@
-﻿using Eu.Iamia.Invoicing.Application.Contract.DTO;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Invoice;
-using Eu.Iamia.Invoicing.Mapping.Caches;
-// ReSharper disable RedundantNameQualifier
+﻿// ReSharper disable RedundantNameQualifier
 
 namespace Eu.Iamia.Invoicing.Mapping;
 
@@ -36,7 +33,6 @@ public static class Mapping
         };
     }
 
-
     /// <summary>
     /// Incoming RestApi-Customer to CustomerDto.
     /// </summary>
@@ -53,111 +49,5 @@ public static class Mapping
             Zip = restApiCustomer.zip,
             PaymentTerms = restApiCustomer.paymentTerms.paymentTermsNumber
         };
-    }
-
-    /// <summary>
-    /// Outgoing CustomerDto, InvoiceDto, ProductDto to RestApi-Invoice.
-    /// </summary>
-    /// <param name="customerDto"></param>
-    /// <param name="invoiceDto"></param>
-    /// <param name="productDtoCache"></param>
-    /// <param name="layoutNumber"></param>
-    /// <returns></returns>
-    /// <exception cref="ApplicationException"></exception>
-    public static E_Conomic.Gateway.DTO.Invoice.Invoice ToRestApiInvoice(
-        CustomerDto customerDto,
-        InvoiceDto invoiceDto,
-        ProductDtoCache productDtoCache,
-        int layoutNumber
-        )
-    {
-        var inputInvoiceInvoiceDate = DateTime.MaxValue;
-
-        var invoice = new Invoice
-        {
-            Customer = new E_Conomic.Gateway.DTO.Invoice.Customer (customerDto.CustomerNumber),
-            Date = inputInvoiceInvoiceDate.ToString("yyyy-MM-dd"),
-            //ExchangeRate = 100,
-            //Delivery = new(
-            //"delivery-address"
-            //, "delivery-zip"
-            //, "delivery-city"
-            //, "delivery-country"
-            //, DateTime.Today
-            //),
-            Layout = new() { LayoutNumber = layoutNumber },
-            Notes = new()
-            {
-                Heading = $"#{customerDto.CustomerNumber} {customerDto.Name}",
-                TextLine1 = invoiceDto.Text1
-                //TextLine2 = "Text2.1\nText2.2\nText2.3"
-            },
-            Recipient = new()
-            {
-                Address = $"{customerDto.Address}",
-                City = $"{customerDto.City}",
-                Zip = $"{customerDto.Zip}",
-                Name = $"{customerDto.Name}",
-                VatZone = new()
-                {
-                    EnabledForCustomer = true,
-                    EnabledForSupplier = true,
-                    Name = "Domestic",
-                    VatZoneNumber = 1 // Hardcoded value
-                }
-            },
-            References = new()
-            {
-                //Other = "references-other"
-            },
-            PaymentTerms = new()
-            {
-                //DaysOfCredit = 14
-                //,
-                //PaymentTermsNumber = customerDto.PaymentTerms,
-                PaymentTermsNumber = customerDto.PaymentTerms,
-                //,
-                //Name = "Lb. md. 14 dage"
-                //,
-                //PaymentTermsType = PaymentTermsType.invoiceMonth
-            }
-        };
-
-        foreach (var invoiceLineDto in invoiceDto.InvoiceLines)
-        {
-            const int lineNumber = 1;
-
-            var productDto = productDtoCache.GetProduct(invoiceLineDto.ProductNumber);
-
-            if (productDto is null)
-            {
-                throw new ApplicationException($"Product: '{invoiceLineDto.ProductNumber}' not found in e-conomic, Source file line: {invoiceLineDto.SourceFileLineNumber}");
-            }
-
-            var unit = productDto.Unit is null
-                ? null
-                : new E_Conomic.Gateway.DTO.Invoice.Unit(
-                    name: productDto.Unit.Name,
-                    unitNumber: productDto.Unit.UnitNumber
-                );
-
-            var line = new Line()
-            {
-                Description = invoiceLineDto.Description,
-                LineNumber = lineNumber,
-                Product = new E_Conomic.Gateway.DTO.Invoice.Product()
-                {
-                    ProductNumber = invoiceLineDto.ProductNumber
-                },
-                Quantity = invoiceLineDto.Quantity!.Value,
-                SortKey = lineNumber,
-                Unit = unit,
-                UnitNetPrice = invoiceLineDto.UnitNetPrice!.Value,
-            };
-
-            invoice.Lines.Add(line);
-        }
-
-        return invoice;
     }
 }

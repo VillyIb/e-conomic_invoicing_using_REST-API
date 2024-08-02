@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Caching.cs" />
     <Compile Remove="Gateway1660273Authentication.cs" />
     <Compile Remove="Product.cs" />
   </ItemGroup>
