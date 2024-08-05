@@ -4,7 +4,6 @@ using Microsoft.Extensions.Options;
 using Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.Contract;
 using System.Text;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers;
-using Eu.Iamia.Utils;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Customer;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.DraftInvoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Product;
@@ -41,8 +40,7 @@ public class GatewayV2 : IEconomicGatewayV2
     {
         var stream = await _restApiGateway.GetCustomersPaged(page, pageSize, cancellationToken);
 
-        var serializer = new JsonSerializerFacade();
-        var serializerCustomersHandle = new SerializerCustomersHandle(serializer);
+        var serializerCustomersHandle = new SerializerCustomersHandle();
 
         var customersHandle = await serializerCustomersHandle.DeserializeAsync(stream, cancellationToken);
 
@@ -53,8 +51,7 @@ public class GatewayV2 : IEconomicGatewayV2
     {
         var stream = await _restApiGateway.GetProductsPaged(page, pageSize, cancellationToken);
 
-        var serializer = new JsonSerializerFacade();
-        var serializerProductsHandle = new SerializerProductsHandle(serializer);
+        var serializerProductsHandle = new SerializerProductsHandle();
 
         var productsHandle = await serializerProductsHandle.DeserializeAsync(stream, cancellationToken);
 
@@ -70,10 +67,8 @@ public class GatewayV2 : IEconomicGatewayV2
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
         var stream = await _restApiGateway.PushInvoice(content, cancellationToken);
-
-
-        var serializer = new JsonSerializerFacade();
-        var serializerDraftInvoice = new SerializerDraftInvoice(serializer);
+        
+        var serializerDraftInvoice = new SerializerDraftInvoice();
 
         var draftInvoice = await serializerDraftInvoice.DeserializeAsync(stream, cancellationToken);
 
