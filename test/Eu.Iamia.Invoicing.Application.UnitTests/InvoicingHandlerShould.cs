@@ -44,7 +44,9 @@ public class InvoicingHandlerShould : IDisposable
     [Fact]
     public async Task Test1()
     {
-        var result = await _sut.LoadInvoices();
+        using var cts = new CancellationTokenSource();
+
+        var result = await _sut.LoadInvoices(cts.Token);
         _sut.Dispose();
 
         Assert.NotNull(result);

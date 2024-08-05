@@ -7,7 +7,7 @@ public partial class GatewayBase
 {
     public async Task<ProductsHandle> ReadProductsPaged(int page, int pageSize, CancellationToken cancellationToken)
     {
-        const string reference = nameof(ReadProductsPaged);
+        const string reference = ""; // nameof(ReadProductsPaged);
 
         SetAuthenticationHeaders();
 

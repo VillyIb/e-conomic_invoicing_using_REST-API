@@ -4,6 +4,7 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Utils;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
 
+// TODO still used - move
 public class SerializerDraftInvoice : ISerializerDraftInvoice
 {
     private readonly IJsonSerializerFacade _serializer;
