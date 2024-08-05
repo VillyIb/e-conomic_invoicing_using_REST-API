@@ -1,6 +1,6 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Serializers;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.DraftInvoice;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Utils;
+using Eu.Iamia.Utils.Contract;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
 

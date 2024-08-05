@@ -4,10 +4,6 @@
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Customer;
 
-internal class CustomerDto
-{
-}
-
 public class Collection
 {
     public int customerNumber { get; set; }

@@ -25,8 +25,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eu.Iamia.Invoicing.CSVLoade
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests", "test\Eu.Iamia.Invoicing.E-ConomicGateway.UnitTests\Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests.csproj", "{38ABA3CE-0AED-4EBF-B602-522B159B24D0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests", "test\Eu.Iamia.Invoicing.E-Conomic.Gateway.IntegrationTests\Eu.Iamia.Invoicing.E_Conomic.Gateway.IntegrationTests.csproj", "{E0C71A65-FF53-496C-B59A-461B6C4C87BA}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eu.Iamia.Reporting", "src\Eu.Iamia.Reporting\Eu.Iamia.Reporting.csproj", "{DC054E87-81C7-44AC-844F-A9C122BF1E5D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eu.Iamia.Reporting.Contract", "src\Eu.Iamia.Reporting.Contract\Eu.Iamia.Reporting.Contract.csproj", "{FFB591B7-35FF-4A5F-AD9C-76B2B07FB58A}"
@@ -51,7 +49,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eu.Iamia.Invoicing.Applicat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eu.Iamia.Invoicing.E-Conomic.Gateway.V2", "src\Eu.Iamia.Invoicing.E-Conomic.Gateway.V2\Eu.Iamia.Invoicing.E-Conomic.Gateway.V2.csproj", "{34336B0E-E652-4831-930A-337802752611}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eu.Iamia.Invoicing.Mapping", "src\Eu.Iamia.Invoicing.Mapping\Eu.Iamia.Invoicing.Mapping.csproj", "{FAB8C538-83D7-4827-B97C-A51BFB2F613D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eu.Iamia.Invoicing.Mapping", "src\Eu.Iamia.Invoicing.Mapping\Eu.Iamia.Invoicing.Mapping.csproj", "{FAB8C538-83D7-4827-B97C-A51BFB2F613D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,10 +93,6 @@ Global
 		{38ABA3CE-0AED-4EBF-B602-522B159B24D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38ABA3CE-0AED-4EBF-B602-522B159B24D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38ABA3CE-0AED-4EBF-B602-522B159B24D0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E0C71A65-FF53-496C-B59A-461B6C4C87BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E0C71A65-FF53-496C-B59A-461B6C4C87BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E0C71A65-FF53-496C-B59A-461B6C4C87BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E0C71A65-FF53-496C-B59A-461B6C4C87BA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DC054E87-81C7-44AC-844F-A9C122BF1E5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DC054E87-81C7-44AC-844F-A9C122BF1E5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC054E87-81C7-44AC-844F-A9C122BF1E5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -165,7 +159,6 @@ Global
 		{6906E36E-F121-4EEF-BC43-EA23D38D50B4} = {2DAF952C-CA92-4F32-9401-2B75DF2CEAE0}
 		{FB6ED5AF-8319-4A9D-8ED2-42ED47825D1B} = {5DA775E7-8B00-4C4F-A9F1-51CB654ACB44}
 		{38ABA3CE-0AED-4EBF-B602-522B159B24D0} = {5DA775E7-8B00-4C4F-A9F1-51CB654ACB44}
-		{E0C71A65-FF53-496C-B59A-461B6C4C87BA} = {5DA775E7-8B00-4C4F-A9F1-51CB654ACB44}
 		{DC054E87-81C7-44AC-844F-A9C122BF1E5D} = {2DAF952C-CA92-4F32-9401-2B75DF2CEAE0}
 		{FFB591B7-35FF-4A5F-AD9C-76B2B07FB58A} = {2DAF952C-CA92-4F32-9401-2B75DF2CEAE0}
 		{6CD5DBE4-4000-4072-AB64-60716AB2BE95} = {5DA775E7-8B00-4C4F-A9F1-51CB654ACB44}

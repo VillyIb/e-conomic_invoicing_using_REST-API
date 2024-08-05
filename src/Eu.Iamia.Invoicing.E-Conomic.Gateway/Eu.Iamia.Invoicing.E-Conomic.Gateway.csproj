@@ -8,6 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Guards\**" />
+    <Compile Remove="Mapping\**" />
+    <EmbeddedResource Remove="Guards\**" />
+    <EmbeddedResource Remove="Mapping\**" />
+    <None Remove="Guards\**" />
+    <None Remove="Mapping\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Caching.cs" />
     <Compile Remove="Gateway1660273Authentication.cs" />
     <Compile Remove="Product.cs" />
@@ -20,8 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Guards\" />
-    <Folder Include="Mapping\" />
+    <Folder Include="Utils\" />
   </ItemGroup>
 
 </Project>

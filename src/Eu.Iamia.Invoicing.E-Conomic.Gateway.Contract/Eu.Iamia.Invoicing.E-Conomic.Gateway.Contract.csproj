@@ -23,4 +23,8 @@
     <ProjectReference Include="..\Eu.Iamia.Utils.Contract\Eu.Iamia.Utils.Contract.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Utils\" />
+  </ItemGroup>
+
 </Project>

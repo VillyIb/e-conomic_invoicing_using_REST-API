@@ -6,8 +6,8 @@ using Eu.Iamia.Reporting.Contract;
 using Microsoft.Extensions.Options;
 using Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.Contract;
 using System.Text;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Utils;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers;
+using Eu.Iamia.Utils;
 
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2;

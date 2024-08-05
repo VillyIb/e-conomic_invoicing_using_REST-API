@@ -1,6 +1,5 @@
 ﻿using Eu.Iamia.Invoicing.Application.Contract.DTO;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.DTO.Customer;
 using Eu.Iamia.Invoicing.Mapping.Caches;
 using Eu.Iamia.Reporting.Contract;
 
@@ -190,7 +189,7 @@ public class MappingService : IMappingService
 
         var customerDto = _customersCache.GetCustomer(invoiceDto.CustomerNumber);
 
-        _report.SetCustomer(new CachedCustomer
+        _report.SetCustomer(new CustomerDto
         {
             Name = customerDto is null ? "---- ----" : customerDto.Name,
             CustomerNumber = invoiceDto.CustomerNumber

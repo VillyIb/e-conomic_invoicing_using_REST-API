@@ -1,4 +1,4 @@
-﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Utils;
+﻿namespace Eu.Iamia.Utils.Contract;
 
 public interface IJsonSerializerFacade
 {

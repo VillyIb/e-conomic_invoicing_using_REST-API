@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Utils;
+using Eu.Iamia.Utils.Contract;
 
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Utils;
+namespace Eu.Iamia.Utils;
 
 public class JsonSerializerFacade : IJsonSerializerFacade
 {

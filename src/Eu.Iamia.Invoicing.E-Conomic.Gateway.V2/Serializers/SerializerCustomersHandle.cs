@@ -1,8 +1,8 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Customer;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Serializers;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Utils;
+using Eu.Iamia.Utils.Contract;
 
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers;
 
 public class SerializerCustomersHandle : ISerializerCustomersHandle
 {
