@@ -1,13 +1,14 @@
-﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Customer;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Product;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Configuration;
+﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Configuration;
 using Eu.Iamia.Reporting.Contract;
 using Microsoft.Extensions.Options;
 using Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.Contract;
 using System.Text;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers;
 using Eu.Iamia.Utils;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Customer;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.DraftInvoice;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Product;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.Serializers;
 
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2;

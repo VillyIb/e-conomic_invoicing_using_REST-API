@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Eu.Iamia.ConfigBase;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Serializers;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

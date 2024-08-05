@@ -1,4 +1,4 @@
-﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Guards;
+﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO;
 
 public static class InvoiceGuards
 {

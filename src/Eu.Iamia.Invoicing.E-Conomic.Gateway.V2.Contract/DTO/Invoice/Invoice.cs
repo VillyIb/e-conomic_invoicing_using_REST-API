@@ -1,8 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Guards;
 
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Invoice;
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoice;
 
 public class InvoiceComparer : IEqualityComparer<Invoice>
 {
@@ -484,7 +483,7 @@ public class Product : ValueObject<Product>
 
 public static class InvoiceExtension
 {
-    public static string ToJson(this Contract.DTO.Invoice.Invoice invoice)
+    public static string ToJson(this Invoice invoice)
     {
         var options = new JsonSerializerOptions
         {

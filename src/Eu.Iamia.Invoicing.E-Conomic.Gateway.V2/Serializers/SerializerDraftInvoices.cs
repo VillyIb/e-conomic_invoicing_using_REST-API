@@ -1,7 +1,9 @@
-﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.DraftInvoice;
+﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.DraftInvoice;
 using Eu.Iamia.Utils.Contract;
 
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Serializers;
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers;
+
+[Obsolete("Tentative")]
 public class SerializerDraftInvoices
 {
     private readonly IJsonSerializerFacade _serializer;

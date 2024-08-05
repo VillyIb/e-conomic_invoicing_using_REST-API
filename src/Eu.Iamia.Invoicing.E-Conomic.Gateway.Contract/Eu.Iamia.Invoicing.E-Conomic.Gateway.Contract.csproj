@@ -24,6 +24,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DTO\Customer\" />
+    <Folder Include="DTO\DraftInvoice\" />
+    <Folder Include="DTO\Invoice\" />
+    <Folder Include="DTO\Product\" />
+    <Folder Include="Guards\" />
     <Folder Include="Utils\" />
   </ItemGroup>
 

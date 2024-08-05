@@ -1,4 +1,6 @@
-﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
+﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.DraftInvoice;
+
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.Serializers;
 
 public interface IEconomicGatewayV2
 {

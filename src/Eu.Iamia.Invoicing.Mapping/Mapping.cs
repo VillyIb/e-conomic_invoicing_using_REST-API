@@ -12,7 +12,7 @@ public static class Mapping
     /// </summary>
     /// <param name="restApiProduct"></param>
     /// <returns></returns>
-    public static Application.Contract.DTO.ProductDto ToProductDto(this E_Conomic.Gateway.Contract.DTO.Product.Collection restApiProduct)
+    public static Application.Contract.DTO.ProductDto ToProductDto(this E_Conomic.Gateway.V2.Contract.DTO.Product.Collection restApiProduct)
     {
         // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         var unitDto = restApiProduct.unit is null 
@@ -38,7 +38,7 @@ public static class Mapping
     /// </summary>
     /// <param name="restApiCustomer"></param>
     /// <returns></returns>
-    public static Application.Contract.DTO.CustomerDto ToCustomerDto(this E_Conomic.Gateway.Contract.DTO.Customer.Collection restApiCustomer)
+    public static Application.Contract.DTO.CustomerDto ToCustomerDto(this E_Conomic.Gateway.V2.Contract.DTO.Customer.Collection restApiCustomer)
     {
         return new Application.Contract.DTO.CustomerDto
         {

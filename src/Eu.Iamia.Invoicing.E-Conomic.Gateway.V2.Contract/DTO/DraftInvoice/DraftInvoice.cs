@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.DraftInvoice;
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.DraftInvoice;
 
 public class DraftInvoice : IDraftInvoice
 {
@@ -21,9 +21,9 @@ public class DraftInvoice : IDraftInvoice
 
 public class FailedInvoice : IDraftInvoice
 {
-    public int    DraftInvoiceNumber => -1;
+    public int DraftInvoiceNumber => -1;
 
-    public double GrossAmount        => 0.0;
+    public double GrossAmount => 0.0;
 
     private readonly string _errorMessage;
 

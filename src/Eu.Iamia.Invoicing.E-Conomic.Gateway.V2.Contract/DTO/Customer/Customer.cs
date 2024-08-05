@@ -2,7 +2,7 @@
 // ReSharper disable UnusedMember.Global
 #pragma warning disable CS8618
 
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.Customer;
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Customer;
 
 public class Collection
 {

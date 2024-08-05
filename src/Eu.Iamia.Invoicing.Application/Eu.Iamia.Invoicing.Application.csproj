@@ -9,9 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Eu.Iamia.ConfigBase\Eu.Iamia.ConfigBase.csproj" />
     <ProjectReference Include="..\Eu.Iamia.Invoicing.Application.Contract\Eu.Iamia.Invoicing.Application.Contract.csproj" />
-    <ProjectReference Include="..\Eu.Iamia.Invoicing.E-Conomic.Gateway.Contract\Eu.Iamia.Invoicing.E-Conomic.Gateway.Contract.csproj" />
     <ProjectReference Include="..\Eu.Iamia.Invoicing.E-Conomic.Gateway.V2\Eu.Iamia.Invoicing.E-Conomic.Gateway.V2.csproj" />
-    <ProjectReference Include="..\Eu.Iamia.Invoicing.E-Conomic.Gateway\Eu.Iamia.Invoicing.E-Conomic.Gateway.csproj" />
     <ProjectReference Include="..\Eu.Iamia.Invoicing.Loader.Contract\Eu.Iamia.Invoicing.Loader.Contract.csproj" />
     <ProjectReference Include="..\Eu.Iamia.Invoicing.Mapping\Eu.Iamia.Invoicing.Mapping.csproj" />
   </ItemGroup>

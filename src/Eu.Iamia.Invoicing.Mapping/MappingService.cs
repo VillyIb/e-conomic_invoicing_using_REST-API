@@ -1,5 +1,6 @@
 ﻿using Eu.Iamia.Invoicing.Application.Contract.DTO;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.DraftInvoice;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.Serializers;
 using Eu.Iamia.Invoicing.Mapping.Caches;
 using Eu.Iamia.Reporting.Contract;
 
@@ -88,16 +89,16 @@ public class MappingService : IMappingService
     /// <param name="layoutNumber"></param>
     /// <returns></returns>
     /// <exception cref="ApplicationException"></exception>
-    public static E_Conomic.Gateway.Contract.DTO.Invoice.Invoice ToRestApiInvoice(
+    public static E_Conomic.Gateway.V2.Contract.DTO.Invoice.Invoice ToRestApiInvoice(
         CustomerDto customerDto,
         InvoiceDto invoiceDto,
         ProductDtoCache productDtoCache,
         int layoutNumber
         )
     {
-        var invoice = new E_Conomic.Gateway.Contract.DTO.Invoice.Invoice
+        var invoice = new E_Conomic.Gateway.V2.Contract.DTO.Invoice.Invoice
         {
-            Customer = new E_Conomic.Gateway.Contract.DTO.Invoice.Customer(customerDto.CustomerNumber),
+            Customer = new E_Conomic.Gateway.V2.Contract.DTO.Invoice.Customer(customerDto.CustomerNumber),
             Date = invoiceDto.InvoiceDate.ToString("yyyy-MM-dd"),
             //ExchangeRate = 100,
             //Delivery = new(
@@ -158,16 +159,16 @@ public class MappingService : IMappingService
 
             var unit = productDto.Unit is null
                 ? null
-                : new E_Conomic.Gateway.Contract.DTO.Invoice.Unit(
+                : new E_Conomic.Gateway.V2.Contract.DTO.Invoice.Unit(
                     name: productDto.Unit.Name,
                     unitNumber: productDto.Unit.UnitNumber
                 );
 
-            var line = new E_Conomic.Gateway.Contract.DTO.Invoice.Line()
+            var line = new E_Conomic.Gateway.V2.Contract.DTO.Invoice.Line()
             {
                 Description = invoiceLineDto.Description,
                 LineNumber = lineNumber,
-                Product = new E_Conomic.Gateway.Contract.DTO.Invoice.Product()
+                Product = new E_Conomic.Gateway.V2.Contract.DTO.Invoice.Product()
                 {
                     ProductNumber = invoiceLineDto.ProductNumber
                 },

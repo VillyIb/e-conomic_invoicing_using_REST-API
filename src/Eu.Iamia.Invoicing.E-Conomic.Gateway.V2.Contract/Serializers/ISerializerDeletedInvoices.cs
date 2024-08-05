@@ -1,6 +1,6 @@
-﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.DTO.DraftInvoice;
+﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.DeletedInvoices;
 
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.Contract.Serializers;
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.Serializers;
 
 public interface ISerializerDeletedInvoices
 {

@@ -28,9 +28,7 @@
     <ProjectReference Include="..\..\src\Eu.Iamia.Invoicing.Application.Contract\Eu.Iamia.Invoicing.Application.Contract.csproj" />
     <ProjectReference Include="..\..\src\Eu.Iamia.Invoicing.Application\Eu.Iamia.Invoicing.Application.csproj" />
     <ProjectReference Include="..\..\src\Eu.Iamia.Invoicing.CSVLoader\Eu.Iamia.Invoicing.CSVLoader.csproj" />
-    <ProjectReference Include="..\..\src\Eu.Iamia.Invoicing.E-Conomic.Gateway.Contract\Eu.Iamia.Invoicing.E-Conomic.Gateway.Contract.csproj" />
     <ProjectReference Include="..\..\src\Eu.Iamia.Invoicing.E-Conomic.Gateway.V2\Eu.Iamia.Invoicing.E-Conomic.Gateway.V2.csproj" />
-    <ProjectReference Include="..\..\src\Eu.Iamia.Invoicing.E-Conomic.Gateway\Eu.Iamia.Invoicing.E-Conomic.Gateway.csproj" />
     <ProjectReference Include="..\..\src\Eu.Iamia.Invoicing.E-Conomic.RestApiGateway.Contract\Eu.Iamia.Invoicing.E-Conomic.RestApiGateway.Contract.csproj" />
     <ProjectReference Include="..\..\src\Eu.Iamia.Invoicing.E-Conomic.RestApiGateway\Eu.Iamia.Invoicing.E-Conomic.RestApiGateway.csproj" />
     <ProjectReference Include="..\..\src\Eu.Iamia.Reporting.Contract\Eu.Iamia.Reporting.Contract.csproj" />
