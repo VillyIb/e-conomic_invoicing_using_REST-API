@@ -69,6 +69,7 @@ public class InvoicingHandler : IInvoicingHandler
 
         await _mappingService.LoadCustomerCache(customerGroupsToAccept);
         await _mappingService.LoadProductCache();
+        await _mappingService.LoadPaymentTermCache();
 
         Console.WriteLine("");
 

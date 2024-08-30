@@ -87,28 +87,33 @@ public class MappingService : IMappingService
         return _productsCache.Count;
     }
 
-    private readonly PaymentTermDtoCache _paymentTermCache = [];
-
     public async Task<int> LoadPaymentTermCache()
     {
-        _paymentTermCache.Clear();
-
-        var cts = new CancellationTokenSource();
-        bool @continue = true;
-        var page = 0;
-        while (@continue)
-        {
-            var paymentTermHandle = await _economicGateway.ReadPaymentTermsPaged(page, 20, cts.Token);
-            @continue = paymentTermHandle.collection.Any() && page < 100;
-            foreach (var c in paymentTermHandle.collection)
-            {
-                var paymentDto = c.ToPaymentTermDto();
-                _paymentTermCache.Add(paymentDto);
-                page++;
-            }
-        }
-        return _paymentTermCache.Count;
+        return await _economicGateway.LoadPaymentTermsCache();
     }
+
+    //private readonly PaymentTermDtoCache _paymentTermCache = [];
+
+    //public async Task<int> LoadPaymentTermCache()
+    //{
+    //    _paymentTermCache.Clear();
+
+    //    var cts = new CancellationTokenSource();
+    //    bool @continue = true;
+    //    var page = 0;
+    //    while (@continue)
+    //    {
+    //        var paymentTermHandle = await _economicGateway.ReadPaymentTermsPaged(page, 20, cts.Token);
+    //        foreach (var c in paymentTermHandle.collection)
+    //        {
+    //            var paymentDto = c.ToPaymentTermDto();
+    //            _paymentTermCache.Add(paymentDto);
+    //        }
+    //        @continue = paymentTermHandle.collection.Any() && page < 100;
+    //        page++;
+    //    }
+    //    return _paymentTermCache.Count;
+    //}
 
     /// <summary>
     /// Outgoing CustomerDto, InvoiceDto, ProductDto to RestApi-Invoice.
@@ -119,24 +124,21 @@ public class MappingService : IMappingService
     /// <param name="layoutNumber"></param>
     /// <returns></returns>
     /// <exception cref="ApplicationException"></exception>
-    private static E_Conomic.Gateway.V2.Contract.DTO.Invoice.Invoice ToRestApiInvoice(
+    private  E_Conomic.Gateway.V2.Contract.DTO.Invoice.Invoice ToRestApiInvoice(
         CustomerDto customerDto,
         InvoiceDto invoiceDto,
         ProductDtoCache productDtoCache,
         int layoutNumber
         )
     {
-        var paymentTerms = new PaymentTerms()
+        var paymentTerm1 = _economicGateway.GetPaymentTerm(invoiceDto.PaymentTerm ?? customerDto.PaymentTerms);
+
+        if (paymentTerm1 is null)
         {
-            //DaysOfCredit = 14
-            //,
-            //PaymentTermsNumber = customerDto.PaymentTerms,
-            PaymentTermsNumber = 1,
-            //,
-            //Name = "Lb. md. 14 dage"
-            //,
-            //PaymentTermsType = PaymentTermsType.invoiceMonth
-        };
+            throw new ApplicationException($"PaymentTerm: '{customerDto.PaymentTerms}' not found in e-conomic");
+        }
+
+        var paymentTerms = paymentTerm1.ToInvoice();
 
         var layout = new Layout() { LayoutNumber = layoutNumber };
 

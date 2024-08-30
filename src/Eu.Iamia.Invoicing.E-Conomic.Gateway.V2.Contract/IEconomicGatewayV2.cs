@@ -8,7 +8,11 @@ public interface IEconomicGatewayV2
 
     Task<DTO.Product.ProductsHandle> ReadProductsPaged(int page, int pageSize, CancellationToken cancellationToken = default);
 
-    Task<DTO.PaymentTerm.PaymentTermsHandle> ReadPaymentTermsPaged(int page, int pageSize, CancellationToken cancellationToken = default);
+    Task<DTO.PaymentTerm.PaymentTermsHandle?> ReadPaymentTermsPaged(int page, int pageSize, CancellationToken cancellationToken = default);
 
     Task<IDraftInvoice?> PushInvoice(DTO.Invoice.Invoice restApiInvoice, int sourceFileNumber, CancellationToken cancellationToken);
+
+    Task<int> LoadPaymentTermsCache();
+
+    Contract.DTO.PaymentTerm.Collection? GetPaymentTerm(int paymentTermsNumber);
 }

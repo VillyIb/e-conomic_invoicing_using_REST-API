@@ -5,9 +5,9 @@ namespace Eu.Iamia.Invoicing.Mapping.IntegrationTests;
 
 public class MappingServiceShould
 {
-    private IMappingService _sut;
+    private readonly IMappingService _sut;
 
-    private CancellationTokenSource _cts;
+    private readonly CancellationTokenSource _cts;
 
     public MappingServiceShould()
     {
@@ -35,7 +35,7 @@ public class MappingServiceShould
     public async Task LoadPaymentTermCache_OK()
     {
         var paymentTermCount = await _sut.LoadPaymentTermCache();
-        Assert.True(paymentTermCount > 1 );
+        Assert.True(paymentTermCount > 1);
     }
 
     [Fact]
@@ -45,7 +45,7 @@ public class MappingServiceShould
 
         var invoiceLines = new List<InvoiceLineDto>
         {
-            new InvoiceLineDto
+            new()
             {
                 Description = "TestLine",
                 SourceFileLineNumber = sourceFileLineNumber,
@@ -62,7 +62,7 @@ public class MappingServiceShould
             CustomerNumber = 99999,
             InvoiceDate = DateTime.Today,
             InvoiceLines = invoiceLines,
-            PaymentTerm = 1,
+            PaymentTerm = null, // optionally specify explicit, Customer.PaymentTerm is default.
             SourceFileLineNumber = sourceFileLineNumber,
             Text1 = "xx"
         };
@@ -70,15 +70,18 @@ public class MappingServiceShould
 
         List<int> customerGroupsToAccept = [1,2];
         await _sut.LoadCustomerCache(customerGroupsToAccept);
+
         await _sut.LoadProductCache();
-        try
-        {
+        await _sut.LoadPaymentTermCache();
+
+        //try
+        //{
             var x = await _sut.PushInvoice(invoiceDto, layoutNumber, sourceFileLineNumber, _cts.Token);
-        }
-        catch (HttpRequestException ex)
-        {
-            var msg = ex.Message;
-            Debugger.Break();
-        }
+        //}
+        //catch (HttpRequestException ex)
+        //{
+        //    var msg = ex.Message;
+        //    Debugger.Break();
+        //}
     }
 }

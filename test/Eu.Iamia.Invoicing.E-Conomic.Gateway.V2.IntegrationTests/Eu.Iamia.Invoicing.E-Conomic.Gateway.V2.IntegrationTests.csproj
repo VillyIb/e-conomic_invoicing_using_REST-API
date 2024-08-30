@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.IntegrationTests</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
@@ -23,9 +24,8 @@
     <ProjectReference Include="..\..\src\Eu.Iamia.Invoicing.E-Conomic.Gateway.V2\Eu.Iamia.Invoicing.E-Conomic.Gateway.V2.csproj" />
     <ProjectReference Include="..\..\src\Eu.Iamia.Invoicing.E-Conomic.RestApiGateway.Contract\Eu.Iamia.Invoicing.E-Conomic.RestApiGateway.Contract.csproj" />
     <ProjectReference Include="..\..\src\Eu.Iamia.Invoicing.E-Conomic.RestApiGateway\Eu.Iamia.Invoicing.E-Conomic.RestApiGateway.csproj" />
-    <ProjectReference Include="..\..\src\Eu.Iamia.Invoicing.Mapping\Eu.Iamia.Invoicing.Mapping.csproj" />
+    <ProjectReference Include="..\..\src\Eu.Iamia.Reporting.Contract\Eu.Iamia.Reporting.Contract.csproj" />
     <ProjectReference Include="..\..\src\Eu.Iamia.Reporting\Eu.Iamia.Reporting.csproj" />
-    <ProjectReference Include="..\..\src\Eu.Iamia.Utils\Eu.Iamia.Utils.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,9 +37,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="appsettings.WSA-R910EFVE.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

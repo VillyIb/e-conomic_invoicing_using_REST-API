@@ -8,7 +8,6 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Customer;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.DraftInvoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Product;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.PaymentTerm;
 
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2;
@@ -82,7 +81,31 @@ public class GatewayV2 : IEconomicGatewayV2
         return draftInvoice;
     }
 
-    public async Task<PaymentTermsHandle?> ReadPaymentTermsPaged(int page, int pageSize, CancellationToken cancellationToken = default)
+    private List<Contract.DTO.PaymentTerm.Collection> _paymentTermsCache = [];
+
+    public async Task<int> LoadPaymentTermsCache()
+    {
+        _paymentTermsCache.Clear();
+
+        var cts = new CancellationTokenSource();
+        bool @continue = true;
+        var page = 0;
+        while (@continue)
+        {
+            var paymentTermHandle = await ReadPaymentTermsPaged(page, 20, cts.Token) ?? new Contract.DTO.PaymentTerm.PaymentTermsHandle();
+            _paymentTermsCache.AddRange(paymentTermHandle.collection);
+            @continue = paymentTermHandle.collection.Any() && page < 100;
+            page++;
+        }
+        return _paymentTermsCache.Count; ;
+    }
+
+    public Contract.DTO.PaymentTerm.Collection? GetPaymentTerm(int paymentTermsNumber)
+    {
+        return _paymentTermsCache.FirstOrDefault(collection => collection.paymentTermsNumber == paymentTermsNumber);
+    }
+
+    public async Task<Contract.DTO.PaymentTerm.PaymentTermsHandle?> ReadPaymentTermsPaged(int page, int pageSize, CancellationToken cancellationToken = default)
     {
         var stream = await _restApiGateway.GetPaymentTerms(page, pageSize, cancellationToken);
 

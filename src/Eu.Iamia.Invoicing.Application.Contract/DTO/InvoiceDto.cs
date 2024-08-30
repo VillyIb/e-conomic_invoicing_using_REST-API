@@ -6,7 +6,7 @@ public class InvoiceDto : ValueObject<InvoiceDto>
 
     public int CustomerNumber { get; set; }
 
-    public int PaymentTerm { get; set; }
+    public int? PaymentTerm { get; set; }
 
     public string Text1 { get; set; } = string.Empty;
 

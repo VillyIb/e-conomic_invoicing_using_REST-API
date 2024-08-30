@@ -6,10 +6,13 @@
 #pragma warning disable IDE1006
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
+using System.Text.Json.Serialization;
+
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.PaymentTerm;
 
 public class PaymentTermsHandle
 {
+    [JsonPropertyName("collection")]
     public Collection[] collection { get; set; }
     public Pagination pagination { get; set; }
     public string self { get; set; }
