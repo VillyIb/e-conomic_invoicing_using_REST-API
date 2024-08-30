@@ -8,7 +8,7 @@ namespace Eu.Iamia.Invoicing.E_Conomic.RestApiGateway;
 public partial class RestApiService
 {
     public async Task<Stream> GetDraftInvoices(
-        int page,
+        int skipPages,
         int pageSize,
         CancellationToken cancellationToken
     )
@@ -19,7 +19,7 @@ public partial class RestApiService
 
         var requestUri =
             $"https://restapi.e-conomic.com/invoices/drafts?" +
-            $"skippages={page}&pagesize={pageSize}"
+            $"skippages={skipPages}&pagesize={pageSize}"
         ;
 
         return await GetAsync(requestUri, reference, cancellationToken);
@@ -40,7 +40,7 @@ public partial class RestApiService
 
     public async Task<Stream> GetBookedInvoices
     (
-        int page,
+        int skipPages,
         int pageSize,
         IInterval<DateTime> dateRange,
         CancellationToken cancellationToken
@@ -52,7 +52,7 @@ public partial class RestApiService
 
         // ReSharper disable once StringLiteralTypo
         var requestUri = $"https://restapi.e-conomic.com/invoices/booked?" +
-                         $"skippages={page}&pagesize={pageSize}" +
+                         $"skippages={skipPages}&pagesize={pageSize}" +
                          $"&filter=" +
                          $"date$gte:{dateRange.From:yyyy-MM-dd}&date$lte:{dateRange.To:yyyy-MM-dd}"
             ;
@@ -73,7 +73,7 @@ public partial class RestApiService
     }
 
     public async Task<Stream> PushInvoice(
-        StringContent content, 
+        StringContent content,
         CancellationToken cancellationToken
     )
     {
@@ -81,7 +81,7 @@ public partial class RestApiService
 
         const string reference = nameof(PushInvoice);
 
-        var reqestUri = "https://restapi.e-conomic.com//invoices/drafts";
-        return await PostAsync(reqestUri, content, reference, cancellationToken);
+        var requestUri = "https://restapi.e-conomic.com//invoices/drafts";
+        return await PostAsync(requestUri, content, reference, cancellationToken);
     }
 }

@@ -4,7 +4,7 @@ namespace Eu.Iamia.Invoicing.E_Conomic.RestApiGateway;
 
 public partial class RestApiService
 {
-    public virtual async Task<Stream> GetCustomersPaged(int page, int pageSize, CancellationToken cancellationToken)
+    public virtual async Task<Stream> GetCustomersPaged(int skipPages, int pageSize, CancellationToken cancellationToken)
     {
         // see:https://restdocs.e-conomic.com/#get-customers
 
@@ -12,7 +12,7 @@ public partial class RestApiService
 
         var requestUri =
             $"https://restapi.e-conomic.com/customers?" +
-            $"skippages={page}&pagesize={pageSize}"
+            $"skippages={skipPages}&pagesize={pageSize}"
         ;
 
         return await GetAsync(requestUri, reference, cancellationToken);
