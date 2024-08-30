@@ -16,7 +16,7 @@ public  class Setup : IHandlerSetup
 
     private static void AddHandlers(IServiceCollection services)
     {
-        services.AddTransient<IRestApiGateway, RestApiBase>();
+        services.AddTransient<IRestApiGateway, RestApiService>();
     }
 
     private void AddSettings(IServiceCollection services)

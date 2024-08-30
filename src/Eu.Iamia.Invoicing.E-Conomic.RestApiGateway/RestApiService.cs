@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.RestApiGateway;
 
-public partial class RestApiBase : IRestApiGateway
+public partial class RestApiService : IRestApiGateway
 {
     protected readonly SettingsForEConomicRestApi Settings;
     //private readonly IRestMappingBase _restMappingBase;
@@ -13,12 +13,12 @@ public partial class RestApiBase : IRestApiGateway
 
     protected virtual HttpClient HttpClient => HttpClientField ??= new HttpClient();
 
-    public RestApiBase(SettingsForEConomicRestApi settings)
+    public RestApiService(SettingsForEConomicRestApi settings)
     {
         Settings = settings;
     }
 
-    public RestApiBase(IOptions<SettingsForEConomicRestApi> settings) : this(settings.Value)
+    public RestApiService(IOptions<SettingsForEConomicRestApi> settings) : this(settings.Value)
     { }
 
     private void SetAuthenticationHeaders()

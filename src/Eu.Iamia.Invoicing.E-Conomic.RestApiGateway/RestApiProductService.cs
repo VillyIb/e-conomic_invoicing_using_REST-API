@@ -3,7 +3,7 @@
 
 namespace Eu.Iamia.Invoicing.E_Conomic.RestApiGateway;
 
-public partial class RestApiBase
+public partial class RestApiService
 {
     public virtual async Task<Stream> GetProductsPaged(int page, int pageSize, CancellationToken cancellationToken)
     {

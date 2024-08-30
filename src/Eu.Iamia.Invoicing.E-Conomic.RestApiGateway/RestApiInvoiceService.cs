@@ -1,13 +1,11 @@
-﻿
-
-// ReSharper disable StringLiteralTypo
+﻿// ReSharper disable StringLiteralTypo
 // ReSharper disable CommentTypo
 
 using Eu.Iamia.Utils.Contract;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.RestApiGateway;
 
-public partial class RestApiBase
+public partial class RestApiService
 {
     public async Task<Stream> GetDraftInvoices(
         int page,
