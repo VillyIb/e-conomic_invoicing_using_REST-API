@@ -1,6 +1,6 @@
 ﻿using Eu.Iamia.Invoicing.Application.Contract.DTO;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.DraftInvoice;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.Serializers;
 using Eu.Iamia.Invoicing.Mapping.Caches;
 using Eu.Iamia.Reporting.Contract;
 
@@ -8,9 +8,9 @@ namespace Eu.Iamia.Invoicing.Mapping;
 
 public interface IMappingService
 {
-    Task LoadCustomerCache(IList<int> customerGroupsToAccept);
+    Task<int> LoadCustomerCache(IList<int> customerGroupsToAccept);
 
-    Task LoadProductCache();
+    Task<int> LoadProductCache();
 
     Task<IDraftInvoice?> PushInvoice(
         Application.Contract.DTO.InvoiceDto invoiceDto,
@@ -36,7 +36,7 @@ public class MappingService : IMappingService
 
     private readonly CustomerDtoCache _customersCache = new();
 
-    public async Task LoadCustomerCache(IList<int> customerGroupsToAccept)
+    public async Task<int> LoadCustomerCache(IList<int> customerGroupsToAccept)
     {
         _customersCache.Clear();
 
@@ -56,11 +56,13 @@ public class MappingService : IMappingService
             @continue = customersHandle.collection.Any() && page < 100;
             page++;
         }
+
+        return _customersCache.Count;
     }
 
     private readonly ProductDtoCache _productsCache = new();
 
-    public async Task LoadProductCache()
+    public async Task<int> LoadProductCache()
     {
         _productsCache.Clear();
 
@@ -78,6 +80,8 @@ public class MappingService : IMappingService
             @continue = productsHandle.collection.Any() && page < 100;
             page++;
         }
+
+        return _productsCache.Count;
     }
 
     /// <summary>
@@ -89,7 +93,7 @@ public class MappingService : IMappingService
     /// <param name="layoutNumber"></param>
     /// <returns></returns>
     /// <exception cref="ApplicationException"></exception>
-    public static E_Conomic.Gateway.V2.Contract.DTO.Invoice.Invoice ToRestApiInvoice(
+    private static E_Conomic.Gateway.V2.Contract.DTO.Invoice.Invoice ToRestApiInvoice(
         CustomerDto customerDto,
         InvoiceDto invoiceDto,
         ProductDtoCache productDtoCache,
