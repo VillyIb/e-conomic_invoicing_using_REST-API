@@ -52,9 +52,14 @@ public partial class RestApiService : IRestApiGateway
 
         var response = await HttpClient.PostAsync(requestUri, content, cancellationToken);
 
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            var jsonError = await response.Content.ReadAsStringAsync(cancellationToken);
+
+            var httpRequestError = HttpRequestError.Unknown;
+            throw new HttpRequestException(httpRequestError, jsonError, null, response.StatusCode);
+        }
 
         return await GetPayload(response, cancellationToken);
     }
-
 }
