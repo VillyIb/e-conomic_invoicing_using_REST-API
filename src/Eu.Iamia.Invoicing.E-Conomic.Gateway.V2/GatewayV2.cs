@@ -7,7 +7,7 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Customer;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.DraftInvoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Product;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.Serializers;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract;
 
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2;

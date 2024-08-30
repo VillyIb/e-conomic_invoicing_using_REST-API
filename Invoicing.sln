@@ -49,6 +49,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eu.Iamia.Invoicing.Mapping"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eu.Iamia.Invoicing.E-Conomic.Gateway.V2.Contract", "src\Eu.Iamia.Invoicing.E-Conomic.Gateway.V2.Contract\Eu.Iamia.Invoicing.E-Conomic.Gateway.V2.Contract.csproj", "{679AD7D8-A72E-4103-A429-78E3C3F55E58}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eu.Iamia.Invoicing.IntegrationTests", "test\Eu.Iamia.Invoicing.IntegrationTests\Eu.Iamia.Invoicing.IntegrationTests.csproj", "{C9612E06-0B48-42D1-93B8-D60E5F48E13C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,6 +141,10 @@ Global
 		{679AD7D8-A72E-4103-A429-78E3C3F55E58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{679AD7D8-A72E-4103-A429-78E3C3F55E58}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{679AD7D8-A72E-4103-A429-78E3C3F55E58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9612E06-0B48-42D1-93B8-D60E5F48E13C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9612E06-0B48-42D1-93B8-D60E5F48E13C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9612E06-0B48-42D1-93B8-D60E5F48E13C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9612E06-0B48-42D1-93B8-D60E5F48E13C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -165,6 +171,7 @@ Global
 		{34336B0E-E652-4831-930A-337802752611} = {2DAF952C-CA92-4F32-9401-2B75DF2CEAE0}
 		{FAB8C538-83D7-4827-B97C-A51BFB2F613D} = {2DAF952C-CA92-4F32-9401-2B75DF2CEAE0}
 		{679AD7D8-A72E-4103-A429-78E3C3F55E58} = {2DAF952C-CA92-4F32-9401-2B75DF2CEAE0}
+		{C9612E06-0B48-42D1-93B8-D60E5F48E13C} = {5DA775E7-8B00-4C4F-A9F1-51CB654ACB44}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8DFD028F-A269-4D03-AC4E-9C9305496793}
