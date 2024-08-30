@@ -2,9 +2,11 @@
 // ReSharper disable UnusedMember.Global
 #pragma warning disable CS8618
 
+using System.Text.Json.Serialization;
+
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Customer;
 
-public class Collection
+public class Customer
 {
     public int customerNumber { get; set; }
     public string currency { get; set; }
@@ -76,7 +78,8 @@ public class PaymentTerms
 
 public class CustomersHandle
 {
-    public List<Collection> collection { get; set; }
+    [JsonPropertyName("collection")]
+    public List<Customer> Customers { get; set; }
     public Pagination pagination { get; set; }
     public MetaData metaData { get; set; }
     public string self { get; set; }

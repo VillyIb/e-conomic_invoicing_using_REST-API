@@ -4,10 +4,12 @@
 // ReSharper disable UnusedMember.Global
 #pragma warning disable CS8618
 
+using System.Text.Json.Serialization;
+
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Product;
 
 // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
-public class Collection
+public class Product
 {
     public string productNumber { get; set; }
     public string description { get; set; }
@@ -71,7 +73,8 @@ public class ProductGroup
 
 public class ProductsHandle
 {
-    public List<Collection> collection { get; set; }
+    [JsonPropertyName("collection")]
+    public List<Product> Products { get; set; }
     public Pagination pagination { get; set; }
     public MetaData metaData { get; set; }
     public string self { get; set; }

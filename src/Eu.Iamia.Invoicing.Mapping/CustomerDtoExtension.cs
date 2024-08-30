@@ -8,7 +8,7 @@ public static class CustomerDtoExtension
     /// <param name="restApiCustomer"></param>
     /// <returns></returns>
     public static Application.Contract.DTO.CustomerDto ToCustomerDto(
-        this E_Conomic.Gateway.V2.Contract.DTO.Customer.Collection restApiCustomer)
+        this E_Conomic.Gateway.V2.Contract.DTO.Customer.Customer restApiCustomer)
     {
         return new Application.Contract.DTO.CustomerDto
         {

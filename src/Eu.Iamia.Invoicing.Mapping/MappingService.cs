@@ -49,14 +49,14 @@ public class MappingService : IMappingService
         while (@continue)
         {
             var customersHandle = await _economicGateway.ReadCustomersPaged(page, 20, cts.Token);
-            foreach (var collection in customersHandle.collection)
+            foreach (var collection in customersHandle.Customers)
             {
                 if (!customerGroupsToAccept.Any(cg => cg.Equals(collection.customerGroup.customerGroupNumber))) continue;
 
                 var customerDto = collection.ToCustomerDto();
                 _customersCache.Add(customerDto);
             }
-            @continue = customersHandle.collection.Any() && page < 100;
+            @continue = customersHandle.Customers.Any() && page < 100;
             page++;
         }
 
@@ -75,12 +75,12 @@ public class MappingService : IMappingService
         while (@continue)
         {
             var productsHandle = await _economicGateway.ReadProductsPaged(page, 20, cts.Token);
-            foreach (var collection in productsHandle.collection)
+            foreach (var collection in productsHandle.Products)
             {
                 var productDto = collection.ToProductDto();
                 _productsCache.Add(productDto);
             }
-            @continue = productsHandle.collection.Any() && page < 100;
+            @continue = productsHandle.Products.Any() && page < 100;
             page++;
         }
 
@@ -104,12 +104,12 @@ public class MappingService : IMappingService
     //    while (@continue)
     //    {
     //        var paymentTermHandle = await _economicGateway.ReadPaymentTermsPaged(page, 20, cts.Token);
-    //        foreach (var c in paymentTermHandle.collection)
+    //        foreach (var c in paymentTermHandle.Products)
     //        {
     //            var paymentDto = c.ToPaymentTermDto();
     //            _paymentTermCache.Add(paymentDto);
     //        }
-    //        @continue = paymentTermHandle.collection.Any() && page < 100;
+    //        @continue = paymentTermHandle.Products.Any() && page < 100;
     //        page++;
     //    }
     //    return _paymentTermCache.Count;

@@ -14,5 +14,5 @@ public interface IEconomicGatewayV2
 
     Task<int> LoadPaymentTermsCache();
 
-    Contract.DTO.PaymentTerm.Collection? GetPaymentTerm(int paymentTermsNumber);
+    Contract.DTO.PaymentTerm.PaymentTerm? GetPaymentTerm(int paymentTermsNumber);
 }

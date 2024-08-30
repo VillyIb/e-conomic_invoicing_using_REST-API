@@ -7,7 +7,7 @@ public static class PaymentTermDtoExtension
     /// </summary>
     /// <param name="restApiPaymentTerm"></param>
     /// <returns></returns>
-    public static Application.Contract.DTO.PaymentTermDto ToPaymentTermDto(this E_Conomic.Gateway.V2.Contract.DTO.PaymentTerm.Collection restApiPaymentTerm)
+    public static Application.Contract.DTO.PaymentTermDto ToPaymentTermDto(this E_Conomic.Gateway.V2.Contract.DTO.PaymentTerm.PaymentTerm restApiPaymentTerm)
     {
         return new Application.Contract.DTO.PaymentTermDto()
         {

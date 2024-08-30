@@ -13,7 +13,7 @@ namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.PaymentTerm;
 public class PaymentTermsHandle
 {
     [JsonPropertyName("collection")]
-    public Collection[] collection { get; set; }
+    public PaymentTerm[] PaymentTerms { get; set; }
     public Pagination pagination { get; set; }
     public string self { get; set; }
 }
@@ -29,7 +29,7 @@ public class Pagination
     public string lastPage { get; set; }
 }
 
-public class Collection
+public class PaymentTerm
 {
     public int paymentTermsNumber { get; set; }
     public int daysOfCredit { get; set; }

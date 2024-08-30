@@ -13,7 +13,7 @@ public static class ProductDtoExtension
     /// <param name="restApiProduct"></param>
     /// <returns></returns>
     public static Application.Contract.DTO.ProductDto ToProductDto(
-        this E_Conomic.Gateway.V2.Contract.DTO.Product.Collection restApiProduct)
+        this E_Conomic.Gateway.V2.Contract.DTO.Product.Product restApiProduct)
     {
         // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         var unitDto = restApiProduct.unit is null

@@ -81,7 +81,7 @@ public class GatewayV2 : IEconomicGatewayV2
         return draftInvoice;
     }
 
-    private List<Contract.DTO.PaymentTerm.Collection> _paymentTermsCache = [];
+    private List<Contract.DTO.PaymentTerm.PaymentTerm> _paymentTermsCache = [];
 
     public async Task<int> LoadPaymentTermsCache()
     {
@@ -93,14 +93,14 @@ public class GatewayV2 : IEconomicGatewayV2
         while (@continue)
         {
             var paymentTermHandle = await ReadPaymentTermsPaged(page, 20, cts.Token) ?? new Contract.DTO.PaymentTerm.PaymentTermsHandle();
-            _paymentTermsCache.AddRange(paymentTermHandle.collection);
-            @continue = paymentTermHandle.collection.Any() && page < 100;
+            _paymentTermsCache.AddRange(paymentTermHandle.PaymentTerms);
+            @continue = paymentTermHandle.PaymentTerms.Any() && page < 100;
             page++;
         }
         return _paymentTermsCache.Count; ;
     }
 
-    public Contract.DTO.PaymentTerm.Collection? GetPaymentTerm(int paymentTermsNumber)
+    public Contract.DTO.PaymentTerm.PaymentTerm? GetPaymentTerm(int paymentTermsNumber)
     {
         return _paymentTermsCache.FirstOrDefault(collection => collection.paymentTermsNumber == paymentTermsNumber);
     }

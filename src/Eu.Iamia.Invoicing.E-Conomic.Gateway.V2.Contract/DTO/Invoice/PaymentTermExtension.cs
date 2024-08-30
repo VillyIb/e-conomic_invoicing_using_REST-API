@@ -8,7 +8,7 @@ namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoice;
 
 public static class PaymentTermExtension
 {
-    public static E_Conomic.Gateway.V2.Contract.DTO.Invoice.PaymentTerms ToInvoice(this E_Conomic.Gateway.V2.Contract.DTO.PaymentTerm.Collection paymentTerm)
+    public static E_Conomic.Gateway.V2.Contract.DTO.Invoice.PaymentTerms ToInvoice(this E_Conomic.Gateway.V2.Contract.DTO.PaymentTerm.PaymentTerm paymentTerm)
     {
         return new E_Conomic.Gateway.V2.Contract.DTO.Invoice.PaymentTerms
         {
