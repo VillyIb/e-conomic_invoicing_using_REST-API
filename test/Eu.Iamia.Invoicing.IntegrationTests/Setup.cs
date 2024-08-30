@@ -1,7 +1,7 @@
 ﻿using Eu.Iamia.ConfigBase;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Eu.Iamia.Invoicing.IntegrationTests;
+namespace Eu.Iamia.Invoicing.Mapping.IntegrationTests;
 
 public class Setup : SetupBase
 {

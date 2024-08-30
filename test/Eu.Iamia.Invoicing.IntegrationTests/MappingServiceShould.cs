@@ -1,6 +1,4 @@
-using Eu.Iamia.Invoicing.Mapping;
-
-namespace Eu.Iamia.Invoicing.IntegrationTests;
+namespace Eu.Iamia.Invoicing.Mapping.IntegrationTests;
 
 public class MappingServiceShould
 {

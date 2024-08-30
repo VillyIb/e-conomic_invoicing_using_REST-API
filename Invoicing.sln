@@ -49,7 +49,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eu.Iamia.Invoicing.Mapping"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eu.Iamia.Invoicing.E-Conomic.Gateway.V2.Contract", "src\Eu.Iamia.Invoicing.E-Conomic.Gateway.V2.Contract\Eu.Iamia.Invoicing.E-Conomic.Gateway.V2.Contract.csproj", "{679AD7D8-A72E-4103-A429-78E3C3F55E58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eu.Iamia.Invoicing.IntegrationTests", "test\Eu.Iamia.Invoicing.IntegrationTests\Eu.Iamia.Invoicing.IntegrationTests.csproj", "{C9612E06-0B48-42D1-93B8-D60E5F48E13C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eu.Iamia.Invoicing.Mapping.IntegrationTests", "test\Eu.Iamia.Invoicing.IntegrationTests\Eu.Iamia.Invoicing.Mapping.IntegrationTests.csproj", "{C9612E06-0B48-42D1-93B8-D60E5F48E13C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
