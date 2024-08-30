@@ -4,8 +4,10 @@ namespace Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.Contract;
 
 public interface IRestApiGateway
 {
+    #region Invoice
+
     Task<Stream> GetDraftInvoices(
-        int page,
+        int skipPages,
         int pageSize,
         CancellationToken cancellationToken
     );
@@ -17,7 +19,7 @@ public interface IRestApiGateway
 
     Task<Stream> GetBookedInvoices
     (
-        int page,
+        int skipPages,
         int pageSize,
         IInterval<DateTime> dateRange,
         CancellationToken cancellationToken
@@ -28,15 +30,28 @@ public interface IRestApiGateway
         CancellationToken cancellationToken
     );
 
-    Task<Stream> GetCustomersPaged(
-        int page, 
-        int pageSize, 
+    Task<Stream> GetBookedInvoice(
+        int invoiceNumber,
         CancellationToken cancellationToken
     );
 
+    #endregion
+
+    #region customer
+
+    Task<Stream> GetCustomersPaged(
+        int skipPages,
+        int pageSize,
+        CancellationToken cancellationToken
+    );
+
+    #endregion
+
+    #region Product
+
     Task<Stream> GetProductsPaged(
-        int page, 
-        int pageSize, 
+        int skipPages,
+        int pageSize,
         CancellationToken cancellationToken
     );
 
@@ -45,8 +60,17 @@ public interface IRestApiGateway
         CancellationToken cancellationToken
     );
 
-    Task<Stream> GetBookedInvoice(
-        int invoiceNumber,
+    #endregion
+
+    #region PaymentTerm
+
+    Task<Stream> GetPaymentTerms(
+        int skipPages,
+        int pageSize, 
         CancellationToken cancellationToken
     );
+
+
+    #endregion
+
 }

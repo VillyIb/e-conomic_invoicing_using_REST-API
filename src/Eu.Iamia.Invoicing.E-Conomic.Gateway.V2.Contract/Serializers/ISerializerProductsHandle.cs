@@ -1,8 +1,8 @@
-﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Product;
+﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.PaymentTerm;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.Serializers;
 
-public interface ISerializerProductsHandle
+public interface ISerializerPaymentTermsHandle
 {
-    Task<ProductsHandle> DeserializeAsync(Stream utf8Json, CancellationToken cancellationToken);
+    Task<PaymentTermsHandle> DeserializeAsync(Stream utf8Json, CancellationToken cancellationToken);
 }

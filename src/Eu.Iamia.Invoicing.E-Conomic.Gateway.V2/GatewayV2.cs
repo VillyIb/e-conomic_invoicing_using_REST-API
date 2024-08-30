@@ -8,6 +8,7 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Customer;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.DraftInvoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Product;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.PaymentTerm;
 
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2;
@@ -79,5 +80,16 @@ public class GatewayV2 : IEconomicGatewayV2
         _report.Close();
 
         return draftInvoice;
+    }
+
+    public async Task<PaymentTermsHandle?> ReadPaymentTermsPaged(int page, int pageSize, CancellationToken cancellationToken = default)
+    {
+        var stream = await _restApiGateway.GetPaymentTerms(page, pageSize, cancellationToken);
+
+        var serializerPaymentTermsHandle = new SerializerPaymentTermsHandle();
+
+        var paymentTermsHandle = await serializerPaymentTermsHandle.DeserializeAsync(stream, cancellationToken);
+
+        return paymentTermsHandle;
     }
 }

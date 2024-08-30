@@ -1,6 +1,7 @@
 ﻿using Eu.Iamia.Invoicing.Application.Contract.DTO;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.DraftInvoice;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoice;
 using Eu.Iamia.Invoicing.Mapping.Caches;
 using Eu.Iamia.Reporting.Contract;
 
@@ -11,6 +12,8 @@ public interface IMappingService
     Task<int> LoadCustomerCache(IList<int> customerGroupsToAccept);
 
     Task<int> LoadProductCache();
+
+    Task<int> LoadPaymentTermCache();
 
     Task<IDraftInvoice?> PushInvoice(
         Application.Contract.DTO.InvoiceDto invoiceDto,
@@ -60,7 +63,7 @@ public class MappingService : IMappingService
         return _customersCache.Count;
     }
 
-    private readonly ProductDtoCache _productsCache = new();
+    private readonly ProductDtoCache _productsCache = [];
 
     public async Task<int> LoadProductCache()
     {
@@ -84,6 +87,29 @@ public class MappingService : IMappingService
         return _productsCache.Count;
     }
 
+    private readonly PaymentTermDtoCache _paymentTermCache = [];
+
+    public async Task<int> LoadPaymentTermCache()
+    {
+        _paymentTermCache.Clear();
+
+        var cts = new CancellationTokenSource();
+        bool @continue = true;
+        var page = 0;
+        while (@continue)
+        {
+            var paymentTermHandle = await _economicGateway.ReadPaymentTermsPaged(page, 20, cts.Token);
+            @continue = paymentTermHandle.collection.Any() && page < 100;
+            foreach (var c in paymentTermHandle.collection)
+            {
+                var paymentDto = c.ToPaymentTermDto();
+                _paymentTermCache.Add(paymentDto);
+                page++;
+            }
+        }
+        return _paymentTermCache.Count;
+    }
+
     /// <summary>
     /// Outgoing CustomerDto, InvoiceDto, ProductDto to RestApi-Invoice.
     /// </summary>
@@ -100,9 +126,52 @@ public class MappingService : IMappingService
         int layoutNumber
         )
     {
+        var paymentTerms = new PaymentTerms()
+        {
+            //DaysOfCredit = 14
+            //,
+            //PaymentTermsNumber = customerDto.PaymentTerms,
+            PaymentTermsNumber = 1,
+            //,
+            //Name = "Lb. md. 14 dage"
+            //,
+            //PaymentTermsType = PaymentTermsType.invoiceMonth
+        };
+
+        var layout = new Layout() { LayoutNumber = layoutNumber };
+
+        var notes = new Notes()
+        {
+            Heading = $"#{customerDto.CustomerNumber} {customerDto.Name}",
+            TextLine1 = invoiceDto.Text1
+            //TextLine2 = "Text2.1\nText2.2\nText2.3"
+        };
+
+        var recipient = new Recipient()
+        {
+            Address = $"{customerDto.Address}",
+            City = $"{customerDto.City}",
+            Zip = $"{customerDto.Zip}",
+            Name = $"{customerDto.Name}",
+            VatZone = new()
+            {
+                EnabledForCustomer = true,
+                EnabledForSupplier = true,
+                Name = "Domestic",
+                VatZoneNumber = 1 // Hardcoded value
+            }
+        };
+
+        var references = new References()
+        {
+            //Other = "references-other"
+        };
+
+        var customer = new E_Conomic.Gateway.V2.Contract.DTO.Invoice.Customer(customerDto.CustomerNumber);
+
         var invoice = new E_Conomic.Gateway.V2.Contract.DTO.Invoice.Invoice
         {
-            Customer = new E_Conomic.Gateway.V2.Contract.DTO.Invoice.Customer(customerDto.CustomerNumber),
+            Customer = customer,
             Date = invoiceDto.InvoiceDate.ToString("yyyy-MM-dd"),
             //ExchangeRate = 100,
             //Delivery = new(
@@ -112,42 +181,11 @@ public class MappingService : IMappingService
             //, "delivery-country"
             //, DateTime.Today
             //),
-            Layout = new() { LayoutNumber = layoutNumber },
-            Notes = new()
-            {
-                Heading = $"#{customerDto.CustomerNumber} {customerDto.Name}",
-                TextLine1 = invoiceDto.Text1
-                //TextLine2 = "Text2.1\nText2.2\nText2.3"
-            },
-            Recipient = new()
-            {
-                Address = $"{customerDto.Address}",
-                City = $"{customerDto.City}",
-                Zip = $"{customerDto.Zip}",
-                Name = $"{customerDto.Name}",
-                VatZone = new()
-                {
-                    EnabledForCustomer = true,
-                    EnabledForSupplier = true,
-                    Name = "Domestic",
-                    VatZoneNumber = 1 // Hardcoded value
-                }
-            },
-            References = new()
-            {
-                //Other = "references-other"
-            },
-            PaymentTerms = new()
-            {
-                //DaysOfCredit = 14
-                //,
-                //PaymentTermsNumber = customerDto.PaymentTerms,
-                PaymentTermsNumber = customerDto.PaymentTerms,
-                //,
-                //Name = "Lb. md. 14 dage"
-                //,
-                //PaymentTermsType = PaymentTermsType.invoiceMonth
-            }
+            Layout = layout,
+            Notes = notes,
+            Recipient = recipient,
+            References = references,
+            PaymentTerms = paymentTerms
         };
 
         foreach (var invoiceLineDto in invoiceDto.InvoiceLines)
@@ -168,18 +206,25 @@ public class MappingService : IMappingService
                     unitNumber: productDto.Unit.UnitNumber
                 );
 
+            var product = new E_Conomic.Gateway.V2.Contract.DTO.Invoice.Product()
+            {
+                ProductNumber = invoiceLineDto.ProductNumber
+            };
             var line = new E_Conomic.Gateway.V2.Contract.DTO.Invoice.Line()
             {
                 Description = invoiceLineDto.Description,
                 LineNumber = lineNumber,
-                Product = new E_Conomic.Gateway.V2.Contract.DTO.Invoice.Product()
-                {
-                    ProductNumber = invoiceLineDto.ProductNumber
-                },
+                Product = product,
                 Quantity = invoiceLineDto.Quantity!.Value,
                 SortKey = lineNumber,
                 Unit = unit,
                 UnitNetPrice = invoiceLineDto.UnitNetPrice!.Value,
+                // extra
+                DiscountPercentage = 0.0,
+                MarginInBaseCurrency = 100.0,
+                MarginPercentage = 100.0,
+                TotalNetAmount = 100.0,
+                UnitCostPrice = 0.0
             };
 
             invoice.Lines.Add(line);
