@@ -5,9 +5,6 @@
 #pragma warning disable CS8618
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Product;
-internal class ProductDto
-{
-}
 
 // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
 public class Collection
