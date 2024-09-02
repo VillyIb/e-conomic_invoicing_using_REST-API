@@ -13,6 +13,12 @@ public class MappingServiceShould
     {
         _cts = new CancellationTokenSource();
         using var setup = new Setup();
+
+        // IEconomicGatewayV2 to point to GatewayV2TestVariant.
+
+        // services.AddTransient<IEconomicGatewayV2, GatewayV2>();
+        setup.
+
         _sut = setup.GetService<IMappingService>();
     }
 

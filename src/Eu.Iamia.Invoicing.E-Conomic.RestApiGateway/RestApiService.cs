@@ -30,9 +30,16 @@ public partial class RestApiService : IRestApiGateway
         HttpClient.DefaultRequestHeaders.Add("X-AgreementGrantToken", Settings.X_AgreementGrantToken);
     }
 
-    private static async Task<Stream> GetPayload(HttpResponseMessage response, CancellationToken cancellationToken)
+    private static async Task<Stream> PostProcessing(HttpResponseMessage response, CancellationToken cancellationToken)
     {
-        return await response.Content.ReadAsStreamAsync(cancellationToken);
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadAsStreamAsync(cancellationToken);
+        }
+
+        var jsonError = await response.Content.ReadAsStringAsync(cancellationToken);
+
+        throw new HttpRequestException(HttpRequestError.Unknown, jsonError, null, response.StatusCode);
     }
 
     private async Task<Stream> GetAsync(string requestUri, string reference, CancellationToken cancellationToken)
@@ -41,9 +48,7 @@ public partial class RestApiService : IRestApiGateway
 
         var response = await HttpClient.GetAsync(requestUri, cancellationToken);
 
-        response.EnsureSuccessStatusCode();
-
-        return await GetPayload(response, cancellationToken);
+        return await PostProcessing(response, cancellationToken);
     }
 
     private async Task<Stream> PostAsync(string requestUri, StringContent content, string reference, CancellationToken cancellationToken)
@@ -52,14 +57,15 @@ public partial class RestApiService : IRestApiGateway
 
         var response = await HttpClient.PostAsync(requestUri, content, cancellationToken);
 
-        if (!response.IsSuccessStatusCode)
-        {
-            var jsonError = await response.Content.ReadAsStringAsync(cancellationToken);
+        return await PostProcessing(response, cancellationToken);
+    }
 
-            var httpRequestError = HttpRequestError.Unknown;
-            throw new HttpRequestException(httpRequestError, jsonError, null, response.StatusCode);
-        }
+    private async Task<Stream> DeleteAsync(string requestUri, string reference, CancellationToken cancellationToken)
+    {
+        SetAuthenticationHeaders();
 
-        return await GetPayload(response, cancellationToken);
+        var response = await HttpClient.DeleteAsync(requestUri, cancellationToken);
+
+        return await PostProcessing(response, cancellationToken);
     }
 }

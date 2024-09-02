@@ -38,6 +38,19 @@ public partial class RestApiService
         return await GetAsync(requestUri, reference, cancellationToken);
     }
 
+    public async Task<Stream> DeleteDraftInvoice(
+        int invoiceNumber,
+        CancellationToken cancellationToken
+    )
+    {
+        // see: https://restdocs.e-conomic.com/#delete-invoices-drafts
+
+        const string reference = nameof(DeleteDraftInvoice);
+        var requestUri = $"https://restapi.e-conomic.com/invoices/drafts/{invoiceNumber}";
+
+        return await DeleteAsync(requestUri, reference, cancellationToken);
+    }
+
     public async Task<Stream> GetBookedInvoices
     (
         int skipPages,
