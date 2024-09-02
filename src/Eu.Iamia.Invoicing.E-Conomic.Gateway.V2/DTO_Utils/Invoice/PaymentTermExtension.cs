@@ -1,4 +1,4 @@
-﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoice;
+﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.DTO_Utils.Invoice;
 
 public static class PaymentTermExtension
 {
