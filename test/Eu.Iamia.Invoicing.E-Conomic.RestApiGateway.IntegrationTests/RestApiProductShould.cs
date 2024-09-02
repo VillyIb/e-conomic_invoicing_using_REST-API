@@ -18,9 +18,9 @@ public class RestApiProductShould
     [Theory]
     [InlineData(0, 20)]
     [InlineData(1, 20)]
-    public async Task GetProductsPaged(int page, int pageSize)
+    public async Task GetProducts(int page, int pageSize)
     {
-        var stream = await _sut.GetProductsPaged(page, pageSize, _cts.Token);
+        var stream = await _sut.GetProducts(page, pageSize, _cts.Token);
 
         Assert.NotNull(stream);
 

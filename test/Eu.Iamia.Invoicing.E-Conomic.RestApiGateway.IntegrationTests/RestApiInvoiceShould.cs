@@ -20,7 +20,7 @@ public class RestApiInvoiceShould
     [Theory]
     [InlineData(0, 20)]
     [InlineData(1, 20)]
-    public async Task GetDraftInvoicesPaged(int page, int pageSize)
+    public async Task GetDraftInvoices(int page, int pageSize)
     {
         var stream = await _sut.GetDraftInvoices(page, pageSize, _cts.Token);
 
@@ -52,7 +52,7 @@ public class RestApiInvoiceShould
     [Theory]
     [InlineData(0, 20)]
     [InlineData(1, 20)]
-    public async Task GetBookedInvoicesPaged(int page, int pageSize)
+    public async Task GetBookedInvoices(int page, int pageSize)
     {
         var from = DateTime.Parse("2024-01-01");
         var to = DateTime.Parse("2024-01-31");

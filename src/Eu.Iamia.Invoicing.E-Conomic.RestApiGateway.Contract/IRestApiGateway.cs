@@ -6,7 +6,7 @@ public interface IRestApiGateway
 {
     #region Customer
 
-    Task<Stream> GetCustomersPaged(
+    Task<Stream> GetCustomers(
         int skipPages,
         int pageSize,
         CancellationToken cancellationToken
@@ -60,7 +60,7 @@ public interface IRestApiGateway
 
     #region Product
 
-    Task<Stream> GetProductsPaged(
+    Task<Stream> GetProducts(
         int skipPages,
         int pageSize,
         CancellationToken cancellationToken

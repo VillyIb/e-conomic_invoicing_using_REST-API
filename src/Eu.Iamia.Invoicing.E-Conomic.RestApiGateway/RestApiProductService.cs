@@ -5,11 +5,11 @@ namespace Eu.Iamia.Invoicing.E_Conomic.RestApiGateway;
 
 public partial class RestApiService
 {
-    public virtual async Task<Stream> GetProductsPaged(int skipPages, int pageSize, CancellationToken cancellationToken)
+    public virtual async Task<Stream> GetProducts(int skipPages, int pageSize, CancellationToken cancellationToken)
     {
         // see: https://restdocs.e-conomic.com/#get-products
 
-        const string reference = nameof(GetProductsPaged);
+        const string reference = nameof(GetProducts);
 
         var requestUrl =
             $"https://restapi.e-conomic.com/products?" +

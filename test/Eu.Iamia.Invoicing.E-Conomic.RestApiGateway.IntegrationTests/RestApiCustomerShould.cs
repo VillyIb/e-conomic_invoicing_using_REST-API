@@ -18,9 +18,9 @@ public class RestApiCustomerShould
     [Theory]
     [InlineData(0, 20)]
     [InlineData(1, 20)]
-    public async Task GetCustomersPaged(int page, int pageSize)
+    public async Task GetCustomers(int page, int pageSize)
     {
-        var stream = await _sut.GetCustomersPaged(page, pageSize, _cts.Token);
+        var stream = await _sut.GetCustomers(page, pageSize, _cts.Token);
 
         Assert.NotNull(stream);
 

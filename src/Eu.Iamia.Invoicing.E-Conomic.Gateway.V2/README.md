@@ -6,6 +6,6 @@ Accepts business class data
 Returns business class data
 
 ## Methods
-* ReadCustomersPaged
-* ReadProductsPaged
+* ReadCustomers
+* ReadProducts
 * PushInvoice

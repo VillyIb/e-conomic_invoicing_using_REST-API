@@ -9,7 +9,7 @@ No validation of content only transport layer validation.
 
 # Methods
 * Customer
-    * GetCustomersPaged
+    * GetCustomers 
 * Invoice
     * GetDraftInvoices
     * GetDraftInvoice
@@ -17,5 +17,5 @@ No validation of content only transport layer validation.
     * GetBookedInvoice
     * PushInvoice
 * Product
-    * GetProductsPaged
+    * GetProducts
     * GetProduct

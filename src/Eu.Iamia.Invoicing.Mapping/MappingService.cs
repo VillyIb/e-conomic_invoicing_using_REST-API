@@ -48,7 +48,7 @@ public class MappingService : IMappingService
         var page = 0;
         while (@continue)
         {
-            var customersHandle = await _economicGateway.ReadCustomersPaged(page, 20, cts.Token);
+            var customersHandle = await _economicGateway.ReadCustomers(page, 20, cts.Token);
             foreach (var collection in customersHandle.Customers)
             {
                 if (!customerGroupsToAccept.Any(cg => cg.Equals(collection.customerGroup.customerGroupNumber))) continue;
@@ -74,7 +74,7 @@ public class MappingService : IMappingService
         var page = 0;
         while (@continue)
         {
-            var productsHandle = await _economicGateway.ReadProductsPaged(page, 20, cts.Token);
+            var productsHandle = await _economicGateway.ReadProducts(page, 20, cts.Token);
             foreach (var collection in productsHandle.Products)
             {
                 var productDto = collection.ToProductDto();
@@ -103,7 +103,7 @@ public class MappingService : IMappingService
     //    var page = 0;
     //    while (@continue)
     //    {
-    //        var paymentTermHandle = await _economicGateway.ReadPaymentTermsPaged(page, 20, cts.Token);
+    //        var paymentTermHandle = await _economicGateway.ReadPaymentTerms(page, 20, cts.Token);
     //        foreach (var c in paymentTermHandle.Products)
     //        {
     //            var paymentDto = c.ToPaymentTermDto();

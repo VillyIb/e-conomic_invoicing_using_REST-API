@@ -36,9 +36,9 @@ public class GatewayV2 : IEconomicGatewayV2
     { }
 
 
-    public async Task<CustomersHandle> ReadCustomersPaged(int page, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<CustomersHandle> ReadCustomers(int page, int pageSize, CancellationToken cancellationToken = default)
     {
-        var stream = await _restApiGateway.GetCustomersPaged(page, pageSize, cancellationToken);
+        var stream = await _restApiGateway.GetCustomers(page, pageSize, cancellationToken);
 
         var serializerCustomersHandle = new SerializerCustomersHandle();
 
@@ -47,9 +47,9 @@ public class GatewayV2 : IEconomicGatewayV2
         return customersHandle;
     }
 
-    public async Task<ProductsHandle> ReadProductsPaged(int page, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<ProductsHandle> ReadProducts(int page, int pageSize, CancellationToken cancellationToken = default)
     {
-        var stream = await _restApiGateway.GetProductsPaged(page, pageSize, cancellationToken);
+        var stream = await _restApiGateway.GetProducts(page, pageSize, cancellationToken);
 
         var serializerProductsHandle = new SerializerProductsHandle();
 
@@ -92,7 +92,7 @@ public class GatewayV2 : IEconomicGatewayV2
         var page = 0;
         while (@continue)
         {
-            var paymentTermHandle = await ReadPaymentTermsPaged(page, 20, cts.Token) ?? new Contract.DTO.PaymentTerm.PaymentTermsHandle();
+            var paymentTermHandle = await ReadPaymentTerms(page, 20, cts.Token) ?? new Contract.DTO.PaymentTerm.PaymentTermsHandle();
             _paymentTermsCache.AddRange(paymentTermHandle.PaymentTerms);
             @continue = paymentTermHandle.PaymentTerms.Any() && page < 100;
             page++;
@@ -105,7 +105,7 @@ public class GatewayV2 : IEconomicGatewayV2
         return _paymentTermsCache.FirstOrDefault(collection => collection.paymentTermsNumber == paymentTermsNumber);
     }
 
-    public async Task<Contract.DTO.PaymentTerm.PaymentTermsHandle?> ReadPaymentTermsPaged(int page, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<Contract.DTO.PaymentTerm.PaymentTermsHandle?> ReadPaymentTerms(int page, int pageSize, CancellationToken cancellationToken = default)
     {
         var stream = await _restApiGateway.GetPaymentTerms(page, pageSize, cancellationToken);
 
