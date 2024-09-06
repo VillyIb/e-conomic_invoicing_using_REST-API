@@ -13,11 +13,16 @@ public class Setup : SetupBase
         var configuration = ConfigurationSetup.Init(args);
 
         services ??= new ServiceCollection();
+        var  @params = new IHandlerSetup[] {
+            new Invoicing.E_Conomic.Gateway.V2.Configuration.Setup(configuration), 
+            new Reporting.Configuration.Setup(configuration), 
+            new Invoicing.E_Conomic.RestApiGateway.Configuration.Setup(configuration), 
+            new Invoicing.E_Conomic.Gateway.V2.IntegrationTests.Configuration.Setup(configuration)
+        };
+
         Register(
             services,
-            new Eu.Iamia.Reporting.Configuration.Setup(configuration),
-            new Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.Configuration.Setup(configuration),
-            new Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Configuration.Setup(configuration)
+            @params    
         );
 
         ServiceProvider = services.BuildServiceProvider();

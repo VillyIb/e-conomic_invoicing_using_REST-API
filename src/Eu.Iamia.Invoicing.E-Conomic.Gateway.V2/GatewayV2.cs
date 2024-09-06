@@ -14,7 +14,7 @@ namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2;
 public class GatewayV2 : IEconomicGatewayV2
 {
     private readonly SettingsForEConomicGatewayV2 _settings; // TODO review
-    private readonly IRestApiGateway _restApiGateway;
+    protected readonly IRestApiGateway _restApiGateway;
     private readonly ICustomerReport _report;
 
     public GatewayV2(

@@ -26,7 +26,7 @@ public partial class RestApiService
     {
         // see: https://restdocs.e-conomic.com/#get-invoices-booked-bookedinvoicenumber
 
-        const string reference = nameof(GetBookedInvoices);
+        const string reference = nameof(GetProduct);
 
         var requestUri = $"https://restapi.e-conomic.com/products/{productNumber}";
         return await GetAsync(requestUri, reference, cancellationToken);
