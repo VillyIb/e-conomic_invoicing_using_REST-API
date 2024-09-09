@@ -7,10 +7,10 @@ using System.Text.Json.Serialization;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.BookedInvoice;
 
-public class BookedInvoiceHandle
+public class BookedInvoicesHandle
 {
     [JsonPropertyName("collection")]
-    public BookedInvoice[] BookedInvoices { get; set; }
+    public BookedInvoices[] BookedInvoices { get; set; }
     public Pagination pagination { get; set; }
     public string self { get; set; }
 }
@@ -28,7 +28,7 @@ public class Pagination
     public string lastPage { get; set; }
 }
 
-public class BookedInvoice
+public class BookedInvoices
 {
     public int bookedInvoiceNumber { get; set; }
     public int orderNumber { get; set; }

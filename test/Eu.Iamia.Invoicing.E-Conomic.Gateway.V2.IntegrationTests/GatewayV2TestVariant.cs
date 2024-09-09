@@ -25,7 +25,7 @@ public  class GatewayV2TestVariant : GatewayV2
     public GatewayV2TestVariant(IOptions<SettingsForEConomicGatewayV2> settings, IRestApiGateway restApiGateway, ICustomerReport report) : base(settings, restApiGateway, report)
     { }
 
-    public async Task<BookedInvoiceHandle> ReadBookedInvoices(int page, int pageSize, IInterval<DateTime> dateRange, CancellationToken cancellationToken = default)
+    public async Task<BookedInvoicesHandle> ReadBookedInvoices(int page, int pageSize, IInterval<DateTime> dateRange, CancellationToken cancellationToken = default)
     {
         var stream = await _restApiGateway.GetBookedInvoices(page, pageSize, dateRange, cancellationToken);
 
