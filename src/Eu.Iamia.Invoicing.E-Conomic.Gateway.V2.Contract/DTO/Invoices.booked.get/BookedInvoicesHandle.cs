@@ -1,18 +1,16 @@
-﻿// ReSharper disable IdentifierTypo
-// ReSharper disable InconsistentNaming
-// ReSharper disable UnusedMember.Global
-#pragma warning disable IDE1006
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.BookedInvoice;
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.booked.get;
+
+// see: https://restapi.e-conomic.com/schema/invoices.booked.get.schema.json
 
 public class BookedInvoicesHandle
 {
-    [JsonPropertyName("collection")]
-    public BookedInvoices[] BookedInvoices { get; set; }
-    public Pagination pagination { get; set; }
-    public string self { get; set; }
+    [JsonPropertyName("collection")] public BookedInvoice[] Invoices   { get; set; } = [];
+    public                                  Pagination      pagination { get; set; }
+    public                                  string          self       { get; set; }
+
+    public static readonly BookedInvoicesHandle NullBookedInvoicesHandle = new();
 }
 
 public class Pagination
@@ -28,7 +26,7 @@ public class Pagination
     public string lastPage { get; set; }
 }
 
-public class BookedInvoices
+public class BookedInvoice
 {
     public int bookedInvoiceNumber { get; set; }
     public int orderNumber { get; set; }
@@ -116,3 +114,4 @@ public class Pdf
 {
     public string download { get; set; }
 }
+

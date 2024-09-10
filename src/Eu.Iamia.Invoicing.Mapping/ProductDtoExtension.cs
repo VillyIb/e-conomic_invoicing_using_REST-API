@@ -1,5 +1,7 @@
 ﻿// ReSharper disable RedundantNameQualifier
 
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Products.get;
+
 namespace Eu.Iamia.Invoicing.Mapping;
 
 /// <summary>
@@ -13,7 +15,7 @@ public static class ProductDtoExtension
     /// <param name="restApiProduct"></param>
     /// <returns></returns>
     public static Application.Contract.DTO.ProductDto ToProductDto(
-        this E_Conomic.Gateway.V2.Contract.DTO.Product.Product restApiProduct)
+        this Product restApiProduct)
     {
         // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         var unitDto = restApiProduct.unit is null

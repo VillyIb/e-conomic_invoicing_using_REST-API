@@ -9,6 +9,10 @@ public partial class RestApiService
         CancellationToken cancellationToken
     )
     {
+        // see: https://restdocs.e-conomic.com/#get-payment-terms
+
+        // see: https://restapi.e-conomic.com/schema/payment-terms.get.schema.json
+
         const string reference = nameof(GetPaymentTerms);
 
         var requestUri =

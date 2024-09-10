@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoice;
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts.post;
 
 /// <summary>
 /// 

@@ -1,6 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.DraftInvoice;
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts.draftInvoiceNumber.lines.post;
+
+// see: https://restapi.e-conomic.com/schema/invoices.drafts.draftInvoiceNumber.lines.post.schema.json
 
 public class DraftInvoice : IDraftInvoice
 {

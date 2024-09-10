@@ -6,7 +6,9 @@
 
 using System.Text.Json.Serialization;
 
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Product;
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Products.get;
+
+// see: https://restapi.e-conomic.com/schema/products.get.schema.json
 
 // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
 public class Product

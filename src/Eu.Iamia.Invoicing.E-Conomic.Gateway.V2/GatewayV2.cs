@@ -4,10 +4,14 @@ using Microsoft.Extensions.Options;
 using Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.Contract;
 using System.Text;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Customer;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.DraftInvoice;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Product;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Customers.get;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.Draft.Post;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts.post;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.PaymentTerms.get;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Products.get;
 
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2;
@@ -58,15 +62,15 @@ public class GatewayV2 : IEconomicGatewayV2
         return productsHandle;
     }
 
-    public async Task<IDraftInvoice?> PushInvoice(Contract.DTO.Invoice.Invoice restApiInvoice, int sourceFileNumber, CancellationToken cancellationToken)
+    public async Task<IDraftInvoice?> PostInvoice(Invoice restApiInvoice, int sourceFileNumber, CancellationToken cancellationToken)
     {
-        const string reference = nameof(PushInvoice);
+        const string reference = nameof(PostInvoice);
 
-        var json = Contract.DTO.Invoice.InvoiceExtension.ToJson(restApiInvoice);
+        var json = InvoiceExtension.ToJson(restApiInvoice);
 
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var stream = await _restApiGateway.PushInvoice(content, cancellationToken);
+        var stream = await _restApiGateway.PostInvoice(content, cancellationToken);
         
         var serializerDraftInvoice = new SerializerDraftInvoice();
 
@@ -81,7 +85,7 @@ public class GatewayV2 : IEconomicGatewayV2
         return draftInvoice;
     }
 
-    private List<Contract.DTO.PaymentTerm.PaymentTerm> _paymentTermsCache = [];
+    private List<PaymentTerm> _paymentTermsCache = [];
 
     public async Task<int> LoadPaymentTermsCache()
     {
@@ -92,7 +96,7 @@ public class GatewayV2 : IEconomicGatewayV2
         var page = 0;
         while (@continue)
         {
-            var paymentTermHandle = await ReadPaymentTerms(page, 20, cts.Token) ?? new Contract.DTO.PaymentTerm.PaymentTermsHandle();
+            var paymentTermHandle = await ReadPaymentTerms(page, 20, cts.Token) ?? new PaymentTermsHandle();
             _paymentTermsCache.AddRange(paymentTermHandle.PaymentTerms);
             @continue = paymentTermHandle.PaymentTerms.Any() && page < 100;
             page++;
@@ -100,12 +104,12 @@ public class GatewayV2 : IEconomicGatewayV2
         return _paymentTermsCache.Count; ;
     }
 
-    public Contract.DTO.PaymentTerm.PaymentTerm? GetPaymentTerm(int paymentTermsNumber)
+    public PaymentTerm? GetPaymentTerm(int paymentTermsNumber)
     {
         return _paymentTermsCache.FirstOrDefault(collection => collection.paymentTermsNumber == paymentTermsNumber);
     }
 
-    public async Task<Contract.DTO.PaymentTerm.PaymentTermsHandle?> ReadPaymentTerms(int page, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<PaymentTermsHandle?> ReadPaymentTerms(int page, int pageSize, CancellationToken cancellationToken = default)
     {
         var stream = await _restApiGateway.GetPaymentTerms(page, pageSize, cancellationToken);
 

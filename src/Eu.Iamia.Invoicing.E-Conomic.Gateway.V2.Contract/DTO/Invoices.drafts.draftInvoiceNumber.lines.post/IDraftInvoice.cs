@@ -1,4 +1,4 @@
-﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.DraftInvoice;
+﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts;
 
 public interface IDraftInvoice
 {

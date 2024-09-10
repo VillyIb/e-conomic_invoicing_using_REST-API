@@ -49,11 +49,11 @@ public class GatewayV2Should
     public async Task ReadBookedInvoices(int page, int pageSize, string from, string to)
     {
         var dateRange = Interval<DateTime>.Create(DateTime.Parse(from), DateTime.Parse(to));
-        var bookedInvoices = await ((GatewayV2TestVariant)_sut).ReadBookedInvoices(page, pageSize, dateRange, _cts.Token);
+        var bookedInvoicesHandle = await ((GatewayV2TestVariant)_sut).ReadBookedInvoices(page, pageSize, dateRange, _cts.Token);
 
-        Assert.NotNull(bookedInvoices);
-        Assert.True(bookedInvoices.BookedInvoices.Any());
-        Assert.Equal(pageSize, bookedInvoices.BookedInvoices.Length );
+        Assert.NotNull(bookedInvoicesHandle);
+        Assert.True(bookedInvoicesHandle.Invoices.Any());
+        Assert.Equal(pageSize, bookedInvoicesHandle.Invoices.Length );
 
     }
     

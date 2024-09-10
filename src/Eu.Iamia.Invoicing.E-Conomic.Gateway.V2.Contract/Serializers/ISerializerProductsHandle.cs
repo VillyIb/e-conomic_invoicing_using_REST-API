@@ -1,4 +1,4 @@
-﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.PaymentTerm;
+﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.PaymentTerms.get;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.Serializers;
 

@@ -15,6 +15,8 @@ public partial class RestApiService
     {
         // see: https://restdocs.e-conomic.com/#get-invoices-drafts
 
+        // see: https://restapi.e-conomic.com/schema/invoices.drafts.get.schema.json
+
         const string reference = nameof(GetDraftInvoices);
 
         var requestUri =
@@ -31,6 +33,8 @@ public partial class RestApiService
     )
     {
         // see: https://restdocs.e-conomic.com/#get-invoices-drafts-draftinvoicenumber
+
+        // see:https://restapi.e-conomic.com/schema/invoices.drafts.draftInvoiceNumber.get.schema.json
 
         const string reference = nameof(GetDraftInvoice);
         var requestUri = $"https://restapi.e-conomic.com/invoices/drafts/{invoiceNumber}";
@@ -61,6 +65,8 @@ public partial class RestApiService
     {
         // see: https://restdocs.e-conomic.com/#get-invoices-booked
 
+        // see: https://restapi.e-conomic.com/schema/invoices.booked.get.schema.json
+
         const string reference = nameof(GetBookedInvoices);
 
         // ReSharper disable once StringLiteralTypo
@@ -79,20 +85,30 @@ public partial class RestApiService
     {
         // see: https://restdocs.e-conomic.com/#get-invoices-booked-bookedinvoicenumber
 
-        const string reference = nameof(GetBookedInvoices);
+        // see: https://restapi.e-conomic.com/schema/invoices.booked.bookedInvoiceNumber.get.schema.json
+
+        const string reference = nameof(GetBookedInvoice);
 
         var requestUri = $"https://restapi.e-conomic.com/invoices/booked/{invoiceNumber}";
         return await GetAsync(requestUri, reference, cancellationToken);
     }
 
-    public async Task<Stream> PushInvoice(
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="content"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public async Task<Stream> PostInvoice(
         StringContent content,
         CancellationToken cancellationToken
     )
     {
         // see: https://restdocs.e-conomic.com/#post-invoices-drafts-draftinvoicenumber-lines
 
-        const string reference = nameof(PushInvoice);
+        // see: https://restapi.e-conomic.com/schema/invoices.drafts.draftInvoiceNumber.lines.post.schema.json
+
+        const string reference = nameof(PostInvoice);
 
         var requestUri = "https://restapi.e-conomic.com//invoices/drafts";
         return await PostAsync(requestUri, content, reference, cancellationToken);

@@ -1,4 +1,6 @@
-﻿namespace Eu.Iamia.Invoicing.Mapping;
+﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Customers.get;
+
+namespace Eu.Iamia.Invoicing.Mapping;
 
 public static class CustomerDtoExtension
 {
@@ -8,7 +10,7 @@ public static class CustomerDtoExtension
     /// <param name="restApiCustomer"></param>
     /// <returns></returns>
     public static Application.Contract.DTO.CustomerDto ToCustomerDto(
-        this E_Conomic.Gateway.V2.Contract.DTO.Customer.Customer restApiCustomer)
+        this Customer restApiCustomer)
     {
         return new Application.Contract.DTO.CustomerDto
         {

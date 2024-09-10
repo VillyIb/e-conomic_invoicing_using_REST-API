@@ -9,6 +9,8 @@ public partial class RestApiService
     {
         // see: https://restdocs.e-conomic.com/#get-products
 
+        // see: https://restapi.e-conomic.com/schema/products.get.schema.json
+
         const string reference = nameof(GetProducts);
 
         var requestUrl =
@@ -24,7 +26,9 @@ public partial class RestApiService
         CancellationToken cancellationToken
     )
     {
-        // see: https://restdocs.e-conomic.com/#get-invoices-booked-bookedinvoicenumber
+        // see: https://restdocs.e-conomic.com/#get-products-productnumber
+
+        // see: https://restapi.e-conomic.com/schema/products.productNumber.get.schema.json
 
         const string reference = nameof(GetProduct);
 

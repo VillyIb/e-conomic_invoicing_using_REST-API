@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Configuration;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.BookedInvoice;
+﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Configuration;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.booked.get;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers;
 using Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.Contract;
 using Eu.Iamia.Reporting.Contract;

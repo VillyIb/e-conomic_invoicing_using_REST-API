@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.PaymentTerm;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.PaymentTerms.get;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.Serializers;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers;

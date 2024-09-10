@@ -91,7 +91,7 @@ public class InvoicingHandler : IInvoicingHandler
             catch (Exception ex)
             {
                 countFails++;
-                _customerReport.Error("PushInvoice", ex.Message);
+                _customerReport.Error(nameof(LoadInvoices), ex.Message);
                 _customerReport.Close();
             }
         }

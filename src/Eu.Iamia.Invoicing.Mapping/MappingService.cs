@@ -1,7 +1,8 @@
 ﻿using Eu.Iamia.Invoicing.Application.Contract.DTO;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.DraftInvoice;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoice;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.Draft.Post;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts.post;
 using Eu.Iamia.Invoicing.Mapping.Caches;
 using Eu.Iamia.Reporting.Contract;
 
@@ -124,7 +125,7 @@ public class MappingService : IMappingService
     /// <param name="layoutNumber"></param>
     /// <returns></returns>
     /// <exception cref="ApplicationException"></exception>
-    private  E_Conomic.Gateway.V2.Contract.DTO.Invoice.Invoice ToRestApiInvoice(
+    private  Invoice ToRestApiInvoice(
         CustomerDto customerDto,
         InvoiceDto invoiceDto,
         ProductDtoCache productDtoCache,
@@ -169,9 +170,9 @@ public class MappingService : IMappingService
             //Other = "references-other"
         };
 
-        var customer = new E_Conomic.Gateway.V2.Contract.DTO.Invoice.Customer(customerDto.CustomerNumber);
+        var customer = new Customer(customerDto.CustomerNumber);
 
-        var invoice = new E_Conomic.Gateway.V2.Contract.DTO.Invoice.Invoice
+        var invoice = new Invoice
         {
             Customer = customer,
             Date = invoiceDto.InvoiceDate.ToString("yyyy-MM-dd"),
@@ -203,16 +204,16 @@ public class MappingService : IMappingService
 
             var unit = productDto.Unit is null
                 ? null
-                : new E_Conomic.Gateway.V2.Contract.DTO.Invoice.Unit(
+                : new Unit(
                     name: productDto.Unit.Name,
                     unitNumber: productDto.Unit.UnitNumber
                 );
 
-            var product = new E_Conomic.Gateway.V2.Contract.DTO.Invoice.Product()
+            var product = new Product()
             {
                 ProductNumber = invoiceLineDto.ProductNumber
             };
-            var line = new E_Conomic.Gateway.V2.Contract.DTO.Invoice.Line()
+            var line = new Line()
             {
                 Description = invoiceLineDto.Description,
                 LineNumber = lineNumber,
@@ -260,7 +261,7 @@ public class MappingService : IMappingService
              layoutNumber
         );
 
-        var draftInvoice = await _economicGateway.PushInvoice(restApiInvoice, sourceFileLineNumber, cancellationToken);
+        var draftInvoice = await _economicGateway.PostInvoice(restApiInvoice, sourceFileLineNumber, cancellationToken);
 
         return draftInvoice;
     }

@@ -8,6 +8,8 @@ public partial class RestApiService
     {
         // see:https://restdocs.e-conomic.com/#get-customers
 
+        // see: https://restapi.e-conomic.com/schema/customers.get.schema.json
+
         const string reference = nameof(GetCustomers);
 
         var requestUri =

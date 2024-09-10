@@ -8,7 +8,9 @@
 
 using System.Text.Json.Serialization;
 
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.PaymentTerm;
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.PaymentTerms.get;
+
+// see: https://restapi.e-conomic.com/schema/payment-terms.get.schema.json
 
 public class PaymentTermsHandle
 {

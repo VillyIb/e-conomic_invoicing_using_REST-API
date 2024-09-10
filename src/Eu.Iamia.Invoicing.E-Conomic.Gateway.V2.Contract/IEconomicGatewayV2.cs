@@ -1,18 +1,23 @@
-﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.DraftInvoice;
+﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Customers.get;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.Draft.Post;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts.post;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.PaymentTerms.get;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Products.get;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract;
 
 public interface IEconomicGatewayV2
 {
-    Task<DTO.Customer.CustomersHandle> ReadCustomers(int page, int pageSize, CancellationToken cancellationToken = default);
+    Task<CustomersHandle> ReadCustomers(int page, int pageSize, CancellationToken cancellationToken = default);
 
-    Task<DTO.Product.ProductsHandle> ReadProducts(int page, int pageSize, CancellationToken cancellationToken = default);
+    Task<ProductsHandle> ReadProducts(int page, int pageSize, CancellationToken cancellationToken = default);
 
-    Task<DTO.PaymentTerm.PaymentTermsHandle?> ReadPaymentTerms(int page, int pageSize, CancellationToken cancellationToken = default);
+    Task<PaymentTermsHandle?> ReadPaymentTerms(int page, int pageSize, CancellationToken cancellationToken = default);
 
-    Task<IDraftInvoice?> PushInvoice(DTO.Invoice.Invoice restApiInvoice, int sourceFileNumber, CancellationToken cancellationToken);
+    Task<IDraftInvoice?> PostInvoice(Invoice restApiInvoice, int sourceFileNumber, CancellationToken cancellationToken);
 
     Task<int> LoadPaymentTermsCache();
 
-    Contract.DTO.PaymentTerm.PaymentTerm? GetPaymentTerm(int paymentTermsNumber);
+    PaymentTerm? GetPaymentTerm(int paymentTermsNumber);
 }

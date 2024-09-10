@@ -40,7 +40,7 @@ public interface IRestApiGateway
         CancellationToken cancellationToken
     );
 
-    Task<Stream> PushInvoice(
+    Task<Stream> PostInvoice(
         StringContent content,
         CancellationToken cancellationToken
     );
