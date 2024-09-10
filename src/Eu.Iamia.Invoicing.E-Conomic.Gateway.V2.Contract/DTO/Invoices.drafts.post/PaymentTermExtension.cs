@@ -1,12 +1,10 @@
-﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.PaymentTerms.get;
-
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts.post;
+﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts.post;
 
 public static class PaymentTermExtension
 {
-    public static DTO.PaymentTerms ToInvoice(this PaymentTerm paymentTerm)
+    public static PaymentTerms ToInvoice(this DTO.PaymentTerms.get.PaymentTerm paymentTerm)
     {
-        return new DTO.PaymentTerms
+        return new PaymentTerms()
         {
             DaysOfCredit = paymentTerm.daysOfCredit,
             Name = paymentTerm.name,

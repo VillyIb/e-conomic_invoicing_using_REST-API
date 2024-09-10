@@ -1,6 +1,5 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract;
 using Eu.Iamia.Utils;
-using Eu.Iamia.Utils.Contract;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.IntegrationTests;
 public class GatewayV2Should

@@ -1,6 +1,5 @@
 ﻿using Eu.Iamia.Invoicing.Application.Contract.DTO;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts.draftInvoiceNumber.lines.post;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts.post;
 using Eu.Iamia.Invoicing.Mapping.Caches;

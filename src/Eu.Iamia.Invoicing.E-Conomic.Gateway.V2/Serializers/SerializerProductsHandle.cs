@@ -1,5 +1,4 @@
-﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Product;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.Serializers;
+﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.Serializers;
 using System.Text.Json;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Products.get;
 
