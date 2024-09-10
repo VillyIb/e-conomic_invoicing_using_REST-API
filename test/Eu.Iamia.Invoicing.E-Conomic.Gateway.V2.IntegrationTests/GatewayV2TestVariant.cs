@@ -1,6 +1,7 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Configuration;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.booked.get;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers.Invoices.booked.get;
 using Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.Contract;
 using Eu.Iamia.Reporting.Contract;
 using Eu.Iamia.Utils.Contract;

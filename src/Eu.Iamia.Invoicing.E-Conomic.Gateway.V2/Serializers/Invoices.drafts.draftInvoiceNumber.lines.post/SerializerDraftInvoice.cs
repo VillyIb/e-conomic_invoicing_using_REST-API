@@ -2,10 +2,9 @@
 using System.Text.Json;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts.draftInvoiceNumber.lines.post;
 
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers;
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers.Invoices.drafts.draftInvoiceNumber.lines.post;
 
-[Obsolete("Tentative")]
-public class SerializerDraftInvoices : ISerializerDraftInvoice
+public class SerializerDraftInvoice : ISerializerDraftInvoice
 {
     public async Task<DraftInvoice> DeserializeAsync(Stream utf8Json, CancellationToken cancellationToken)
     {

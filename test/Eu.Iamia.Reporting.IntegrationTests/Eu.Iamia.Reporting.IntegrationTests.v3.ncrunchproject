@@ -4,6 +4,33 @@
       <FixtureTestSelector>
         <FixtureName>Eu.Iamia.Reporting.IntegrationTests.CustomerReportShould</FixtureName>
       </FixtureTestSelector>
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Reporting.IntegrationTests.CustomerReportShould.Given_Alfa_as_Key_and_Body_When_Error_File_Contains_ExpectedText</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Reporting.IntegrationTests.CustomerReportShould.Given_CustomerWithName_When_Error_CreateErrorFilename</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Reporting.IntegrationTests.CustomerReportShould.Given_CustomerWithName_When_Info_LeaveInfoFilename</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Reporting.IntegrationTests.CustomerReportShould.Given_CustomerWithName_When_Message_CreateMessageFilename</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Reporting.IntegrationTests.CustomerReportShould.Given_CustomerWithOutName_When_Error_LeaveDefaultErrorFilename</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Reporting.IntegrationTests.CustomerReportShould.Given_DiscardNonErrors_is_True_When_Info_LeavesNoFile</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Reporting.IntegrationTests.CustomerReportShould.Given_file_is_created_written_closed_opened_written_AllTextIsRetained</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Reporting.IntegrationTests.CustomerReportShould.Given_FileIsCreated_When_SetCustomer_CustomerIsUnchanged</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Eu.Iamia.Reporting.IntegrationTests.CustomerReportShould.Given_FileIsNotCreated_When_SetCustomer_CustomerIsChanged</TestName>
+      </NamedTestSelector>
     </IgnoredTests>
   </Settings>
 </ProjectConfiguration>

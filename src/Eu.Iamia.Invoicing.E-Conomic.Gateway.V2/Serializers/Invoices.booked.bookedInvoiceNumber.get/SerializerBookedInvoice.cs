@@ -2,7 +2,7 @@
 using System.Text.Json;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.booked.bookedInvoiceNumber.get;
 
-namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers;
+namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers.Invoices.booked.bookedInvoiceNumber.get;
 
 public class SerializerBookedInvoice : ISerializerBookedInvoice
 {
