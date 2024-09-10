@@ -53,7 +53,15 @@ public class GatewayV2Should
         Assert.NotNull(bookedInvoicesHandle);
         Assert.True(bookedInvoicesHandle.Invoices.Any());
         Assert.Equal(pageSize, bookedInvoicesHandle.Invoices.Length );
+    }
 
+    [Theory]
+    [InlineData(56,2024072)]
+    public async Task ReadBookedInvoice(int customerNumber, int invoiceNumber)
+    {
+        var bookedInvoice = await _sut.ReadBookedInvoice(invoiceNumber);
+        Assert.NotNull(bookedInvoice);
+        Assert.Equal(customerNumber,bookedInvoice.customer.customerNumber);
     }
     
 }

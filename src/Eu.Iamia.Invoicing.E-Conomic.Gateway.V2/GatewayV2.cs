@@ -3,7 +3,6 @@ using Eu.Iamia.Reporting.Contract;
 using Microsoft.Extensions.Options;
 using Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.Contract;
 using System.Text;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Customers.get;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts.draftInvoiceNumber.lines.post;
@@ -14,9 +13,11 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers.Customers.get;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers.Invoices.drafts.draftInvoiceNumber.lines.post;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers.PaymentTerms.get;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers.Products.get;
+using Eu.Iamia.Utils.Contract;
 
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2;
+
 public class GatewayV2 : IEconomicGatewayV2
 {
     private readonly SettingsForEConomicGatewayV2 _settings; // TODO review
@@ -85,6 +86,28 @@ public class GatewayV2 : IEconomicGatewayV2
         _report.Close();
 
         return draftInvoice;
+    }
+
+    public async Task<Contract.DTO.Invoices.booked.get.BookedInvoicesHandle> ReadBookedInvoices(int page, int pageSize, IInterval<DateTime> dateRange, CancellationToken cancellationToken = default)
+    {
+        var stream = await _restApiGateway.GetBookedInvoices(page, pageSize, dateRange, cancellationToken);
+
+        var serializerCustomersHandle = new Serializers.Invoices.booked.get.SerializerBookedInvoicesHandle();
+
+        var customersHandle = await serializerCustomersHandle.DeserializeAsync(stream, cancellationToken);
+
+        return customersHandle;
+    }
+
+    public async Task<Contract.DTO.Invoices.booked.bookedInvoiceNumber.get.BookedInvoice> ReadBookedInvoice(int invoiceNumber, CancellationToken cancellationToken = default)
+    {
+        var stream = await _restApiGateway.GetBookedInvoice(invoiceNumber, cancellationToken);
+
+        var serializerCustomersHandle = new Serializers.Invoices.booked.bookedInvoiceNumber.get.SerializerBookedInvoice();
+
+        var bookedInvoice = await serializerCustomersHandle.DeserializeAsync(stream, cancellationToken);
+
+        return bookedInvoice;
     }
 
     private List<PaymentTerm> _paymentTermsCache = [];
