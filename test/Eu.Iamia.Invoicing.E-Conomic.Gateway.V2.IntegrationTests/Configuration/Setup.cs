@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.IntegrationTests.Configuration;
-public  class Setup : IHandlerSetup
+public class Setup : IHandlerSetup
 {
     private readonly IConfiguration _configuration;
 
@@ -19,12 +19,9 @@ public  class Setup : IHandlerSetup
         var serviceDescriptor = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(IEconomicGatewayV2));
         if (serviceDescriptor is null)
         {
-            throw new ArgumentException("Order not OK");
+            throw new ArgumentException($"Unable to remove standard service for {nameof(IEconomicGatewayV2)} before adding {nameof(GatewayV2TestVariant)}");
         }
-        if (serviceDescriptor != null)
-        {
-            services.Remove(serviceDescriptor);
-        }
+        services.Remove(serviceDescriptor);
         services.AddTransient<IEconomicGatewayV2, GatewayV2TestVariant>();
     }
 
