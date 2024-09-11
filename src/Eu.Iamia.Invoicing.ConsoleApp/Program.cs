@@ -1,11 +1,8 @@
 ﻿using System.CommandLine;
 using System.CommandLine.Parsing;
-using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
-using System.Text;
 using Eu.Iamia.ConfigBase;
+using Eu.Iamia.Invoicing.Application;
 using Eu.Iamia.Invoicing.Application.Contract;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract;
 using Eu.Iamia.Utils;
 using JetBrains.Annotations;
 
@@ -125,58 +122,24 @@ public class Program
 
             if (doUpload)
             {
-                //var invoicingHandler = setup.GetService<IInvoicingHandler>();
-                //var status = await invoicingHandler.LoadInvoices(cancellationToken);
-                //return status;
-
-                return new ExecutionStatus() { CountFails = 0, Report = $"Upload Invoices", Status = 0 };
+                var invoicingHandler = setup.GetService<IInvoicingHandler>();
+                var status = await invoicingHandler.LoadInvoices(cancellationToken);
+                return status;
             }
-            else if (doDumpInvoice)
+            if (doDumpInvoice)
             {
-                //Contract.DTO.Invoices.booked.get.
-                var invoices = new List<Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.booked.get.BookedInvoice>();
-                var gw = setup.GetService<IEconomicGatewayV2>();
+                var exportService = setup.GetService<IExportService>();
 
                 var from = DateTime.Parse(fromDate);
                 var to = DateTime.Parse(toDate);
 
                 var dateRange = Interval<DateTime>.Create(from, to);
 
-                bool @continue = true;
-                var page = 0;
-                while (@continue)
-                {
-                    var bookedInvoicesHandle = await gw.ReadBookedInvoices(page, 20, dateRange, cancellationToken);
-                    foreach (var invoice in bookedInvoicesHandle.Invoices)
-                    {
-                        invoices.Add(invoice);
-                    }
+                var executionStatus = await exportService.ExportBookedInvoices(dateRange, cancellationToken);
 
-                    @continue = bookedInvoicesHandle.Invoices.Any() && page < 100;
-                    page++;
-                }
-                
-                var sb = new StringBuilder();
-
-                sb.AppendLine("CustomerNumber;InvoiceNumber;Date;Name-address;Product;Antal;Pris");
-                foreach (var invoice in invoices.OrderBy(inv => inv.customer.customerNumber).ThenBy(inv => inv.bookedInvoiceNumber))
-                {
-                    var bi = await gw.ReadBookedInvoice(invoice.bookedInvoiceNumber, cancellationToken);
-                    foreach (var line in bi.lines)
-                    {
-                        // TODO map to export format where it is possible to order by product number. then export to file in csv format.
-
-                        sb.Append($"{bi.customer.customerNumber};{bi.bookedInvoiceNumber};{bi.date:yyyy-MM-dd};{bi.recipient.name}-{bi.recipient.address};{line.product.productNumber};{line.quantity};{line.totalNetAmount}");
-                        sb.AppendLine();
-                    }
-                }
-
-                var all = sb.ToString();
-            
-
-                return new ExecutionStatus() { CountFails = 0, Report = $"Dump invoices from {fromDate} to {toDate}", Status = 0 };
+                return executionStatus;
             }
-            else
+
             {
                 return new ExecutionStatus() { CountFails = 0, Report = $"No operation selected", Status = -98 };
             }

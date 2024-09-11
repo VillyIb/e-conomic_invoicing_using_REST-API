@@ -17,6 +17,7 @@ public class Setup : IHandlerSetup
     private static void AddHandlers(IServiceCollection services)
     {
         services.AddTransient<IInvoicingHandler, InvoicingHandler>();
+        services.AddTransient<IExportService, ExportService>();
     }
 
     private void AddSettings(IServiceCollection services)

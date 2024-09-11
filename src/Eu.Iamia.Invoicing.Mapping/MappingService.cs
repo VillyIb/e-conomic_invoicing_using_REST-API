@@ -1,4 +1,5 @@
-﻿using Eu.Iamia.Invoicing.Application.Contract.DTO;
+﻿using System.Collections.ObjectModel;
+using Eu.Iamia.Invoicing.Application.Contract.DTO;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts.draftInvoiceNumber.lines.post;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts.post;
@@ -12,6 +13,10 @@ public interface IMappingService
     Task<int> LoadCustomerCache(IList<int> customerGroupsToAccept);
 
     Task<int> LoadProductCache();
+
+    ReadOnlyCollection<ProductDto> ProductDtoCache { get; }
+
+    ReadOnlyCollection<CustomerDto> CustomerDtoCache { get; }
 
     Task<int> LoadPaymentTermCache();
 
@@ -63,6 +68,8 @@ public class MappingService : IMappingService
         return _customersCache.Count;
     }
 
+    public ReadOnlyCollection<CustomerDto> CustomerDtoCache => new ReadOnlyCollection<CustomerDto>(_customersCache);
+
     private readonly ProductDtoCache _productsCache = [];
 
     public async Task<int> LoadProductCache()
@@ -86,6 +93,9 @@ public class MappingService : IMappingService
 
         return _productsCache.Count;
     }
+
+    public ReadOnlyCollection<ProductDto> ProductDtoCache => new ReadOnlyCollection<ProductDto>(_productsCache);
+
 
     public async Task<int> LoadPaymentTermCache()
     {
@@ -124,7 +134,7 @@ public class MappingService : IMappingService
     /// <param name="layoutNumber"></param>
     /// <returns></returns>
     /// <exception cref="ApplicationException"></exception>
-    private  Invoice ToRestApiInvoice(
+    private Invoice ToRestApiInvoice(
         CustomerDto customerDto,
         InvoiceDto invoiceDto,
         ProductDtoCache productDtoCache,
