@@ -18,7 +18,7 @@ public class RestApiInvoiceShould
     }
 
     [Theory]
-    [InlineData(0, 20)]
+    [InlineData(0, 2)]
     [InlineData(1, 20)]
     public async Task GetDraftInvoices(int page, int pageSize)
     {
@@ -35,7 +35,7 @@ public class RestApiInvoiceShould
 
     //[Theory(Skip = "Requires draft invoice to exist")]
     [Theory]
-    [InlineData(417)]
+    [InlineData(454)]
     public async Task GetDraftInvoice(int invoiceNo)
     {
         var stream = await _sut.GetDraftInvoice(invoiceNo, _cts.Token);
@@ -68,6 +68,7 @@ public class RestApiInvoiceShould
     }
 
     [Theory]
+    [InlineData(16)]
     [InlineData(18)]
     public async Task GetBookedInvoice(int invoiceNo)
     {

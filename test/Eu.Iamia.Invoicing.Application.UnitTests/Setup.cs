@@ -21,7 +21,8 @@ public class Setup : SetupBase
             new Application.Configuration.Setup(configuration),
             new E_Conomic.RestApiGateway.Configuration.Setup(configuration),
             new E_Conomic.Gateway.V2.Configuration.Setup(configuration),
-            new Mapping.Configuration.Setup(configuration)
+            new Mapping.Configuration.Setup(configuration),
+            new Application.UnitTests.Configuration.Setup(configuration)
         );
 
         ServiceProvider = services.BuildServiceProvider();

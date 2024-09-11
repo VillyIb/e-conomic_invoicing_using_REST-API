@@ -13,7 +13,7 @@ public class RestApiPaymentTermShould
         using var setup = new Setup();
         _sut = setup.GetService<IRestApiGateway>();
     }
-
+    
     [Theory]
     [InlineData(0, 20)]
     [InlineData(1, 20)]
