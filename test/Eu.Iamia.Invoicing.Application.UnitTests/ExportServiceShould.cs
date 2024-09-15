@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.Invoicing.Application.UnitTests;
+
+[NCrunch.Framework.Category("Unit")]
+
 public class ExportServiceShould
 {
     private readonly IExportService _sut;
@@ -43,7 +46,6 @@ public class ExportServiceShould
             var _ = ex.ToString();
             Debugger.Break();
         }
-
     }
 
 

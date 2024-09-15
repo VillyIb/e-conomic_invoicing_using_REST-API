@@ -2,6 +2,9 @@
 using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.IntegrationTests;
+
+[NCrunch.Framework.Category("Integration")]
+
 public class GatewayV2Should
 {
     private readonly IEconomicGatewayV2 _sut;

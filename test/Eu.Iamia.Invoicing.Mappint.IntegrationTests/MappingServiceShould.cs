@@ -2,6 +2,8 @@ using Eu.Iamia.Invoicing.Application.Contract.DTO;
 
 namespace Eu.Iamia.Invoicing.Mapping.IntegrationTests;
 
+[NCrunch.Framework.Category("Integration")]
+
 public class MappingServiceShould
 {
     private readonly IMappingService _sut;

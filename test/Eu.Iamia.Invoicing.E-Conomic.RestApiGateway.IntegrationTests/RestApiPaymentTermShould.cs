@@ -2,6 +2,8 @@
 
 namespace Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.IntegrationTests;
 
+[NCrunch.Framework.Category("Integration")]
+
 public class RestApiPaymentTermShould
 {
     private readonly IRestApiGateway _sut;
