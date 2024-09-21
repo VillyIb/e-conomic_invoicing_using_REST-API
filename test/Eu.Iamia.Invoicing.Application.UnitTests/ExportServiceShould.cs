@@ -1,13 +1,6 @@
 ﻿using Eu.Iamia.Invoicing.Application.Configuration;
-using Eu.Iamia.Invoicing.Application.Contract;
-using Eu.Iamia.Reporting.Configuration;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.Invoicing.Application.UnitTests;
@@ -45,8 +38,7 @@ public class ExportServiceShould
         {
             var _ = ex.ToString();
             Debugger.Break();
+            throw;
         }
     }
-
-
 }
