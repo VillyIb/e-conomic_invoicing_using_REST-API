@@ -89,12 +89,12 @@ public class ExportService : IExportService
     {
         var headline = string.Empty
                        + $"{nameof(ExportData.CustomerNumber)};"
-                       + $"{nameof(ExportData.Name)};"
-                       + $"{nameof(ExportData.Address)};"
+                       + $"{nameof(ExportData.Name),-50};"
+                       + $"{nameof(ExportData.Address),-40};"
                        + $"{nameof(ExportData.InvoiceNumber)};"
-                       + $"{nameof(ExportData.InvoiceDate)} ;"
+                       + $"{nameof(ExportData.InvoiceDate),-12} ;"
                        + $"{nameof(ExportData.ProductNumber)};"
-                       + $"{nameof(ExportData.ProductName)} ;"
+                       + $"{nameof(ExportData.ProductName),-30} ;"
                        + $"{nameof(ExportData.Price)} ;"
                        + $"{nameof(ExportData.Quantity)} ;"
                        + $"{nameof(ExportData.TotalAmount)} ;"
@@ -106,13 +106,13 @@ public class ExportService : IExportService
 
         foreach (var line in data)
         {
-            await sw.WriteAsync($"{line.CustomerNumber,5};");
-            await sw.WriteAsync($"\"{line.Name,-50}\";");
-            await sw.WriteAsync($"\"{line.Address,-40}\";");
+            await sw.WriteAsync($"{line.CustomerNumber};");
+            await sw.WriteAsync($"\"{line.Name}\";");
+            await sw.WriteAsync($"\"{line.Address}\";");
             await sw.WriteAsync($"{line.InvoiceNumber,8};");
-            await sw.WriteAsync($"{line.InvoiceDate};");
+            await sw.WriteAsync($"{line.InvoiceDate,12};");
             await sw.WriteAsync($"{line.ProductNumber,4};");
-            await sw.WriteAsync($"\"{line.ProductName,-30}\";");
+            await sw.WriteAsync($"\"{line.ProductName}\";");
             await sw.WriteAsync($"{line.Price,10:0.000};");
             await sw.WriteAsync($"{line.Quantity,8:0.00};");
             await sw.WriteAsync($"{line.TotalAmount,10:0.00};");
