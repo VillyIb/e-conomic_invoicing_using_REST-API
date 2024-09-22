@@ -32,6 +32,12 @@ public class ExportService : IExportService
         _economicGateway = economicGateway;
     }
 
+    /// <summary>
+    /// Updates <em>_exportData</em> with invoice lines.
+    /// </summary>
+    /// <param name="dateInterval"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     private async Task LoadInvoices(
         IInterval<DateTime> dateInterval,
         CancellationToken cancellationToken
@@ -85,9 +91,41 @@ public class ExportService : IExportService
         }
     }
 
+    /// <summary>
+    /// Updates <em>_exportData</em> with empty invoice lines.
+    /// </summary>
+    private async Task LoadCustomers(IEnumerable<int> customerGroupsToAccept)
+    {
+        const int closedAccountGroup = 99;
+
+        await _mappingService.LoadCustomerCache(customerGroupsToAccept.ToList());
+
+        var customers = _mappingService.CustomerDtoCache;
+
+        foreach (var customer in customers)
+        {
+            var existing = _exportData.Where(ed => ed.CustomerNumber == customer.CustomerNumber).ToList();
+            foreach (var line in existing)
+            {
+                line.CustomerGroupNumber = customer.CustomerGroupNumber;
+            }
+            if (existing.Count > 0) continue;
+            if (customer.CustomerGroupNumber == closedAccountGroup) continue;
+
+            _exportData.Add(new ExportData
+            {
+                Address = customer.Address ?? string.Empty,
+                CustomerNumber = customer.CustomerNumber,
+                CustomerGroupNumber = customer.CustomerGroupNumber,
+                Name = customer.Name ?? string.Empty,
+            });
+        }
+    }
+
     private async Task ExportToCsv(IEnumerable<ExportData> data, FileInfo filename, CancellationToken cancellationToken)
     {
         var headline = string.Empty
+                       + $"{nameof(ExportData.CustomerGroupNumber)};"
                        + $"{nameof(ExportData.CustomerNumber)};"
                        + $"{nameof(ExportData.Name),-50};"
                        + $"{nameof(ExportData.Address),-40};"
@@ -106,6 +144,7 @@ public class ExportService : IExportService
 
         foreach (var line in data)
         {
+            await sw.WriteAsync($"{line.CustomerGroupNumber};");
             await sw.WriteAsync($"{line.CustomerNumber};");
             await sw.WriteAsync($"\"{line.Name}\";");
             await sw.WriteAsync($"\"{line.Address}\";");
@@ -128,10 +167,12 @@ public class ExportService : IExportService
         CancellationToken cancellationToken
     )
     {
+        var customerGroupsToAccept = new[] { 1, 2, 3, 4, 5, 6, 11, 99 };
         await LoadInvoices(dateInterval, cancellationToken);
+        await LoadCustomers(customerGroupsToAccept);
 
         var filename = new FileInfo($"C:\\Development\\Logfiles\\{DateTime.Now:yyyy-MM-dd_HH-mm}_BookedInvoices.csv");
-        await ExportToCsv(_exportData.OrderBy(ed => ed.CustomerNumber).ThenBy(ed => ed.ProductNumber), filename, cancellationToken);
+        await ExportToCsv(_exportData.OrderBy(ed => ed.CustomerGroupNumber).ThenBy(ed => ed.CustomerNumber).ThenBy(ed => ed.ProductNumber), filename, cancellationToken);
 
         return new ExecutionStatus
         {
@@ -145,6 +186,7 @@ public class ExportService : IExportService
 public class ExportData
 {
     public int CustomerNumber { get; set; }
+    public int CustomerGroupNumber { get; set; }
     public int InvoiceNumber { get; set; }
     public string InvoiceDate { get; set; }
     public string Name { get; set; }

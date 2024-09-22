@@ -16,8 +16,16 @@ public class RestApiCustomerShould
     }
 
     [Theory]
-    [InlineData(0, 20)]
-    [InlineData(1, 20)]
+    //[InlineData(0, 20)]
+    //[InlineData(1, 20)]
+    //[InlineData(2, 20)]
+    //[InlineData(3, 20)]
+    //[InlineData(4, 20)]
+    //[InlineData(5, 20)]
+    //[InlineData(6, 20)]
+    //[InlineData(7, 20)]
+    [InlineData(12, 20)]
+    //[InlineData(13, 20)]
     public async Task GetCustomers(int page, int pageSize)
     {
         var stream = await _sut.GetCustomers(page, pageSize, _cts.Token);

@@ -20,7 +20,7 @@ public class MappingServiceShould
     [Fact]
     public async Task LoadCustomerCache_OK()
     {
-        var customerGroupsToAccept = new List<int> { 1, 2, 3 };
+        var customerGroupsToAccept = new List<int> { 1, 2, 3, 4, 5, 6, 11 };
         var customerCount = await _sut.LoadCustomerCache(customerGroupsToAccept);
         Assert.True(customerCount > 1);
     }

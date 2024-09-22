@@ -18,6 +18,7 @@ public static class CustomerDtoExtension
             Address = restApiCustomer.address,
             City = restApiCustomer.city,
             CustomerNumber = restApiCustomer.customerNumber,
+            CustomerGroupNumber = restApiCustomer.customerGroup.customerGroupNumber,
             Zip = restApiCustomer.zip,
             PaymentTerms = restApiCustomer.paymentTerms.paymentTermsNumber
         };

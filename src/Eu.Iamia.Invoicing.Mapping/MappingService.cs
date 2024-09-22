@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using Eu.Iamia.Invoicing.Application.Contract.DTO;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts.draftInvoiceNumber.lines.post;
@@ -10,6 +11,11 @@ namespace Eu.Iamia.Invoicing.Mapping;
 
 public interface IMappingService
 {
+    /// <summary>
+    /// Returns result by CustomerDtoCache.
+    /// </summary>
+    /// <param name="customerGroupsToAccept"></param>
+    /// <returns>CustomerDtoCache</returns>
     Task<int> LoadCustomerCache(IList<int> customerGroupsToAccept);
 
     Task<int> LoadProductCache();
@@ -56,7 +62,10 @@ public class MappingService : IMappingService
             var customersHandle = await _economicGateway.ReadCustomers(page, 20, cts.Token);
             foreach (var collection in customersHandle.Customers)
             {
-                if (!customerGroupsToAccept.Any(cg => cg.Equals(collection.customerGroup.customerGroupNumber))) continue;
+                if(collection.customerNumber == 3) Debugger.Break();
+
+                if (!customerGroupsToAccept.Any(cg => cg.Equals(collection.customerGroup.customerGroupNumber))) 
+                    continue;
 
                 var customerDto = collection.ToCustomerDto();
                 _customersCache.Add(customerDto);

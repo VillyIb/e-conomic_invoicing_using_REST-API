@@ -4,6 +4,8 @@ public class CustomerDto :  ValueObject<CustomerDto>, Reporting.Contract.ICustom
 {
     public int CustomerNumber { get; init; }
 
+    public int CustomerGroupNumber { get; init; }
+
     public int PaymentTerms { get; init; }
 
     public string? Address { get; init; }
@@ -16,17 +18,17 @@ public class CustomerDto :  ValueObject<CustomerDto>, Reporting.Contract.ICustom
 
     public override string ToString()
     {
-        return $"{nameof(CustomerNumber)}: {CustomerNumber}, {nameof(Name)}: {Name}, ";
+        return $"{nameof(CustomerNumber)}: {CustomerNumber}, {nameof(Name)}: {Name}, {nameof(CustomerGroupNumber)}: {CustomerGroupNumber}";
     }
 
     protected override IEnumerable<object?> GetEqualityComponents()
     {
         yield return CustomerNumber;
+        yield return CustomerGroupNumber;
         yield return PaymentTerms;
         yield return Address ?? string.Empty;
         yield return City ?? string.Empty;
         yield return Name ?? string.Empty;
         yield return Zip ?? string.Empty;
-
     }
 }
