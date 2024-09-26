@@ -1,10 +1,11 @@
-﻿using System.Diagnostics;
-using System.Text;
+﻿using System.Text;
+using Eu.Iamia.Invoicing.Application.Configuration;
 using Eu.Iamia.Invoicing.Application.Contract;
 using Eu.Iamia.Invoicing.Application.Contract.DTO;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract;
 using Eu.Iamia.Invoicing.Mapping;
 using Eu.Iamia.Utils.Contract;
+using Microsoft.Extensions.Options;
 
 namespace Eu.Iamia.Invoicing.Application;
 
@@ -18,19 +19,29 @@ public interface IExportService
 
 public class ExportService : IExportService
 {
+    private readonly SettingsForInvoicingApplication _invoicingApplicationSettings;
     private readonly IMappingService _mappingService;
     private readonly IEconomicGatewayV2 _economicGateway;
 
     private readonly List<ExportData> _exportData = new List<ExportData>();
 
-    public ExportService(
+    internal ExportService(
+        SettingsForInvoicingApplication invoicingApplicationSettings,
         IMappingService mappingService,
         IEconomicGatewayV2 economicGateway
     )
     {
+        _invoicingApplicationSettings = invoicingApplicationSettings;
         _mappingService = mappingService;
         _economicGateway = economicGateway;
     }
+
+    public ExportService(
+        IOptions<SettingsForInvoicingApplication> invoicingApplicationOptions,
+        IMappingService mappingService,
+        IEconomicGatewayV2 economicGateway
+    ) : this(invoicingApplicationOptions.Value, mappingService, economicGateway)
+    { }
 
     /// <summary>
     /// Updates <em>_exportData</em> with invoice lines.
@@ -64,16 +75,11 @@ public class ExportService : IExportService
                                       Name = $"Product {line.product.productNumber} not found!"
                                   };
 
-                    if (inv.customer.customerNumber == 1132)
-                    {
-                        Debugger.Break();
-                    }
-
                     var ed = new ExportData
                     {
                         Address = (inv.recipient.address ?? "").Replace("\n", ", "),
                         CustomerNumber = inv.customer.customerNumber,
-                        InvoiceDate = inv.date, // TODO convert to ISO ???
+                        InvoiceDate = inv.date,
                         InvoiceNumber = inv.bookedInvoiceNumber,
                         Name = inv.recipient.name,
                         Price = line.unitNetPrice,
@@ -94,72 +100,108 @@ public class ExportService : IExportService
     /// <summary>
     /// Updates <em>_exportData</em> with empty invoice lines.
     /// </summary>
-    private async Task LoadCustomers(IEnumerable<int> customerGroupsToAccept)
+    private async Task MergeCustomerDetails(ICollection<int> customerGroupsToAccept)
     {
-        const int closedAccountGroup = 99;
+        await _mappingService.LoadCustomerCache();
 
-        await _mappingService.LoadCustomerCache(customerGroupsToAccept.ToList());
-
-        var customers = _mappingService.CustomerDtoCache;
-
-        foreach (var customer in customers)
+        foreach (var customer in _mappingService.CustomerDtoCache)
         {
             var existing = _exportData.Where(ed => ed.CustomerNumber == customer.CustomerNumber).ToList();
             foreach (var line in existing)
             {
                 line.CustomerGroupNumber = customer.CustomerGroupNumber;
             }
-            if (existing.Count > 0) continue;
-            if (customer.CustomerGroupNumber == closedAccountGroup) continue;
 
-            _exportData.Add(new ExportData
+            if (StopWhenCustomerIsAlreadyIncluded(existing))
+            {
+                continue;
+            }
+
+            if (RejectCustomerNotInCustomerGroupsToAccept(customer))
+            {
+                continue;
+            }
+
+            _exportData.Add(CustomerWithoutInvoiceLines(customer));
+        }
+
+        return;
+
+        bool StopWhenCustomerIsAlreadyIncluded(List<ExportData> existing)
+        {
+            return existing.Count > 0;
+        }
+
+        bool RejectCustomerNotInCustomerGroupsToAccept(CustomerDto customer)
+        {
+            return !customerGroupsToAccept.Any(cg => cg.Equals(customer.CustomerGroupNumber));
+        }
+
+        ExportData CustomerWithoutInvoiceLines(CustomerDto customer)
+        {
+            return new ExportData
             {
                 Address = customer.Address ?? string.Empty,
                 CustomerNumber = customer.CustomerNumber,
                 CustomerGroupNumber = customer.CustomerGroupNumber,
                 Name = customer.Name ?? string.Empty,
-            });
+            };
         }
     }
 
     private async Task ExportToCsv(IEnumerable<ExportData> data, FileInfo filename, CancellationToken cancellationToken)
     {
         var headline = string.Empty
-                       + $"{nameof(ExportData.CustomerGroupNumber)};"
-                       + $"{nameof(ExportData.CustomerNumber)};"
-                       + $"{nameof(ExportData.Name),-50};"
-                       + $"{nameof(ExportData.Address),-40};"
-                       + $"{nameof(ExportData.InvoiceNumber)};"
-                       + $"{nameof(ExportData.InvoiceDate),-12} ;"
-                       + $"{nameof(ExportData.ProductNumber)};"
-                       + $"{nameof(ExportData.ProductName),-30} ;"
-                       + $"{nameof(ExportData.Price)} ;"
-                       + $"{nameof(ExportData.Quantity)} ;"
-                       + $"{nameof(ExportData.TotalAmount)} ;"
+                + $"{nameof(ExportData.CustomerGroupNumber)};"
+                + $"{nameof(ExportData.CustomerNumber)};"
+                + $"{nameof(ExportData.Name),-50};"
+                + $"{nameof(ExportData.Address),-40};"
+                + $"{nameof(ExportData.InvoiceNumber)};"
+                + $"{nameof(ExportData.InvoiceDate),-12} ;"
+                + $"{nameof(ExportData.ProductNumber)};"
+                + $"{nameof(ExportData.ProductName),-30} ;"
+                + $"{nameof(ExportData.Price)} ;"
+                + $"{nameof(ExportData.Quantity)} ;"
+                + $"{nameof(ExportData.TotalAmount)} ;"
             ;
 
         await using var sw = new StreamWriter(filename.FullName, false, Encoding.UTF8);
 
         await sw.WriteLineAsync(headline);
 
+
         foreach (var line in data)
         {
-            await sw.WriteAsync($"{line.CustomerGroupNumber};");
-            await sw.WriteAsync($"{line.CustomerNumber};");
-            await sw.WriteAsync($"\"{line.Name}\";");
-            await sw.WriteAsync($"\"{line.Address}\";");
-            await sw.WriteAsync($"{line.InvoiceNumber,8};");
-            await sw.WriteAsync($"{line.InvoiceDate,12};");
-            await sw.WriteAsync($"{line.ProductNumber,4};");
-            await sw.WriteAsync($"\"{line.ProductName}\";");
-            await sw.WriteAsync($"{line.Price,10:0.000};");
-            await sw.WriteAsync($"{line.Quantity,8:0.00};");
-            await sw.WriteAsync($"{line.TotalAmount,10:0.00};");
-            await sw.WriteLineAsync();
+            var bodyLine = string.Empty
+                + $"{line.CustomerGroupNumber};"
+                + $"{line.CustomerNumber};"
+                + $"\"{line.Name}\";"
+                + $"\"{line.Address.ReplaceLineEndings(", ")}\";"
+                + (IsZero(line.InvoiceNumber) ? string.Empty : $"{line.InvoiceNumber,8};")
+                + $"{line.InvoiceDate,12};"
+                + (IsZero(line.ProductNumber) ? string.Empty : $"{line.ProductNumber,4};")
+                + $"\"{line.ProductName}\";"
+                + (IsZero(line.Price) ? string.Empty : $"{line.Price,10:0.000};")
+                + (IsZero(line.Quantity) ? string.Empty : $"{line.Quantity,8:0.00};")
+                + (IsZero(line.TotalAmount) ? string.Empty : $"{line.TotalAmount,10:0.00};")
+            ;
+
+            await sw.WriteLineAsync(bodyLine);
         }
 
         await sw.FlushAsync(cancellationToken);
         sw.Close();
+
+    }
+
+    private static bool IsZero(float value)
+    {
+        return Math.Abs(value) <= float.Epsilon;
+    }
+
+    private static bool IsZero(int value)
+    {
+        return value == 0;
     }
 
     public async Task<ExecutionStatus> ExportBookedInvoices(
@@ -167,9 +209,9 @@ public class ExportService : IExportService
         CancellationToken cancellationToken
     )
     {
-        var customerGroupsToAccept = new[] { 1, 2, 3, 4, 5, 6, 11, 99 };
+
         await LoadInvoices(dateInterval, cancellationToken);
-        await LoadCustomers(customerGroupsToAccept);
+        await MergeCustomerDetails(_invoicingApplicationSettings.CustomerGroupsToAccept);
 
         var filename = new FileInfo($"C:\\Development\\Logfiles\\{DateTime.Now:yyyy-MM-dd_HH-mm}_BookedInvoices.csv");
         await ExportToCsv(_exportData.OrderBy(ed => ed.CustomerGroupNumber).ThenBy(ed => ed.CustomerNumber).ThenBy(ed => ed.ProductNumber), filename, cancellationToken);
@@ -188,11 +230,11 @@ public class ExportData
     public int CustomerNumber { get; set; }
     public int CustomerGroupNumber { get; set; }
     public int InvoiceNumber { get; set; }
-    public string InvoiceDate { get; set; }
-    public string Name { get; set; }
-    public string Address { get; set; }
+    public string InvoiceDate { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string Address { get; set; } = string.Empty;
     public int ProductNumber { get; set; }
-    public string ProductName { get; set; }
+    public string ProductName { get; set; } = string.Empty;
     public float Quantity { get; set; }
     public float TotalAmount { get; set; }
     public float Price { get; set; }

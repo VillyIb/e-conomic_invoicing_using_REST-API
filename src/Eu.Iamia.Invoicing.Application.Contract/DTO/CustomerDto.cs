@@ -1,6 +1,6 @@
 ﻿namespace Eu.Iamia.Invoicing.Application.Contract.DTO;
 
-public class CustomerDto :  ValueObject<CustomerDto>, Reporting.Contract.ICustomer
+public class CustomerDto : ValueObject<CustomerDto>, Reporting.Contract.ICustomer
 {
     public int CustomerNumber { get; init; }
 

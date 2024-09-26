@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
 using Eu.Iamia.Invoicing.Application.Contract.DTO;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts.draftInvoiceNumber.lines.post;
@@ -12,11 +11,11 @@ namespace Eu.Iamia.Invoicing.Mapping;
 public interface IMappingService
 {
     /// <summary>
-    /// Returns result by CustomerDtoCache.
+    /// Loads Customers optionally filtering by CustomerGroupsToAccept.
     /// </summary>
     /// <param name="customerGroupsToAccept"></param>
     /// <returns>CustomerDtoCache</returns>
-    Task<int> LoadCustomerCache(IList<int> customerGroupsToAccept);
+    Task<int> LoadCustomerCache(IList<int>? customerGroupsToAccept = null);
 
     Task<int> LoadProductCache();
 
@@ -50,22 +49,25 @@ public class MappingService : IMappingService
 
     private readonly CustomerDtoCache _customersCache = new();
 
-    public async Task<int> LoadCustomerCache(IList<int> customerGroupsToAccept)
+    public async Task<int> LoadCustomerCache(IList<int>? customerGroupsToAccept = null)
     {
         _customersCache.Clear();
 
         var cts = new CancellationTokenSource();
-        bool @continue = true;
+        var @continue = true;
         var page = 0;
         while (@continue)
         {
             var customersHandle = await _economicGateway.ReadCustomers(page, 20, cts.Token);
             foreach (var collection in customersHandle.Customers)
             {
-                if(collection.customerNumber == 3) Debugger.Break();
-
-                if (!customerGroupsToAccept.Any(cg => cg.Equals(collection.customerGroup.customerGroupNumber))) 
+                if (customerGroupsToAccept is not null 
+                    &&
+                    !customerGroupsToAccept.Any(cg => cg.Equals(collection.customerGroup.customerGroupNumber))
+                )
+                {
                     continue;
+                }
 
                 var customerDto = collection.ToCustomerDto();
                 _customersCache.Add(customerDto);
