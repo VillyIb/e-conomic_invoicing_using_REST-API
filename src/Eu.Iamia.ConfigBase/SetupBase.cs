@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using System.CommandLine;
 using System.Diagnostics.CodeAnalysis;
+using Eu.Iamia.Utils;
 
 namespace Eu.Iamia.ConfigBase;
 
@@ -14,7 +15,7 @@ public abstract class SetupBase : IDisposable
     protected List<IHandlerSetup> SetupList = [];
 
     protected IServiceProvider GetServiceProvider() => ServiceProvider.CheckForNull($"{nameof(SetupBase)}.{nameof(GetServiceProvider)}");
-
+    
     protected void Register(IServiceCollection services, params IHandlerSetup[] businessLayerSetups)
     {
         // see:https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-7.0
