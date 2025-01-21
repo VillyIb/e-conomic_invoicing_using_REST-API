@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections;
+using System.Reflection;
 
 namespace Eu.Iamia.ConfigBase;
 
@@ -11,6 +12,11 @@ public abstract class SettingsBase
     protected SettingsBase(string sectionName)
     {
         _sectionName = sectionName;
+    }
+
+    public static bool IsCollection(Type type)
+    {
+        return typeof(IEnumerable).IsAssignableFrom(type) && type != typeof(string);
     }
 
     // use reflection to get all instance properties
@@ -33,8 +39,15 @@ public abstract class SettingsBase
             var helpMetadata = property.GetCustomAttribute<HelpMetadataAttribute>();
             if (helpMetadata is null) { continue; }
             if (helpMetadata.Hide) continue;
+            if (IsCollection(property.PropertyType)) { continue; } // Collections cannot be overriden by command line option.
 
-            var helpMetaData = new HelpMetaData { Name = $"--{sectionName}:{property.Name}", Description = helpMetadata.Description, ArgumentHelpName = helpMetadata.ArgumentHelpName, IsRequired = helpMetadata.IsRequired};
+            var helpMetaData = new HelpMetaData
+            {
+                Name = $"--{sectionName}:{property.Name}",
+                Description = helpMetadata.Description,
+                ArgumentHelpName = helpMetadata.ArgumentHelpName,
+                IsRequired = helpMetadata.IsRequired,
+            };
 
             helpMetadataList.Add(helpMetaData);
 

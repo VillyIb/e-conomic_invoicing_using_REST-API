@@ -11,6 +11,5 @@ public class SettingsForInvoicingApplication : SettingsBase
     [HelpMetadata(description: "Full path to .csv file", argumentHelpName: "path.csv", false)]
     public string CsvFile { get; set; } = string.Empty;
 
-    [HelpMetadata(description: "Gustomer goup numbers to accept", argumentHelpName: "E.g.: 1, 2, 3, 4, 5, 6, 11")]
     public List<int> CustomerGroupsToAccept { get; set; }
 }

@@ -213,6 +213,7 @@ public class ExportService : IExportService
         await LoadInvoices(dateInterval, cancellationToken);
         await MergeCustomerDetails(_invoicingApplicationSettings.CustomerGroupsToAccept);
 
+        // TODO input parameter or configuration
         var filename = new FileInfo($"C:\\Development\\Logfiles\\{DateTime.Now:yyyy-MM-dd_HH-mm}_BookedInvoices.csv");
         await ExportToCsv(_exportData.OrderBy(ed => ed.CustomerGroupNumber).ThenBy(ed => ed.CustomerNumber).ThenBy(ed => ed.ProductNumber), filename, cancellationToken);
 
