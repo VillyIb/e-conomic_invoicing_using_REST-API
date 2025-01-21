@@ -1,20 +1,32 @@
 ﻿using System.CommandLine;
 using System.CommandLine.Parsing;
+using System.ComponentModel;
 using Eu.Iamia.ConfigBase;
 using Eu.Iamia.Invoicing.Application;
 using Eu.Iamia.Invoicing.Application.Contract;
 using Eu.Iamia.Utils;
+using Eu.Iamia.Utils.Contract;
 using JetBrains.Annotations;
+using ArgumentException = System.ArgumentException;
 
 namespace Eu.Iamia.Invoicing.ConsoleApp;
 
 public class Program
 {
+    private const string OptUpload = "--Upload";
+    private const string AliasUpload = "-u";
+    private const string OptDumpInv = "--Dump_invoices";
+    private const string AliasDumpInv = "-d";
+    private const string OptFromDate = "--From-date";
+    private const string AliasFromDate = "-f";
+    private const string OptToDate = "--To-date";
+    private const string AliasToDate = "-t";
+
     private static async Task<int> Main(string[] args)
     {
         using var setup = new Setup(args);
 
-        var rootCommand = new RootCommand("Upload af fakturaer til e-conomic - Console Application");
+        var rootCommand = new RootCommand("Upload af fakturaer til e-conomic m.m. - Console Application");
 
         foreach (var helpMetadata in setup.HelpMetaData)
         {
@@ -23,28 +35,26 @@ public class Program
                 ArgumentHelpName = helpMetadata.ArgumentHelpName,
                 IsRequired = helpMetadata.IsRequired,
             };
-
             rootCommand.AddOption(option);
         }
 
-        var doUpload = new Option<bool>("Upload", description: "Upload invoices from .csv file to e-conomic");
-        doUpload.AddAlias("-u");
+        var doUpload = new Option<bool>(OptUpload, description: "Upload invoices from .csv file to e-conomic");
+        doUpload.AddAlias(AliasUpload);
         rootCommand.AddOption(doUpload);
 
-        var doDumpInvoices = new Option<bool>("Dump_invoices", description: "Dump booked invoices");
-        doDumpInvoices.AddAlias("-d");
+        var doDumpInvoices = new Option<bool>(OptDumpInv, description: "Dump booked invoices");
+        doDumpInvoices.AddAlias(AliasDumpInv);
         rootCommand.AddOption(doDumpInvoices);
 
-        var fromDate = new Option<string>("From-date", description: "Date interval to ");
-        fromDate.AddAlias("-f");
+        var fromDate = new Option<string>(OptFromDate, description: "Date interval from incl.");
+        fromDate.AddAlias(AliasFromDate);
         fromDate.ArgumentHelpName = "yyyy-mm-dd";
         rootCommand.AddOption(fromDate);
 
-        var toDate = new Option<string>("To-date", description: "Date interval to ");
-        toDate.AddAlias("-t");
+        var toDate = new Option<string>(OptToDate, description: "Date interval to incl.");
+        toDate.AddAlias(AliasToDate);
         toDate.ArgumentHelpName = "yyyy-mm-dd";
         rootCommand.AddOption(toDate);
-
 
         var psr = rootCommand.Parse(args);
 
@@ -103,37 +113,51 @@ public class Program
     }
 
     private static async Task<ExecutionStatus> DefaultHandler(
-        [InstantHandle] SetupBase setup,
-        bool doUpload, bool doDumpInvoice, string fromDate, string toDate
-
-
-        // ReSharper disable once UnusedParameter.Local
+        [InstantHandle] SetupBase setup
+        , bool doUpload
+        , bool doDumpInvoice
+        , string fromDate
+        , string toDate
         , CancellationToken cancellationToken
     )
     {
         try
         {
-            //var op1 = option1.
-
             if (doUpload && doDumpInvoice)
             {
-                return new ExecutionStatus() { CountFails = 0, Report = $"Error! Both '{nameof(doUpload)}' and '{nameof(doDumpInvoice)}' are set", Status = -91 };
+                return new ExecutionStatus { Report = $"Error! Both '{OptUpload}/{AliasUpload}' and '{OptDumpInv}/{AliasDumpInv}' are specified", Status = -91 };
             }
 
             if (doUpload)
             {
                 var invoicingHandler = setup.GetService<IInvoicingHandler>();
-                var status = await invoicingHandler.LoadInvoices(cancellationToken);
-                return status;
+                var executionStatus = await invoicingHandler.LoadInvoices(cancellationToken);
+                return executionStatus;
             }
+
             if (doDumpInvoice)
             {
+                if (!DateTime.TryParse(fromDate, out var from))
+                {
+                    return new ExecutionStatus { Report = $"Error! '{OptFromDate}/{AliasFromDate}' must be specified together with '{OptDumpInv}/{AliasDumpInv}''", Status = -92 };
+                }
+
+                if (!DateTime.TryParse(toDate, out var to))
+                {
+                    return new ExecutionStatus { CountFails = 1, Report = $"Error! '{OptToDate}/{AliasToDate}' must be specified together with '{OptDumpInv}/{AliasDumpInv}'", Status = -93 };
+                }
+
                 var exportService = setup.GetService<IExportService>();
 
-                var from = DateTime.Parse(fromDate);
-                var to = DateTime.Parse(toDate);
-
-                var dateRange = Interval<DateTime>.Create(from, to);
+                IInterval<DateTime> dateRange;
+                try
+                {
+                    dateRange = Interval<DateTime>.Create(from, to);
+                }
+                catch (ArgumentException)
+                {
+                    return new ExecutionStatus { Report = $"Error! '{OptFromDate}/{AliasFromDate}' ({fromDate}) > '{OptToDate}/{AliasToDate}' ({toDate})", Status = -94 };
+                }
 
                 var executionStatus = await exportService.ExportBookedInvoices(dateRange, cancellationToken);
 
@@ -141,10 +165,8 @@ public class Program
             }
 
             {
-                return new ExecutionStatus() { CountFails = 0, Report = $"No operation selected", Status = -98 };
+                return new ExecutionStatus { Report = $"No option selected", Status = -98 };
             }
-
-
         }
         catch (ApplicationException ex)
         {
