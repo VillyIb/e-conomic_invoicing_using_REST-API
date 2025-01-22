@@ -22,6 +22,7 @@ public class Customer
     public string city { get; set; }
     public string country { get; set; }
     public string email { get; set; }
+    public bool barred { get; set; }
     public string name { get; set; }
     public string zip { get; set; }
     public string telephoneAndFaxNumber { get; set; }

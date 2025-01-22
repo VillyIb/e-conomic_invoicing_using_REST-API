@@ -20,6 +20,7 @@ public static class CustomerDtoExtension
             CustomerNumber = restApiCustomer.customerNumber,
             CustomerGroupNumber = restApiCustomer.customerGroup.customerGroupNumber,
             Zip = restApiCustomer.zip,
+            IsBarred = restApiCustomer.barred,
             PaymentTerms = restApiCustomer.paymentTerms.paymentTermsNumber
         };
     }

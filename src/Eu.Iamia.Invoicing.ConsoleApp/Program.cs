@@ -1,6 +1,5 @@
 ﻿using System.CommandLine;
 using System.CommandLine.Parsing;
-using System.ComponentModel;
 using Eu.Iamia.ConfigBase;
 using Eu.Iamia.Invoicing.Application;
 using Eu.Iamia.Invoicing.Application.Contract;
@@ -21,6 +20,9 @@ public class Program
     private const string AliasFromDate = "-f";
     private const string OptToDate = "--To-date";
     private const string AliasToDate = "-t";
+    private const string OptIncludeNonInvCustomers = "--IncludeNonInvoicedCustomers";
+    private const string AliasIncludeNonInvCustomers = "-inc";
+
 
     private static async Task<int> Main(string[] args)
     {
@@ -46,15 +48,20 @@ public class Program
         doDumpInvoices.AddAlias(AliasDumpInv);
         rootCommand.AddOption(doDumpInvoices);
 
-        var fromDate = new Option<string>(OptFromDate, description: "Date interval from incl.");
+        var fromDate = new Option<string>(OptFromDate, description: $"Date interval from incl. (required by {OptDumpInv})");
         fromDate.AddAlias(AliasFromDate);
         fromDate.ArgumentHelpName = "yyyy-mm-dd";
         rootCommand.AddOption(fromDate);
 
-        var toDate = new Option<string>(OptToDate, description: "Date interval to incl.");
+        var toDate = new Option<string>(OptToDate, description: $"Date interval to incl. (required by {OptDumpInv})");
         toDate.AddAlias(AliasToDate);
         toDate.ArgumentHelpName = "yyyy-mm-dd";
         rootCommand.AddOption(toDate);
+
+        var doIncludeNonInvoicedCustomers = new Option<bool>(OptIncludeNonInvCustomers, description: $"Include Customers without invoice.  (optional on {OptDumpInv})");
+        doIncludeNonInvoicedCustomers.AddAlias(AliasIncludeNonInvCustomers);
+        doIncludeNonInvoicedCustomers.Arity = ArgumentArity.Zero;
+        rootCommand.AddOption(doIncludeNonInvoicedCustomers);
 
         var psr = rootCommand.Parse(args);
 
@@ -62,7 +69,7 @@ public class Program
 
         var cts = new CancellationTokenSource();
 
-        rootCommand.SetHandler(async (uploadFlagValue, dumpInvoiceFlagValue, fromDateValue, toDateValue) =>
+        rootCommand.SetHandler(async (uploadFlagValue, dumpInvoiceFlagValue, fromDateValue, toDateValue, includeNonInvoicedCustomersValue) =>
             {
                 //var cancellationToken = context.GetCancellationToken();
                 // ReSharper disable once AccessToDisposedClosure
@@ -72,10 +79,11 @@ public class Program
                     dumpInvoiceFlagValue,
                     fromDateValue,
                     toDateValue,
+                    includeNonInvoicedCustomersValue,
                     cts.Token
                 );
             },
-            doUpload, doDumpInvoices, fromDate, toDate
+            doUpload, doDumpInvoices, fromDate, toDate, doIncludeNonInvoicedCustomers
         );
 
         await rootCommand.InvokeAsync(args); // this must be before the test for errors.
@@ -118,6 +126,7 @@ public class Program
         , bool doDumpInvoice
         , string fromDate
         , string toDate
+        , bool? includeNonInvoicedCustomers
         , CancellationToken cancellationToken
     )
     {
@@ -159,7 +168,7 @@ public class Program
                     return new ExecutionStatus { Report = $"Error! '{OptFromDate}/{AliasFromDate}' ({fromDate}) > '{OptToDate}/{AliasToDate}' ({toDate})", Status = -94 };
                 }
 
-                var executionStatus = await exportService.ExportBookedInvoices(dateRange, cancellationToken);
+                var executionStatus = await exportService.ExportBookedInvoices(dateRange, includeNonInvoicedCustomers ?? false, cancellationToken);
 
                 return executionStatus;
             }

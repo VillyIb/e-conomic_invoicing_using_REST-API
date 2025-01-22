@@ -16,6 +16,8 @@ public class CustomerDto : ValueObject<CustomerDto>, Reporting.Contract.ICustome
 
     public string? Zip { get; init; }
 
+    public bool IsBarred { get; init; }
+
     public override string ToString()
     {
         return $"{nameof(CustomerNumber)}: {CustomerNumber}, {nameof(Name)}: {Name}, {nameof(CustomerGroupNumber)}: {CustomerGroupNumber}";
@@ -30,5 +32,6 @@ public class CustomerDto : ValueObject<CustomerDto>, Reporting.Contract.ICustome
         yield return City ?? string.Empty;
         yield return Name ?? string.Empty;
         yield return Zip ?? string.Empty;
+        yield return IsBarred;
     }
 }

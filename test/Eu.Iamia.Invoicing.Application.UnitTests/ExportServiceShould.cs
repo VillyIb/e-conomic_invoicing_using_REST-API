@@ -32,7 +32,7 @@ public class ExportServiceShould
         var dateInterval = Interval<DateTime>.Create(DateTime.Parse("2024-01-01"), DateTime.Parse("2024-12-31"));
         try
         {
-            var x = await _sut.ExportBookedInvoices(dateInterval, cts.Token);
+            var x = await _sut.ExportBookedInvoices(dateInterval, false, cts.Token);
         }
         catch (Exception ex)
         {

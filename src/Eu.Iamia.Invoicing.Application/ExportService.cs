@@ -13,6 +13,7 @@ public interface IExportService
 {
     Task<ExecutionStatus> ExportBookedInvoices(
         IInterval<DateTime> dateInterval,
+        bool includeNonInvoicedCustomers,
         CancellationToken cancellationToken
     );
 }
@@ -100,7 +101,7 @@ public class ExportService : IExportService
     /// <summary>
     /// Updates <em>_exportData</em> with empty invoice lines.
     /// </summary>
-    private async Task MergeCustomerDetails(ICollection<int> customerGroupsToAccept)
+    private async Task MergeCustomerDetails(ICollection<int> customerGroupsToAccept, bool includeNonInvoicedCustomers)
     {
         await _mappingService.LoadCustomerCache();
 
@@ -112,12 +113,22 @@ public class ExportService : IExportService
                 line.CustomerGroupNumber = customer.CustomerGroupNumber;
             }
 
+            if (!includeNonInvoicedCustomers)
+            {
+                continue;
+            }
+
             if (StopWhenCustomerIsAlreadyIncluded(existing))
             {
                 continue;
             }
 
             if (RejectCustomerNotInCustomerGroupsToAccept(customer))
+            {
+                continue;
+            }
+
+            if (RejectCustomerBarred(customer))
             {
                 continue;
             }
@@ -135,6 +146,11 @@ public class ExportService : IExportService
         bool RejectCustomerNotInCustomerGroupsToAccept(CustomerDto customer)
         {
             return !customerGroupsToAccept.Any(cg => cg.Equals(customer.CustomerGroupNumber));
+        }
+
+        bool RejectCustomerBarred(CustomerDto customer)
+        {
+            return customer.IsBarred;
         }
 
         ExportData CustomerWithoutInvoiceLines(CustomerDto customer)
@@ -206,12 +222,13 @@ public class ExportService : IExportService
 
     public async Task<ExecutionStatus> ExportBookedInvoices(
         IInterval<DateTime> dateInterval,
+        bool includeNonInvoicedCustomers,
         CancellationToken cancellationToken
     )
     {
 
         await LoadInvoices(dateInterval, cancellationToken);
-        await MergeCustomerDetails(_invoicingApplicationSettings.CustomerGroupsToAccept);
+        await MergeCustomerDetails(_invoicingApplicationSettings.CustomerGroupsToAccept, includeNonInvoicedCustomers);
 
         // TODO input parameter or configuration
         var filename = new FileInfo($"C:\\Development\\Logfiles\\{DateTime.Now:yyyy-MM-dd_HH-mm}_BookedInvoices.csv");
