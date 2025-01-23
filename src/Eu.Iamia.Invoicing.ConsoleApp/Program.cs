@@ -14,14 +14,16 @@ public class Program
 {
     private const string OptUpload = "--Upload";
     private const string AliasUpload = "-u";
-    private const string OptDumpInv = "--Dump_invoices";
-    private const string AliasDumpInv = "-d";
+    private const string OptExportInv = "--Export_invoices";
+    private const string AliasExportInv = "-e";
     private const string OptFromDate = "--From-date";
     private const string AliasFromDate = "-f";
     private const string OptToDate = "--To-date";
     private const string AliasToDate = "-t";
     private const string OptIncludeNonInvCustomers = "--IncludeNonInvoicedCustomers";
     private const string AliasIncludeNonInvCustomers = "-inc";
+    private const string OptExampleExport = "--Exmample_export";
+    private const string AliasExampleExport = "-xe";
 
 
     private static async Task<int> Main(string[] args)
@@ -44,21 +46,25 @@ public class Program
         doUpload.AddAlias(AliasUpload);
         rootCommand.AddOption(doUpload);
 
-        var doDumpInvoices = new Option<bool>(OptDumpInv, description: "Export booked invoices");
-        doDumpInvoices.AddAlias(AliasDumpInv);
+        var doDumpInvoices = new Option<bool>(OptExportInv, description: "Export booked invoices");
+        doDumpInvoices.AddAlias(AliasExportInv);
         rootCommand.AddOption(doDumpInvoices);
 
-        var fromDate = new Option<string>(OptFromDate, description: $"Date interval from incl. (required by {OptDumpInv})");
+        var fromDate = new Option<string>(OptFromDate, description: $"Date interval from incl. (required by {OptExportInv})");
         fromDate.AddAlias(AliasFromDate);
         fromDate.ArgumentHelpName = "yyyy-mm-dd";
         rootCommand.AddOption(fromDate);
 
-        var toDate = new Option<string>(OptToDate, description: $"Date interval to incl. (required by {OptDumpInv})");
+        var toDate = new Option<string>(OptToDate, description: $"Date interval to incl. (required by {OptExportInv})");
         toDate.AddAlias(AliasToDate);
         toDate.ArgumentHelpName = "yyyy-mm-dd";
         rootCommand.AddOption(toDate);
 
-        var doIncludeNonInvoicedCustomers = new Option<bool>(OptIncludeNonInvCustomers, description: $"Include Customers without invoice. (optional on {OptDumpInv})");
+        var doExampleExport = new Option<bool>(OptExampleExport, description: $"How to export debitor invoices");
+        doExampleExport.AddAlias(AliasExampleExport);
+        rootCommand.AddOption(doExampleExport);
+
+        var doIncludeNonInvoicedCustomers = new Option<bool>(OptIncludeNonInvCustomers, description: $"Include Customers without invoice. (optional on {OptExportInv})");
         doIncludeNonInvoicedCustomers.AddAlias(AliasIncludeNonInvCustomers);
         doIncludeNonInvoicedCustomers.Arity = ArgumentArity.Zero;
         rootCommand.AddOption(doIncludeNonInvoicedCustomers);
@@ -69,7 +75,14 @@ public class Program
 
         var cts = new CancellationTokenSource();
 
-        rootCommand.SetHandler(async (uploadFlagValue, dumpInvoiceFlagValue, fromDateValue, toDateValue, includeNonInvoicedCustomersValue) =>
+        rootCommand.SetHandler(async (
+                uploadFlagValue
+                , dumpInvoiceFlagValue
+                , fromDateValue
+                , toDateValue
+                , includeNonInvoicedCustomersValue
+                , doExampleExportValue
+            ) =>
             {
                 //var cancellationToken = context.GetCancellationToken();
                 // ReSharper disable once AccessToDisposedClosure
@@ -80,10 +93,11 @@ public class Program
                     fromDateValue,
                     toDateValue,
                     includeNonInvoicedCustomersValue,
+                    doExampleExportValue,
                     cts.Token
                 );
             },
-            doUpload, doDumpInvoices, fromDate, toDate, doIncludeNonInvoicedCustomers
+            doUpload, doDumpInvoices, fromDate, toDate, doIncludeNonInvoicedCustomers, doExampleExport
         );
 
         await rootCommand.InvokeAsync(args); // this must be before the test for errors.
@@ -127,6 +141,7 @@ public class Program
         , string fromDate
         , string toDate
         , bool? includeNonInvoicedCustomers
+        , bool doExampleExport
         , CancellationToken cancellationToken
     )
     {
@@ -134,7 +149,7 @@ public class Program
         {
             if (doUpload && doDumpInvoice)
             {
-                return new ExecutionStatus { Report = $"Error! Both '{OptUpload}/{AliasUpload}' and '{OptDumpInv}/{AliasDumpInv}' are specified", Status = -91 };
+                return new ExecutionStatus { Report = $"Error! Both '{OptUpload}/{AliasUpload}' and '{OptExportInv}/{AliasExportInv}' are specified", Status = -91 };
             }
 
             if (doUpload)
@@ -148,12 +163,12 @@ public class Program
             {
                 if (!DateTime.TryParse(fromDate, out var from))
                 {
-                    return new ExecutionStatus { Report = $"Error! '{OptFromDate}/{AliasFromDate}' must be specified together with '{OptDumpInv}/{AliasDumpInv}''", Status = -92 };
+                    return new ExecutionStatus { Report = $"Error! '{OptFromDate}/{AliasFromDate}' must be specified together with '{OptExportInv}/{AliasExportInv}''", Status = -92 };
                 }
 
                 if (!DateTime.TryParse(toDate, out var to))
                 {
-                    return new ExecutionStatus { CountFails = 1, Report = $"Error! '{OptToDate}/{AliasToDate}' must be specified together with '{OptDumpInv}/{AliasDumpInv}'", Status = -93 };
+                    return new ExecutionStatus { CountFails = 1, Report = $"Error! '{OptToDate}/{AliasToDate}' must be specified together with '{OptExportInv}/{AliasExportInv}'", Status = -93 };
                 }
 
                 var exportService = setup.GetService<IExportService>();
@@ -171,6 +186,12 @@ public class Program
                 var executionStatus = await exportService.ExportBookedInvoices(dateRange, includeNonInvoicedCustomers ?? false, cancellationToken);
 
                 return executionStatus;
+            }
+
+            if (doExampleExport)
+            {
+                var year = DateTime.Today.Year;
+                return new ExecutionStatus { Report = $"Export booked debitor invoices: Eu.Iamia.Invoicing.ConsoleApp -d -f {year}-01-01 -t {year}-12-31", Status = 0};
             }
 
             {
