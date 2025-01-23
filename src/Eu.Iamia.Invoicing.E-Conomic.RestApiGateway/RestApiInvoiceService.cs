@@ -73,7 +73,9 @@ public partial class RestApiService
         var requestUri = $"https://restapi.e-conomic.com/invoices/booked?" +
                          $"skippages={skipPages}&pagesize={pageSize}" +
                          $"&filter=" +
-                         $"date$gte:{dateRange.From:yyyy-MM-dd}&date$lte:{dateRange.To:yyyy-MM-dd}"
+                         $"date$gte:{dateRange.From:yyyy-MM-dd}" +
+                         $"$and:" +
+                         $"date$lte:{dateRange.To:yyyy-MM-dd}"
             ;
         return await GetAsync(requestUri, reference, cancellationToken);
     }

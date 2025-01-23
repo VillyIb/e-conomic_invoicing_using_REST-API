@@ -46,6 +46,7 @@ public class GatewayV2Should
         }
     }
 
+    // this should be a unit test validating the generated query.
     [Theory]
     [InlineData(1,66, "2024-01-01", "2024-12-31")]
     public async Task ReadBookedInvoices(int page, int pageSize, string from, string to)
