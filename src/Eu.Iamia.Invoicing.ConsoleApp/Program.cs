@@ -28,7 +28,7 @@ public class Program
     {
         using var setup = new Setup(args);
 
-        var rootCommand = new RootCommand("Upload af fakturaer til e-conomic m.m. - Console Application");
+        var rootCommand = new RootCommand("e-conomic debitor invoice service. - Console Application");
 
         foreach (var helpMetadata in setup.HelpMetaData)
         {
@@ -44,7 +44,7 @@ public class Program
         doUpload.AddAlias(AliasUpload);
         rootCommand.AddOption(doUpload);
 
-        var doDumpInvoices = new Option<bool>(OptDumpInv, description: "Dump booked invoices");
+        var doDumpInvoices = new Option<bool>(OptDumpInv, description: "Export booked invoices");
         doDumpInvoices.AddAlias(AliasDumpInv);
         rootCommand.AddOption(doDumpInvoices);
 
@@ -58,7 +58,7 @@ public class Program
         toDate.ArgumentHelpName = "yyyy-mm-dd";
         rootCommand.AddOption(toDate);
 
-        var doIncludeNonInvoicedCustomers = new Option<bool>(OptIncludeNonInvCustomers, description: $"Include Customers without invoice.  (optional on {OptDumpInv})");
+        var doIncludeNonInvoicedCustomers = new Option<bool>(OptIncludeNonInvCustomers, description: $"Include Customers without invoice. (optional on {OptDumpInv})");
         doIncludeNonInvoicedCustomers.AddAlias(AliasIncludeNonInvCustomers);
         doIncludeNonInvoicedCustomers.Arity = ArgumentArity.Zero;
         rootCommand.AddOption(doIncludeNonInvoicedCustomers);
@@ -174,7 +174,7 @@ public class Program
             }
 
             {
-                return new ExecutionStatus { Report = $"No option selected", Status = -98 };
+                return new ExecutionStatus { Report = $"No option selected, provide option -h for help", Status = -98 };
             }
         }
         catch (ApplicationException ex)
