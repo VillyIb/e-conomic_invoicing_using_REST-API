@@ -65,15 +65,15 @@ public class GatewayV2 : IEconomicGatewayV2
         return productsHandle;
     }
 
-    public async Task<IDraftInvoice?> PostInvoice(Invoice restApiInvoice, int sourceFileNumber, CancellationToken cancellationToken)
+    public async Task<IDraftInvoice?> PostDraftInvoice(Invoice restApiInvoice, int sourceFileNumber, CancellationToken cancellationToken)
     {
-        const string reference = nameof(PostInvoice);
+        const string reference = nameof(PostDraftInvoice);
 
         var json = InvoiceExtension.ToJson(restApiInvoice);
 
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var stream = await _restApiGateway.PostInvoice(content, cancellationToken);
+        var stream = await _restApiGateway.PostDraftInvoice(content, cancellationToken);
         
         var serializerDraftInvoice = new SerializerDraftInvoice();
 

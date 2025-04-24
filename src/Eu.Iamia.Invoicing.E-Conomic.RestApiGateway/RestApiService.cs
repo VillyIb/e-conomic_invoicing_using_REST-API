@@ -38,11 +38,11 @@ public partial class RestApiService : IRestApiGateway
         }
 
         var jsonError = await response.Content.ReadAsStringAsync(cancellationToken);
-
+        
         throw new HttpRequestException(HttpRequestError.Unknown, jsonError, null, response.StatusCode);
     }
 
-    private async Task<Stream> GetAsync(string requestUri, string reference, CancellationToken cancellationToken)
+    internal async Task<Stream> GetAsync(string requestUri, string reference, CancellationToken cancellationToken)
     {
         SetAuthenticationHeaders();
 
@@ -51,7 +51,7 @@ public partial class RestApiService : IRestApiGateway
         return await PostProcessing(response, cancellationToken);
     }
 
-    private async Task<Stream> PostAsync(string requestUri, StringContent content, string reference, CancellationToken cancellationToken)
+    internal async Task<Stream> PostAsync(string requestUri, StringContent content, string reference, CancellationToken cancellationToken)
     {
         SetAuthenticationHeaders();
 
@@ -60,7 +60,7 @@ public partial class RestApiService : IRestApiGateway
         return await PostProcessing(response, cancellationToken);
     }
 
-    private async Task<Stream> DeleteAsync(string requestUri, string reference, CancellationToken cancellationToken)
+    internal async Task<Stream> DeleteAsync(string requestUri, string reference, CancellationToken cancellationToken)
     {
         SetAuthenticationHeaders();
 

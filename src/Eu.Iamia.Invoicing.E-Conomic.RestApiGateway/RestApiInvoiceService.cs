@@ -95,13 +95,7 @@ public partial class RestApiService
         return await GetAsync(requestUri, reference, cancellationToken);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="content"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public async Task<Stream> PostInvoice(
+    public async Task<Stream> PostDraftInvoice(
         StringContent content,
         CancellationToken cancellationToken
     )
@@ -110,9 +104,9 @@ public partial class RestApiService
 
         // see: https://restapi.e-conomic.com/schema/invoices.drafts.draftInvoiceNumber.lines.post.schema.json
 
-        const string reference = nameof(PostInvoice);
+        const string reference = nameof(PostDraftInvoice);
 
-        var requestUri = "https://restapi.e-conomic.com//invoices/drafts";
+        var requestUri = $"https://restapi.e-conomic.com//invoices/drafts";
         return await PostAsync(requestUri, content, reference, cancellationToken);
     }
 }

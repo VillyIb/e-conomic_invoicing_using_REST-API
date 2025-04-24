@@ -281,7 +281,7 @@ public class MappingService : IMappingService
              layoutNumber
         );
 
-        var draftInvoice = await _economicGateway.PostInvoice(restApiInvoice, sourceFileLineNumber, cancellationToken);
+        var draftInvoice = await _economicGateway.PostDraftInvoice(restApiInvoice, sourceFileLineNumber, cancellationToken);
 
         return draftInvoice;
     }

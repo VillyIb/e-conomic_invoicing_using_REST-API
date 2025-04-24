@@ -146,7 +146,7 @@ public class RestApiGatewayStub : IRestApiGateway
         return new MemoryStream(Encoding.UTF8.GetBytes(dic[invoiceNumber]));
     }
 
-    public async Task<Stream> PostInvoice(StringContent content, CancellationToken cancellationToken)
+    public async Task<Stream> PostDraftInvoice(StringContent content, CancellationToken cancellationToken)
     {
         const string response = "";
         return new MemoryStream(Encoding.UTF8.GetBytes(response));

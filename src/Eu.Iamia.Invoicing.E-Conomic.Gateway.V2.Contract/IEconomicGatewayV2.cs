@@ -15,7 +15,7 @@ public interface IEconomicGatewayV2
 
     Task<PaymentTermsHandle?> ReadPaymentTerms(int page, int pageSize, CancellationToken cancellationToken = default);
 
-    Task<IDraftInvoice?> PostInvoice(Invoice restApiInvoice, int sourceFileNumber, CancellationToken cancellationToken);
+    Task<IDraftInvoice?> PostDraftInvoice(Invoice restApiInvoice, int sourceFileNumber, CancellationToken cancellationToken);
 
     Task<Contract.DTO.Invoices.booked.get.BookedInvoicesHandle> ReadBookedInvoices(int page, int pageSize, IInterval<DateTime> dateRange, CancellationToken cancellationToken = default);
 
