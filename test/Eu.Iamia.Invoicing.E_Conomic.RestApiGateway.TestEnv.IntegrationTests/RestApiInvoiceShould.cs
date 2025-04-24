@@ -107,22 +107,4 @@ public class RestApiInvoiceShould
         }
     }
 
-    [Fact(Skip = "Test environment is read only")]
-    public async Task PostDraftInvoice()
-    {
-        // Notice leaves draft invoice.
-        // use: Eu.Iamia.Invoicing.E_ConomicGateway.UnitTests.Stubs.InvoiceStub.GetInvoiceJson() to create valid json.
-        var txJson = "{\"date\":\"2024-07-26\",\"currency\":\"DKK\",\"exchangeRate\":100,\"paymentTerms\":{\"paymentTermsNumber\":1,\"paymentTermsType\":\"invoiceMonth\"},\"customer\":{\"customerNumber\":99999},\"recipient\":{\"name\":\"CustomerName\",\"address\":\"CustomerAddress\",\"zip\":\"9999\",\"city\":\"CustomerCity\",\"vatZone\":{\"name\":\"Domestic\",\"vatZoneNumber\":1,\"enabledForCustomer\":true,\"enabledForSupplier\":true}},\"references\":{},\"layout\":{\"layoutNumber\":21},\"lines\":[{\"lineNumber\":1,\"sortKey\":1,\"unit\":{\"unitNumber\":1,\"name\":\"mdr\"},\"product\":{\"productNumber\":\"99999\"},\"quantity\":1,\"unitNetPrice\":1,\"discountPercentage\":0,\"unitCostPrice\":0,\"totalNetAmount\":1,\"marginInBaseCurrency\":0,\"marginPercentage\":100,\"description\":\"Description line 1\"},{\"lineNumber\":2,\"sortKey\":2,\"unit\":{\"unitNumber\":1,\"name\":\"mdr\"},\"product\":{\"productNumber\":\"99999\"},\"quantity\":1,\"unitNetPrice\":1,\"discountPercentage\":0,\"unitCostPrice\":0,\"totalNetAmount\":1,\"marginInBaseCurrency\":0,\"marginPercentage\":100,\"description\":\"Description line 2\"},{\"lineNumber\":3,\"sortKey\":3,\"unit\":{\"unitNumber\":1,\"name\":\"mdr\"},\"product\":{\"productNumber\":\"99999\"},\"quantity\":1,\"unitNetPrice\":1,\"discountPercentage\":0,\"unitCostPrice\":0,\"totalNetAmount\":1,\"marginInBaseCurrency\":0,\"marginPercentage\":100,\"description\":\"Description line 3\"}],\"notes\":{\"heading\":\"#99999 CustomerName\",\"textLine1\":\"InvoiceText1\"}}";
-        var content = new StringContent(txJson, Encoding.UTF8, "application/json");
-
-        var stream = await _sut.PostDraftInvoice(content, _cts.Token);
-
-        Assert.NotNull(stream);
-
-        var reade = new StreamReader(stream);
-        var json = await reade.ReadToEndAsync(_cts.Token);
-
-        Assert.NotNull(json);
-        Assert.False(string.IsNullOrEmpty(json));
-    }
 }
