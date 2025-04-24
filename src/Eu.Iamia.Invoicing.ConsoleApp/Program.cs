@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using System.CommandLine.Builder;
 using System.CommandLine.Parsing;
 using Eu.Iamia.ConfigBase;
 using Eu.Iamia.Invoicing.Application;
@@ -100,7 +101,32 @@ public class Program
             doUpload, doDumpInvoices, fromDate, toDate, doIncludeNonInvoicedCustomers, doExampleExport
         );
 
-        await rootCommand.InvokeAsync(args); // this must be before the test for errors.
+        var commandLineBuilder = new CommandLineBuilder(rootCommand);
+
+        var exampleDirective = new[] { "Example", "Examples", "Ex" };
+
+        commandLineBuilder.AddMiddleware(async (context, next) =>
+            {
+                if (context.ParseResult.Directives.Contains("just-say-hi"))
+                {
+                    context.Console.WriteLine("Hi!");
+                }
+                else if (exampleDirective.Any(probe => context.ParseResult.Directives.Any(dir => dir.Key.ToLowerInvariant().Equals(probe.ToLowerInvariant()))))
+                {
+                    context.Console.WriteLine($"Example");
+                }
+                else
+                {
+                    await next(context);
+                }
+            }
+        );
+
+        commandLineBuilder.UseDefaults();
+        var parser = commandLineBuilder.Build();
+        await parser.InvokeAsync(args);
+
+        //await rootCommand.InvokeAsync(args); // this must be before the test for errors.
 
         if (psr.Errors.Any())
         {
@@ -191,7 +217,7 @@ public class Program
             if (doExampleExport)
             {
                 var year = DateTime.Today.Year;
-                return new ExecutionStatus { Report = $"Export booked debitor invoices: Eu.Iamia.Invoicing.ConsoleApp -d -f {year}-01-01 -t {year}-12-31", Status = 0};
+                return new ExecutionStatus { Report = $"Export booked debitor invoices: Eu.Iamia.Invoicing.ConsoleApp -d -f {year}-01-01 -t {year}-12-31", Status = 0 };
             }
 
             {
