@@ -60,6 +60,7 @@ public class CustomerCustomerReport : ReportBase, ICustomerReport
         if (!IsSameCustomer(customer))
         {
             TimeStamp = null;
+            ReportStateStrategy = new ReportStateStrategy(ReportState.Info);
             ReportState = ReportState.Info;
         }
 
