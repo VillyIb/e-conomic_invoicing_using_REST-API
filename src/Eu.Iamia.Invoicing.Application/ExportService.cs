@@ -14,6 +14,7 @@ public interface IExportService
     Task<ExecutionStatus> ExportBookedInvoices(
         IInterval<DateTime> dateInterval,
         bool includeNonInvoicedCustomers,
+        FileInfo outputFile,
         CancellationToken cancellationToken
     );
 }
@@ -165,6 +166,7 @@ public class ExportService : IExportService
         }
     }
 
+    // TODO change filename to more universal stream
     private async Task ExportToCsv(IEnumerable<ExportData> data, FileInfo filename, CancellationToken cancellationToken)
     {
         var headline = string.Empty
@@ -223,6 +225,7 @@ public class ExportService : IExportService
     public async Task<ExecutionStatus> ExportBookedInvoices(
         IInterval<DateTime> dateInterval,
         bool includeNonInvoicedCustomers,
+        FileInfo outputFile,
         CancellationToken cancellationToken
     )
     {
@@ -230,9 +233,7 @@ public class ExportService : IExportService
         await LoadInvoices(dateInterval, cancellationToken);
         await MergeCustomerDetails(_invoicingApplicationSettings.CustomerGroupsToAccept, includeNonInvoicedCustomers);
 
-        // TODO input parameter or configuration
-        var filename = new FileInfo($"C:\\Development\\Logfiles\\{DateTime.Now:yyyy-MM-dd_HH-mm}_BookedInvoices.csv");
-        await ExportToCsv(_exportData.OrderBy(ed => ed.CustomerGroupNumber).ThenBy(ed => ed.CustomerNumber).ThenBy(ed => ed.ProductNumber), filename, cancellationToken);
+        await ExportToCsv(_exportData.OrderBy(ed => ed.CustomerGroupNumber).ThenBy(ed => ed.CustomerNumber).ThenBy(ed => ed.ProductNumber), outputFile, cancellationToken);
 
         return new ExecutionStatus
         {

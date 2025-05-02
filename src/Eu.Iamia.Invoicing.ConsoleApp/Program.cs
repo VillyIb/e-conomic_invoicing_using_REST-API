@@ -209,7 +209,8 @@ public class Program
                     return new ExecutionStatus { Report = $"Error! '{OptFromDate}/{AliasFromDate}' ({fromDate}) > '{OptToDate}/{AliasToDate}' ({toDate})", Status = -94 };
                 }
 
-                var executionStatus = await exportService.ExportBookedInvoices(dateRange, includeNonInvoicedCustomers ?? false, cancellationToken);
+                var outputFile = new FileInfo($"C:\\Development\\Logfiles\\{DateTime.Now:yyyy-MM-dd_HH-mm}_BookedInvoices.csv");
+                var executionStatus = await exportService.ExportBookedInvoices(dateRange, includeNonInvoicedCustomers ?? false, outputFile, cancellationToken);
 
                 return executionStatus;
             }
