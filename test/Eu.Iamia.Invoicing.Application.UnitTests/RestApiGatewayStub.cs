@@ -1,6 +1,8 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.Contract;
 using Eu.Iamia.Utils.Contract;
 using System.Text;
+// ReSharper disable StringLiteralTypo
+// ReSharper disable CommentTypo
 
 namespace Eu.Iamia.Invoicing.Application.UnitTests;
 public class RestApiGatewayStub : IRestApiGateway
@@ -16,7 +18,11 @@ public class RestApiGatewayStub : IRestApiGateway
         );
     }
 
-    public async Task<Stream> GetCustomers(int skipPages, int pageSize, CancellationToken cancellationToken)
+    /// <remarks>
+    /// json is extracted from real system using integration test
+    /// <seealso cref="Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.TestEnv.IntegrationTests.RestApiCustomerShould.GetCustomers"/>
+    /// </remarks>
+    public Task<Stream> GetCustomers(int skipPages, int pageSize, CancellationToken cancellationToken)
     {
         const string response0 = "{\"collection\":[" +
                                  "{\"customerNumber\":999,\"currency\":\"DKK\",\"paymentTerms\":{\"paymentTermsNumber\":1,\"self\":\"https://restapi.e-conomic.com/payment-terms/1\"},\"customerGroup\":{\"customerGroupNumber\":11,\"self\":\"https://restapi.e-conomic.com/customer-groups/11\"},\"address\":\"Solen 6\",\"balance\":0.0,\"dueAmount\":0.00,\"city\":\"Hundested\",\"name\":\"Solen 6\",\"zip\":\"3390\",\"vatZone\":{\"vatZoneNumber\":1,\"self\":\"https://restapi.e-conomic.com/vat-zones/1\"},\"layout\":{\"layoutNumber\":21,\"self\":\"https://restapi.e-conomic.com/layouts/21\"},\"lastUpdated\":\"2023-06-26T12:52:54Z\",\"contacts\":\"https://restapi.e-conomic.com/customers/999/contacts\",\"templates\":{\"invoice\":\"https://restapi.e-conomic.com/customers/999/templates/invoice\",\"invoiceLine\":\"https://restapi.e-conomic.com/customers/999/templates/invoiceline\",\"self\":\"https://restapi.e-conomic.com/customers/999/templates\"},\"totals\":{\"drafts\":\"https://restapi.e-conomic.com/invoices/totals/drafts/customers/999\",\"booked\":\"https://restapi.e-conomic.com/invoices/totals/booked/customers/999\",\"self\":\"https://restapi.e-conomic.com/customers/999/totals\"},\"deliveryLocations\":\"https://restapi.e-conomic.com/customers/999/delivery-locations\",\"invoices\":{\"drafts\":\"https://restapi.e-conomic.com/customers/999/invoices/drafts\",\"booked\":\"https://restapi.e-conomic.com/customers/999/invoices/booked\",\"self\":\"https://restapi.e-conomic.com/customers/999/invoices\"},\"eInvoicingDisabledByDefault\":false,\"self\":\"https://restapi.e-conomic.com/customers/999\"}" +
@@ -67,10 +73,14 @@ public class RestApiGatewayStub : IRestApiGateway
             { 0, response0 }
             ,{ 1, response1 }
         };
-        return GetPagedContent(skipPages, dic);
+        return Task.FromResult(GetPagedContent(skipPages, dic));
     }
 
-    public async Task<Stream> GetDraftInvoices(int skipPages, int pageSize, CancellationToken cancellationToken)
+    /// <remarks>
+    /// json is extracted from real system using integration test
+    /// <seealso cref="Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.TestEnv.IntegrationTests.RestApiInvoiceShould.GetDraftInvoices"/>
+    /// </remarks>
+    public Task<Stream> GetDraftInvoices(int skipPages, int pageSize, CancellationToken cancellationToken)
     {
         var response0 = "{\"collection\":[" +
                                "{\"draftInvoiceNumber\":454,\"soap\":{\"currentInvoiceHandle\":{\"id\":34}},\"templates\":{\"bookingInstructions\":\"https://restapi.e-conomic.com/invoices/drafts/454/templates/booking-instructions\",\"self\":\"https://restapi.e-conomic.com/invoices/drafts/454/templates\"},\"attachment\":\"https://restapi.e-conomic.com/invoices/drafts/454/attachment\",\"date\":\"2023-03-24\",\"currency\":\"DKK\",\"exchangeRate\":100.000000,\"netAmount\":5089.770000,\"netAmountInBaseCurrency\":5089.77,\"grossAmount\":5089.770000,\"grossAmountInBaseCurrency\":5089.77,\"marginInBaseCurrency\":5089.7700,\"marginPercentage\":100.00,\"vatAmount\":0.000000,\"roundingAmount\":0.00,\"costPriceInBaseCurrency\":0.0000,\"dueDate\":\"2023-04-14\",\"paymentTerms\":{\"paymentTermsNumber\":1,\"daysOfCredit\":14,\"name\":\"Lb. md. 14 dage\",\"paymentTermsType\":\"invoiceMonth\",\"self\":\"https://restapi.e-conomic.com/payment-terms/1\"}" +
@@ -82,11 +92,15 @@ public class RestApiGatewayStub : IRestApiGateway
         {
             { 0, response0 }
         };
-        return GetPagedContent(skipPages, dic);
+        return Task.FromResult(GetPagedContent(skipPages, dic));
     }
 
 
-    public async Task<Stream> GetDraftInvoice(int invoiceNumber, CancellationToken cancellationToken)
+    /// <remarks>
+    /// json is extracted from real system using integration test
+    /// <seealso cref="Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.TestEnv.IntegrationTests.RestApiInvoiceShould.GetDraftInvoice"/>
+    /// </remarks>
+    public Task<Stream> GetDraftInvoice(int invoiceNumber, CancellationToken cancellationToken)
     {
         const string response454 = "{\"draftInvoiceNumber\":454,\"soap\":{\"currentInvoiceHandle\":{\"id\":34}},\"templates\":{\"bookingInstructions\":\"https://restapi.e-conomic.com/invoices/drafts/454/templates/booking-instructions\",\"self\":\"https://restapi.e-conomic.com/invoices/drafts/454/templates\"},\"attachment\":\"https://restapi.e-conomic.com/invoices/drafts/454/attachment\"" +
                                    ",\"lines\":[" +
@@ -107,10 +121,14 @@ public class RestApiGatewayStub : IRestApiGateway
             { 454, response454 },
             { 485, response485 }
         };
-        return new MemoryStream(Encoding.UTF8.GetBytes(dic[invoiceNumber]));
+        return Task.FromResult<Stream>(new MemoryStream(Encoding.UTF8.GetBytes(dic[invoiceNumber])));
     }
 
-    public async Task<Stream> GetBookedInvoices(int skipPages, int pageSize, IInterval<DateTime> dateRange, CancellationToken cancellationToken)
+    /// <remarks>
+    /// json is extracted from real system using integration test
+    /// <seealso cref="Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.TestEnv.IntegrationTests.RestApiInvoiceShould.GetBookedInvoices"/>
+    /// </remarks>
+    public Task<Stream> GetBookedInvoices(int skipPages, int pageSize, IInterval<DateTime> dateRange, CancellationToken cancellationToken)
     {
         const string response0 = "{\"collection\":[" +
                                 " {\"bookedInvoiceNumber\":16,\"orderNumber\":17,\"date\":\"2024-01-17\",\"currency\":\"DKK\",\"exchangeRate\":100.000000,\"netAmount\":-866.00,\"netAmountInBaseCurrency\":-866.00,\"grossAmount\":-866.00,\"grossAmountInBaseCurrency\":-866.00,\"vatAmount\":0.00,\"roundingAmount\":0.00,\"remainder\":0.00,\"remainderInBaseCurrency\":0.00,\"dueDate\":\"2024-02-14\",\"paymentTerms\":{\"paymentTermsNumber\":1,\"daysOfCredit\":14,\"name\":\"Lb. md. 14 dage\",\"paymentTermsType\":\"invoiceMonth\",\"self\":\"https://restapi.e-conomic.com/payment-terms/1?date$lte:2024-01-31\"},\"customer\":{\"customerNumber\":1117,\"self\":\"https://restapi.e-conomic.com/customers/1117?date$lte:2024-01-31\"},\"recipient\":{\"name\":\"Torup Landsbycenter af 1995\",\"address\":\"Hågendrupvej 6\",\"zip\":\"3390\",\"city\":\"Hundested\",\"country\":\"Danmark\",\"vatZone\":{\"name\":\"Domestic\",\"vatZoneNumber\":1,\"enabledForCustomer\":true,\"enabledForSupplier\":true,\"self\":\"https://restapi.e-conomic.com/vat-zones/1?date$lte:2024-01-31\"}},\"notes\":{\"heading\":\"Fotokopiering m.m. 2023\"},\"layout\":{\"layoutNumber\":21,\"self\":\"https://restapi.e-conomic.com/layouts/21?date$lte:2024-01-31\"},\"pdf\":{\"download\":\"https://restapi.e-conomic.com/invoices/booked/16/pdf?date$lte:2024-01-31\"},\"sent\":\"https://restapi.e-conomic.com/invoices/booked/16/sent?date$lte:2024-01-31\",\"self\":\"https://restapi.e-conomic.com/invoices/booked/16?date$lte:2024-01-31\"}" +
@@ -121,11 +139,15 @@ public class RestApiGatewayStub : IRestApiGateway
         {
             { 0, response0 },
         };
-        return GetPagedContent(skipPages, dic);
+        return Task.FromResult(GetPagedContent(skipPages, dic));
 
     }
 
-    public async Task<Stream> GetBookedInvoice(int invoiceNumber, CancellationToken cancellationToken)
+    /// <remarks>
+    /// json is extracted from real system using integration test
+    /// <seealso cref="Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.TestEnv.IntegrationTests.RestApiInvoiceShould.GetBookedInvoice"/>
+    /// </remarks>
+    public Task<Stream> GetBookedInvoice(int invoiceNumber, CancellationToken cancellationToken)
     {
         const string response16 = "{\"bookedInvoiceNumber\":16,\"orderNumber\":17,\"date\":\"2024-01-17\",\"currency\":\"DKK\",\"exchangeRate\":100.000000,\"netAmount\":-866.00,\"netAmountInBaseCurrency\":-866.00,\"grossAmount\":-866.00,\"grossAmountInBaseCurrency\":-866.00,\"vatAmount\":0.00,\"roundingAmount\":0.00,\"remainder\":0.00,\"remainderInBaseCurrency\":0.00,\"dueDate\":\"2024-02-14\",\"paymentTerms\":{\"paymentTermsNumber\":1,\"daysOfCredit\":14,\"name\":\"Lb. md. 14 dage\",\"paymentTermsType\":\"invoiceMonth\",\"self\":\"https://restapi.e-conomic.com/payment-terms/1\"},\"customer\":{\"customerNumber\":1117,\"self\":\"https://restapi.e-conomic.com/customers/1117\"},\"recipient\":{\"name\":\"Torup Landsbycenter af 1995\",\"address\":\"Hågendrupvej 6\",\"zip\":\"3390\",\"city\":\"Hundested\",\"country\":\"Danmark\",\"vatZone\":{\"name\":\"Domestic\",\"vatZoneNumber\":1,\"enabledForCustomer\":true,\"enabledForSupplier\":true,\"self\":\"https://restapi.e-conomic.com/vat-zones/1\"}},\"notes\":{\"heading\":\"Fotokopiering m.m. 2023\"},\"layout\":{\"layoutNumber\":21,\"self\":\"https://restapi.e-conomic.com/layouts/21\"},\"pdf\":{\"download\":\"https://restapi.e-conomic.com/invoices/booked/16/pdf\"},\"lines\":[" +
                                   "{\"lineNumber\":1,\"sortKey\":1,\"description\":\"A4 almindelig\",\"quantity\":-757.00,\"unitNetPrice\":1.00,\"discountPercentage\":0.00,\"unitCostPrice\":0.00,\"vatRate\":0.00000000,\"vatAmount\":0.0000,\"totalNetAmount\":-757.00,\"product\":{\"productNumber\":\"14\",\"self\":\"https://restapi.e-conomic.com/products/14\"}}" +
@@ -143,16 +165,20 @@ public class RestApiGatewayStub : IRestApiGateway
             { 16, response16 },
             { 18, response18 }
         };
-        return new MemoryStream(Encoding.UTF8.GetBytes(dic[invoiceNumber]));
+        return Task.FromResult<Stream>(new MemoryStream(Encoding.UTF8.GetBytes(dic[invoiceNumber])));
     }
 
-    public async Task<Stream> PostDraftInvoice(StringContent content, CancellationToken cancellationToken)
+    public Task<Stream> PostDraftInvoice(StringContent content, CancellationToken cancellationToken)
     {
         const string response = "{\"draftInvoiceNumber\":2023123,\"grossAmount\":199.01}";
-        return new MemoryStream(Encoding.UTF8.GetBytes(response));
+        return Task.FromResult<Stream>(new MemoryStream(Encoding.UTF8.GetBytes(response)));
     }
 
-    public async Task<Stream> GetPaymentTerms(int skipPages, int pageSize, CancellationToken cancellationToken)
+    /// <remarks>
+    /// json is extracted from real system using integration test
+    /// <seealso cref="Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.TestEnv.IntegrationTests.RestApiPaymentTermShould.GetPaymentTerms_OK"/>
+    /// </remarks>
+    public Task<Stream> GetPaymentTerms(int skipPages, int pageSize, CancellationToken cancellationToken)
     {
         const string response0 = "{\"collection\":[" +
                                 " {\"paymentTermsNumber\":1,\"daysOfCredit\":14,\"name\":\"Lb. md. 14 dage\",\"paymentTermsType\":\"invoiceMonth\",\"self\":\"https://restapi.e-conomic.com/payment-terms/1\"}" +
@@ -166,10 +192,14 @@ public class RestApiGatewayStub : IRestApiGateway
         {
             { 0, response0 },
         };
-        return GetPagedContent(skipPages, dic);
+        return Task.FromResult(GetPagedContent(skipPages, dic));
     }
 
-    public async Task<Stream> GetProducts(int skipPages, int pageSize, CancellationToken cancellationToken)
+    /// <remarks>
+    /// json is extracted from real system using integration test
+    /// <seealso cref="Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.TestEnv.IntegrationTests.RestApiProductShould.GetProducts"/>
+    /// </remarks>
+    public Task<Stream> GetProducts(int skipPages, int pageSize, CancellationToken cancellationToken)
     {
         const string response0 = "{\"collection\":[" +
                                 //",{\"productNumber\":\"1\",\"description\":\"Depositum\",\"name\":\"Medlemsindskud\",\"recommendedPrice\":0.00,\"salesPrice\":8900.00,\"barred\":false,\"lastUpdated\":\"2024-09-10T19:36:00Z\",\"productGroup\":{\"productGroupNumber\":8,\"name\":\"medlemsindskud\",\"salesAccounts\":\"https://restapi.e-conomic.com/product-groups/8/sales-accounts\",\"products\":\"https://restapi.e-conomic.com/product-groups/8/products\",\"self\":\"https://restapi.e-conomic.com/product-groups/8\"},\"invoices\":{\"drafts\":\"https://restapi.e-conomic.com/products/1/invoices/drafts\",\"booked\":\"https://restapi.e-conomic.com/products/1/invoices/booked\",\"self\":\"https://restapi.e-conomic.com/products/1/invoices\"},\"pricing\":{\"currencySpecificSalesPrices\":\"https://restapi.e-conomic.com/products/1/pricing/currency-specific-sales-prices\"},\"self\":\"https://restapi.e-conomic.com/products/1\"}" +
@@ -205,10 +235,14 @@ public class RestApiGatewayStub : IRestApiGateway
         {
             { 0, response0 },
         };
-        return GetPagedContent(skipPages, dic);
+        return Task.FromResult(GetPagedContent(skipPages, dic));
     }
 
-    public async Task<Stream> GetProduct(int productNumber, CancellationToken cancellationToken)
+    /// <remarks>
+    /// json is extracted from real system using integration test
+    /// <seealso cref="Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.TestEnv.IntegrationTests.RestApiProductShould.GetProduct"/>
+    /// </remarks>
+    public Task<Stream> GetProduct(int productNumber, CancellationToken cancellationToken)
     {
         const string response99999 = "{\"productNumber\":\"99999\",\"description\":\"Salgsvare 99.999\",\"name\":\"Testvare\",\"costPrice\":0.00,\"recommendedPrice\":1.00,\"salesPrice\":1.00,\"barred\":false,\"minimumStock\":0.00,\"lastUpdated\":\"2024-07-26T12:38:00Z\",\"productGroup\":{\"productGroupNumber\":99999,\"name\":\"Test varegruppe\",\"salesAccounts\":\"https://restapi.e-conomic.com/product-groups/99999/sales-accounts\",\"products\":\"https://restapi.e-conomic.com/product-groups/99999/products\",\"self\":\"https://restapi.e-conomic.com/product-groups/99999\"},\"unit\":{\"unitNumber\":1,\"name\":\"mdr\",\"products\":\"https://restapi.e-conomic.com/units/1/products\",\"self\":\"https://restapi.e-conomic.com/units/1\"},\"invoices\":{\"drafts\":\"https://restapi.e-conomic.com/products/99999/invoices/drafts\",\"booked\":\"https://restapi.e-conomic.com/products/99999/invoices/booked\",\"self\":\"https://restapi.e-conomic.com/products/99999/invoices\"},\"pricing\":{\"currencySpecificSalesPrices\":\"https://restapi.e-conomic.com/products/99999/pricing/currency-specific-sales-prices\"},\"metaData\":{\"delete\":{\"description\":\"Delete this product.\",\"href\":\"https://restapi.e-conomic.com/products/99999\",\"httpMethod\":\"delete\"},\"replace\":{\"description\":\"Replace this product.\",\"href\":\"https://restapi.e-conomic.com/products/99999\",\"httpMethod\":\"put\"}},\"self\":\"https://restapi.e-conomic.com/products/99999\"}";
         const string response14 = "{\"productNumber\":\"14\",\"name\":\"A4 almindelig\",\"recommendedPrice\":0.00,\"salesPrice\":1.00,\"barred\":false,\"minimumStock\":0.00,\"lastUpdated\":\"2024-02-29T13:39:00Z\",\"productGroup\":{\"productGroupNumber\":6,\"name\":\"Fotokopiering o.lign. videresalg\",\"salesAccounts\":\"https://restapi.e-conomic.com/product-groups/6/sales-accounts\",\"products\":\"https://restapi.e-conomic.com/product-groups/6/products\",\"self\":\"https://restapi.e-conomic.com/product-groups/6\"},\"invoices\":{\"drafts\":\"https://restapi.e-conomic.com/products/14/invoices/drafts\",\"booked\":\"https://restapi.e-conomic.com/products/14/invoices/booked\",\"self\":\"https://restapi.e-conomic.com/products/14/invoices\"},\"pricing\":{\"currencySpecificSalesPrices\":\"https://restapi.e-conomic.com/products/14/pricing/currency-specific-sales-prices\"},\"metaData\":{\"delete\":{\"description\":\"Delete this product.\",\"href\":\"https://restapi.e-conomic.com/products/14\",\"httpMethod\":\"delete\"},\"replace\":{\"description\":\"Replace this product.\",\"href\":\"https://restapi.e-conomic.com/products/14\",\"httpMethod\":\"put\"}},\"self\":\"https://restapi.e-conomic.com/products/14\"}";
@@ -220,6 +254,6 @@ public class RestApiGatewayStub : IRestApiGateway
             { 15, response15 }
         };
 
-        return new MemoryStream(Encoding.UTF8.GetBytes(dic[productNumber]));
+        return Task.FromResult<Stream>(new MemoryStream(Encoding.UTF8.GetBytes(dic[productNumber])));
     }
 }

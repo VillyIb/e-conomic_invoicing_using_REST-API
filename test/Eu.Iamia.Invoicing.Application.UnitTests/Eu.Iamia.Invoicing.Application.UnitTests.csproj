@@ -33,6 +33,7 @@
     <ProjectReference Include="..\..\src\Eu.Iamia.Invoicing.E-Conomic.RestApiGateway\Eu.Iamia.Invoicing.E-Conomic.RestApiGateway.csproj" />
     <ProjectReference Include="..\..\src\Eu.Iamia.Reporting.Contract\Eu.Iamia.Reporting.Contract.csproj" />
     <ProjectReference Include="..\..\src\Eu.Iamia.Reporting\Eu.Iamia.Reporting.csproj" />
+    <ProjectReference Include="..\Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.TestEnv.IntegrationTests\Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.TestEnv.IntegrationTests.csproj" />
   </ItemGroup>
 
   <ItemGroup>
