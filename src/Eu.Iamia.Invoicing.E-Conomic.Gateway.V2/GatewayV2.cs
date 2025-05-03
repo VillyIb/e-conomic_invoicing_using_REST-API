@@ -20,8 +20,9 @@ namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2;
 
 public class GatewayV2 : IEconomicGatewayV2
 {
-    private readonly SettingsForEConomicGatewayV2 _settings; // TODO review
-    protected readonly IRestApiGateway _restApiGateway;
+    // ReSharper disable once NotAccessedField.Local
+    private readonly SettingsForEConomicGatewayV2 _settings; // TODO review unused local
+    protected readonly IRestApiGateway RestApiGateway;
     private readonly ICustomerReport _report;
 
     public GatewayV2(
@@ -31,7 +32,7 @@ public class GatewayV2 : IEconomicGatewayV2
     )
     {
         _settings = settings;
-        _restApiGateway = restApiGateway;
+        RestApiGateway = restApiGateway;
         _report = report;
     }
 
@@ -45,7 +46,7 @@ public class GatewayV2 : IEconomicGatewayV2
 
     public async Task<CustomersHandle> ReadCustomers(int page, int pageSize, CancellationToken cancellationToken = default)
     {
-        var stream = await _restApiGateway.GetCustomers(page, pageSize, cancellationToken);
+        var stream = await RestApiGateway.GetCustomers(page, pageSize, cancellationToken);
 
         var serializerCustomersHandle = new SerializerCustomersHandle();
 
@@ -56,7 +57,7 @@ public class GatewayV2 : IEconomicGatewayV2
 
     public async Task<ProductsHandle> ReadProducts(int page, int pageSize, CancellationToken cancellationToken = default)
     {
-        var stream = await _restApiGateway.GetProducts(page, pageSize, cancellationToken);
+        var stream = await RestApiGateway.GetProducts(page, pageSize, cancellationToken);
 
         var serializerProductsHandle = new SerializerProductsHandle();
 
@@ -69,19 +70,19 @@ public class GatewayV2 : IEconomicGatewayV2
     {
         const string reference = nameof(PostDraftInvoice);
 
-        var json = InvoiceExtension.ToJson(restApiInvoice);
+        var json = restApiInvoice.ToJson();
 
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var stream = await _restApiGateway.PostDraftInvoice(content, cancellationToken);
-        
+        var stream = await RestApiGateway.PostDraftInvoice(content, cancellationToken);
+
         var serializerDraftInvoice = new SerializerDraftInvoice();
 
         var draftInvoice = await serializerDraftInvoice.DeserializeAsync(stream, cancellationToken);
 
         stream.Position = 0;
         using var streamReader = new StreamReader(stream);
-        string htmlBody = await streamReader.ReadToEndAsync(cancellationToken);
+        var htmlBody = await streamReader.ReadToEndAsync(cancellationToken);
         _report.Info(reference, htmlBody);
         _report.Close();
 
@@ -90,7 +91,7 @@ public class GatewayV2 : IEconomicGatewayV2
 
     public async Task<Contract.DTO.Invoices.booked.get.BookedInvoicesHandle> ReadBookedInvoices(int page, int pageSize, IInterval<DateTime> dateRange, CancellationToken cancellationToken = default)
     {
-        var stream = await _restApiGateway.GetBookedInvoices(page, pageSize, dateRange, cancellationToken);
+        var stream = await RestApiGateway.GetBookedInvoices(page, pageSize, dateRange, cancellationToken);
 
         var serializerCustomersHandle = new Serializers.Invoices.booked.get.SerializerBookedInvoicesHandle();
 
@@ -101,7 +102,7 @@ public class GatewayV2 : IEconomicGatewayV2
 
     public async Task<Contract.DTO.Invoices.booked.bookedInvoiceNumber.get.BookedInvoice> ReadBookedInvoice(int invoiceNumber, CancellationToken cancellationToken = default)
     {
-        var stream = await _restApiGateway.GetBookedInvoice(invoiceNumber, cancellationToken);
+        var stream = await RestApiGateway.GetBookedInvoice(invoiceNumber, cancellationToken);
 
         var serializerCustomersHandle = new Serializers.Invoices.booked.bookedInvoiceNumber.get.SerializerBookedInvoice();
 
@@ -110,14 +111,14 @@ public class GatewayV2 : IEconomicGatewayV2
         return bookedInvoice;
     }
 
-    private List<PaymentTerm> _paymentTermsCache = [];
+    private readonly List<PaymentTerm> _paymentTermsCache = [];
 
     public async Task<int> LoadPaymentTermsCache()
     {
         _paymentTermsCache.Clear();
 
         var cts = new CancellationTokenSource();
-        bool @continue = true;
+        var @continue = true;
         var page = 0;
         while (@continue)
         {
@@ -126,7 +127,7 @@ public class GatewayV2 : IEconomicGatewayV2
             @continue = paymentTermHandle.PaymentTerms.Any() && page < 100;
             page++;
         }
-        return _paymentTermsCache.Count; ;
+        return _paymentTermsCache.Count;
     }
 
     public PaymentTerm? GetPaymentTerm(int paymentTermsNumber)
@@ -136,7 +137,7 @@ public class GatewayV2 : IEconomicGatewayV2
 
     public async Task<PaymentTermsHandle?> ReadPaymentTerms(int page, int pageSize, CancellationToken cancellationToken = default)
     {
-        var stream = await _restApiGateway.GetPaymentTerms(page, pageSize, cancellationToken);
+        var stream = await RestApiGateway.GetPaymentTerms(page, pageSize, cancellationToken);
 
         var serializerPaymentTermsHandle = new SerializerPaymentTermsHandle();
 

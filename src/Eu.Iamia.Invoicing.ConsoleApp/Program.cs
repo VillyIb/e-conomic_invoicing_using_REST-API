@@ -13,6 +13,7 @@ namespace Eu.Iamia.Invoicing.ConsoleApp;
 
 public class Program
 {
+    // ReSharper disable InconsistentNaming
     private const string OptUpload = "--Upload";
     private const string AliasUpload = "-u";
     private const string OptExportInv = "--Export_invoices";
@@ -25,6 +26,7 @@ public class Program
     private const string AliasIncludeNonInvCustomers = "-inc";
     private const string OptExampleExport = "--Exmample_export";
     private const string AliasExampleExport = "-xe";
+    // ReSharper restore InconsistentNaming
 
 
     private static async Task<int> Main(string[] args)
@@ -113,7 +115,7 @@ public class Program
                 }
                 else if (exampleDirective.Any(probe => context.ParseResult.Directives.Any(dir => dir.Key.ToLowerInvariant().Equals(probe.ToLowerInvariant()))))
                 {
-                    context.Console.WriteLine($"Example");
+                    context.Console.WriteLine("Example");
                 }
                 else
                 {
@@ -138,14 +140,11 @@ public class Program
             Console.WriteLine();
             Console.WriteLine($"{result.Report}");
 
-            if (result.Status == 0)
-            {
-                Console.WriteLine($"Successful");
-            }
-            else
-            {
-                Console.WriteLine($"Failed with status: {result.Status}");
-            }
+            Console.WriteLine(
+                result.Status == 0
+                    ? $"Successful"
+                    : $"Failed with status: {result.Status}"
+            );
 
             Console.WriteLine();
 
@@ -222,7 +221,7 @@ public class Program
             }
 
             {
-                return new ExecutionStatus { Report = $"No option selected, provide option -h for help", Status = -98 };
+                return new ExecutionStatus { Report = "No option selected, provide option -h for help", Status = -98 };
             }
         }
         catch (ApplicationException ex)

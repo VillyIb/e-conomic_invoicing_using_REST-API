@@ -26,6 +26,8 @@ public partial class RestApiService
         CancellationToken cancellationToken
     )
     {
+        // ReSharper disable once CommentTypo
+
         // see: https://restdocs.e-conomic.com/#get-products-productnumber
 
         // see: https://restapi.e-conomic.com/schema/products.productNumber.get.schema.json

@@ -10,11 +10,11 @@ namespace Eu.Iamia.Invoicing.Application.UnitTests;
 public class ExportServiceShould
 {
     private readonly IExportService _sut;
-    private readonly CancellationTokenSource cts;
+    private readonly CancellationTokenSource _cts;
 
     public ExportServiceShould()
     {
-        cts = new CancellationTokenSource(100000);
+        _cts = new CancellationTokenSource(100000);
 
         var executingDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory!.FullName;
 
@@ -36,7 +36,7 @@ public class ExportServiceShould
 
             Assert.False(expected.Exists);
 
-            var x = await _sut.ExportBookedInvoices(dateInterval, false, expected, cts.Token);
+            var x = await _sut.ExportBookedInvoices(dateInterval, false, expected, _cts.Token);
 
             expected.Refresh();
             Assert.True(expected.Exists);
