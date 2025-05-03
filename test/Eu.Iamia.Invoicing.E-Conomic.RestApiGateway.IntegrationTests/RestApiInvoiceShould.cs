@@ -1,5 +1,4 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.Contract;
-using Eu.Iamia.Utils;
 using System.Text;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.IntegrationTests;
