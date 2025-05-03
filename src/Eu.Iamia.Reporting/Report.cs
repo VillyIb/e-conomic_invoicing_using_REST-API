@@ -29,15 +29,12 @@ public class CustomerCustomerReport : ReportBase, ICustomerReport
 
     protected FileInfo? ReportFile;
 
-    private ReportState _reportState;
-
     private ReportState ReportState
     {
-        get => _reportState;
+        get => ReportStateStrategy.ReportState;
         set
         {
             if (ReportStateStrategy.Locked) return;
-            _reportState = value;
             ReportStateStrategy = new ReportStateStrategy(value);
         }
     }
@@ -78,13 +75,6 @@ public class CustomerCustomerReport : ReportBase, ICustomerReport
             CustomerName == customer.Name
         ;
     }
-
-    //public ICustomerReport SetTime(DateTime timestamp)
-    //{
-    //    if (ReportFile is not null && ReportFile.Exists) { return this; }
-    //    _timeStamp = timestamp;
-    //    return this;
-    //}
 
     internal string GetFilename(ReportState reportState)
     {
