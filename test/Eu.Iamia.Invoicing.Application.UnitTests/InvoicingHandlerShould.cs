@@ -42,7 +42,7 @@ public class InvoicingHandlerShould : IDisposable
 
     
     [Fact]
-    public async Task Test1()
+    public async Task? LoadInvoicesFromCSV_File()
     {
         using var cts = new CancellationTokenSource();
 
