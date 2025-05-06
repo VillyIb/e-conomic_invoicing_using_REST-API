@@ -31,6 +31,10 @@ public class GatewayV2 : IEconomicGatewayV2
         ICustomerReport report
     )
     {
+        if(restApiGateway == null) throw new ArgumentNullException(nameof(restApiGateway));
+        if(report == null) throw new ArgumentNullException(nameof(report));
+        if (settings == null) throw new ArgumentNullException(nameof(settings));
+       
         _settings = settings;
         RestApiGateway = restApiGateway;
         _report = report;
@@ -113,6 +117,7 @@ public class GatewayV2 : IEconomicGatewayV2
 
     private readonly List<PaymentTerm> _paymentTermsCache = [];
 
+    // TODO is this placed in right location -> MappingSevice
     public async Task<int> LoadPaymentTermsCache()
     {
         _paymentTermsCache.Clear();
