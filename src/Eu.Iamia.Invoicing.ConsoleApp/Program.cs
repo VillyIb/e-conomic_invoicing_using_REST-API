@@ -47,30 +47,31 @@ public class Program
 
         var doUpload = new Option<bool>(OptUpload, description: "Upload invoices from .csv file to e-conomic");
         doUpload.AddAlias(AliasUpload);
+        doUpload.SetDefaultValue("--Upload");
         rootCommand.AddOption(doUpload);
 
         var doDumpInvoices = new Option<bool>(OptExportInv, description: "Export booked invoices");
         doDumpInvoices.AddAlias(AliasExportInv);
-        rootCommand.AddOption(doDumpInvoices);
+        //rootCommand.AddOption(doDumpInvoices);
 
         var fromDate = new Option<string>(OptFromDate, description: $"Date interval from incl. (required by {OptExportInv})");
         fromDate.AddAlias(AliasFromDate);
         fromDate.ArgumentHelpName = "yyyy-mm-dd";
-        rootCommand.AddOption(fromDate);
+        //rootCommand.AddOption(fromDate);
 
         var toDate = new Option<string>(OptToDate, description: $"Date interval to incl. (required by {OptExportInv})");
         toDate.AddAlias(AliasToDate);
         toDate.ArgumentHelpName = "yyyy-mm-dd";
-        rootCommand.AddOption(toDate);
+        //rootCommand.AddOption(toDate);
 
         var doExampleExport = new Option<bool>(OptExampleExport, description: $"How to export debitor invoices");
         doExampleExport.AddAlias(AliasExampleExport);
-        rootCommand.AddOption(doExampleExport);
+        //rootCommand.AddOption(doExampleExport);
 
         var doIncludeNonInvoicedCustomers = new Option<bool>(OptIncludeNonInvCustomers, description: $"Include Customers without invoice. (optional on {OptExportInv})");
         doIncludeNonInvoicedCustomers.AddAlias(AliasIncludeNonInvCustomers);
         doIncludeNonInvoicedCustomers.Arity = ArgumentArity.Zero;
-        rootCommand.AddOption(doIncludeNonInvoicedCustomers);
+        //rootCommand.AddOption(doIncludeNonInvoicedCustomers);
 
         var psr = rootCommand.Parse(args);
 
