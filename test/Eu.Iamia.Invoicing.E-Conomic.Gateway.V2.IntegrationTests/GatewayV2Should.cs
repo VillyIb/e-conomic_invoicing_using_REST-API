@@ -19,7 +19,7 @@ public class GatewayV2Should
 
     // this should be a unit test validating the generated query.
     [Theory]
-    [InlineData(1,66, "2024-01-01", "2024-12-31")]
+    [InlineData(1, 66, "2024-01-01", "2024-12-31")]
     public async Task ReadBookedInvoices(int page, int pageSize, string from, string to)
     {
         var dateRange = Interval<DateTime>.Create(DateTime.Parse(from), DateTime.Parse(to));
@@ -27,16 +27,16 @@ public class GatewayV2Should
 
         Assert.NotNull(bookedInvoicesHandle);
         Assert.True(bookedInvoicesHandle.Invoices.Any());
-        Assert.Equal(pageSize, bookedInvoicesHandle.Invoices.Length );
+        Assert.Equal(pageSize, bookedInvoicesHandle.Invoices.Length);
     }
 
     [Theory]
-    [InlineData(56,2024072)]
+    [InlineData(56, 2024072)]
     public async Task ReadBookedInvoice(int customerNumber, int invoiceNumber)
     {
         var bookedInvoice = await _sut.ReadBookedInvoice(invoiceNumber);
         Assert.NotNull(bookedInvoice);
-        Assert.Equal(customerNumber,bookedInvoice.customer.customerNumber);
+        Assert.Equal(customerNumber, bookedInvoice.customer.customerNumber);
     }
-    
+
 }

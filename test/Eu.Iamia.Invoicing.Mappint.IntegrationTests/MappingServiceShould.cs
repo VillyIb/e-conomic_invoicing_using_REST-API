@@ -39,7 +39,7 @@ public class MappingServiceShould
         Assert.True(paymentTermCount > 1);
     }
 
-    [Fact]
+    [Fact(Skip = "Leaves invoice draft if OK")]
     public async Task PushInvoice_OK()
     {
         const int sourceFileLineNumber = 999;
@@ -69,7 +69,7 @@ public class MappingServiceShould
         };
         var layoutNumber = 21;
 
-        List<int> customerGroupsToAccept = [1,2];
+        List<int> customerGroupsToAccept = [1, 2];
         await _sut.LoadCustomerCache(customerGroupsToAccept);
 
         await _sut.LoadProductCache();
@@ -77,7 +77,7 @@ public class MappingServiceShould
 
         //try
         //{
-            var x = await _sut.PushInvoice(invoiceDto, layoutNumber, sourceFileLineNumber, _cts.Token);
+        var x = await _sut.PushInvoice(invoiceDto, layoutNumber, sourceFileLineNumber, _cts.Token);
         //}
         //catch (HttpRequestException ex)
         //{

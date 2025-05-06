@@ -40,7 +40,7 @@ public class InvoicingHandlerShould : IDisposable
         CleanTestDataDirectory(_outputDirectory);
     }
 
-    
+
     [Fact]
     public async Task? LoadInvoicesFromCSV_File()
     {
@@ -50,8 +50,8 @@ public class InvoicingHandlerShould : IDisposable
         _sut.Dispose();
 
         Assert.NotNull(result);
-        Assert.Equal(0,result.Status);
-        Assert.Equal(1,result.CountFails);
+        Assert.Equal(0, result.Status);
+        Assert.Equal(1, result.CountFails);
 
         Assert.Equal(1, CountFiles(_outputDirectory, "*_E_InvoiceReport.txt"));
         Assert.Equal(1, CountFiles(_outputDirectory, "*_I_InvoiceReport.txt"));

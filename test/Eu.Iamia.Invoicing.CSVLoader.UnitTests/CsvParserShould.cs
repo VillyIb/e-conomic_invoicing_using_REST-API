@@ -5,8 +5,9 @@
     {
         private readonly CsvParser sut;
 
-        public CsvParserShould() { 
-            sut = new CsvParser(new Level2Parsers() );
+        public CsvParserShould()
+        {
+            sut = new CsvParser(new Level2Parsers());
         }
 
         [Fact]

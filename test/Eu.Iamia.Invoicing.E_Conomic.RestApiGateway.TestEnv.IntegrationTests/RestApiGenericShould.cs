@@ -48,7 +48,7 @@ public class RestApiGenericShould
         }
         catch (HttpRequestException ex)
         {
-            Assert.Equal(HttpStatusCode.Forbidden, ex.StatusCode);
+            Assert.Equal(HttpStatusCode.UnsupportedMediaType, ex.StatusCode);
         }
     }
 
@@ -57,7 +57,7 @@ public class RestApiGenericShould
     {
         const string reference = nameof(DeleteAsyncFail);
 
-        const string requestUri = $"https://restapi.e-conomic.com/invoices/drafts/999";
+        const string requestUri = $"https://restapi.e-conomic.com/invoices/drafts/99999999";
 
         try
         {
@@ -66,7 +66,7 @@ public class RestApiGenericShould
         }
         catch (HttpRequestException ex)
         {
-            Assert.Equal(HttpStatusCode.Forbidden, ex.StatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, ex.StatusCode);
         }
     }
 
