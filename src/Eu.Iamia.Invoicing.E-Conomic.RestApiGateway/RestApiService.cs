@@ -38,7 +38,7 @@ public partial class RestApiService : IRestApiGateway
         }
 
         var jsonError = await response.Content.ReadAsStringAsync(cancellationToken);
-        
+
         throw new HttpRequestException(HttpRequestError.Unknown, jsonError, null, response.StatusCode);
     }
 

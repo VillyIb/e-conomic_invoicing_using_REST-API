@@ -1,11 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Eu.Iamia.ConfigBase;
+﻿using Eu.Iamia.ConfigBase;
 using Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.Contract;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.Configuration;
-public  class Setup : IHandlerSetup
+public class Setup : IHandlerSetup
 {
     private readonly IConfiguration _configuration;
 

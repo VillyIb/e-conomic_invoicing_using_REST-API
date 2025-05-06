@@ -5,7 +5,11 @@ namespace Eu.Iamia.Invoicing.E_Conomic.RestApiGateway;
 
 public partial class RestApiService
 {
-    public virtual async Task<Stream> GetProducts(int skipPages, int pageSize, CancellationToken cancellationToken)
+    public virtual async Task<Stream> GetProducts(
+        int skipPages,
+        int pageSize,
+        CancellationToken cancellationToken
+    )
     {
         // see: https://restdocs.e-conomic.com/#get-products
 

@@ -11,5 +11,5 @@ public class SettingsForInvoicingApplication : SettingsBase
     [HelpMetadata(description: "Full path to .csv file", argumentHelpName: "path.csv", false)]
     public string CsvFile { get; set; } = string.Empty;
 
-    public List<int> CustomerGroupsToAccept { get; set; }
+    public List<int> CustomerGroupsToAccept { get; set; } = new List<int>();
 }

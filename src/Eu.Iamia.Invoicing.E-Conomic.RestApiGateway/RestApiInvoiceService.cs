@@ -55,6 +55,21 @@ public partial class RestApiService
         return await DeleteAsync(requestUri, reference, cancellationToken);
     }
 
+    public async Task<Stream> PostDraftInvoice(
+        StringContent content,
+        CancellationToken cancellationToken
+    )
+    {
+        // see: https://restdocs.e-conomic.com/#post-invoices-drafts-draftinvoicenumber-lines
+
+        // see: https://restapi.e-conomic.com/schema/invoices.drafts.draftInvoiceNumber.lines.post.schema.json
+
+        const string reference = nameof(PostDraftInvoice);
+
+        var requestUri = $"https://restapi.e-conomic.com//invoices/drafts";
+        return await PostAsync(requestUri, content, reference, cancellationToken);
+    }
+
     public async Task<Stream> GetBookedInvoices
     (
         int skipPages,
@@ -95,18 +110,4 @@ public partial class RestApiService
         return await GetAsync(requestUri, reference, cancellationToken);
     }
 
-    public async Task<Stream> PostDraftInvoice(
-        StringContent content,
-        CancellationToken cancellationToken
-    )
-    {
-        // see: https://restdocs.e-conomic.com/#post-invoices-drafts-draftinvoicenumber-lines
-
-        // see: https://restapi.e-conomic.com/schema/invoices.drafts.draftInvoiceNumber.lines.post.schema.json
-
-        const string reference = nameof(PostDraftInvoice);
-
-        var requestUri = $"https://restapi.e-conomic.com//invoices/drafts";
-        return await PostAsync(requestUri, content, reference, cancellationToken);
-    }
 }
