@@ -16,8 +16,8 @@ public class RestApiInvoiceShould
         _sut = setup.GetService<IRestApiGateway>();
     }
 
-    //[Fact(Skip = "Notice! Leaves draft invoice")]
-    [Fact]
+    [Fact(Skip = "Notice! Leaves draft invoice if OK")]
+    //[Fact]
     public async Task PostDraftInvoice()
     {
         // Notice leaves draft invoice.

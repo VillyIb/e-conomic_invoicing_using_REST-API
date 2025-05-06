@@ -117,29 +117,6 @@ public class GatewayV2 : IEconomicGatewayV2
 
     private readonly List<PaymentTerm> _paymentTermsCache = [];
 
-    // TODO is this placed in right location -> MappingSevice
-    //public async Task<int> LoadPaymentTermsCache()
-    //{
-    //    _paymentTermsCache.Clear();
-
-    //    var cts = new CancellationTokenSource();
-    //    var @continue = true;
-    //    var page = 0;
-    //    while (@continue)
-    //    {
-    //        var paymentTermHandle = await ReadPaymentTerms(page, 20, cts.Token) ?? new PaymentTermsHandle();
-    //        _paymentTermsCache.AddRange(paymentTermHandle.PaymentTerms);
-    //        @continue = paymentTermHandle.PaymentTerms.Any() && page < 100;
-    //        page++;
-    //    }
-    //    return _paymentTermsCache.Count;
-    //}
-
-    //public PaymentTerm? GetPaymentTerm(int paymentTermsNumber)
-    //{
-    //    return _paymentTermsCache.FirstOrDefault(collection => collection.paymentTermsNumber == paymentTermsNumber);
-    //}
-
     public async Task<PaymentTermsHandle> ReadPaymentTerms(int page, int pageSize, CancellationToken cancellationToken = default)
     {
         var stream = await RestApiGateway.GetPaymentTerms(page, pageSize, cancellationToken);
