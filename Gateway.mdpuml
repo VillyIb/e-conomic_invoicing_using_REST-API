@@ -1,0 +1,150 @@
+@startuml
+scale 1
+title Gateway
+
+Extern -> Gateway : ReadCustomers
+activate Extern
+
+activate Gateway
+
+Gateway -> RestApiService : GetCustomers
+
+activate RestApiService
+
+RestApiService -> HttpClient : GetAsync
+
+activate HttpClient
+HttpClient --> RestApiService : HttpResponseMessage
+deactivate HttpClient
+RestApiService --> Gateway : Stream(CustomersHandle)
+deactivate RestApiService
+
+Gateway --> Extern : CustomersHandle
+
+deactivate Gateway
+
+
+Extern -> Gateway : ReadProducts
+
+activate Gateway
+
+Gateway -> RestApiService : GetProducts
+
+activate RestApiService
+
+RestApiService -> HttpClient : GetAsync
+
+activate HttpClient
+HttpClient --> RestApiService : HttpResponseMessage
+deactivate HttpClient
+RestApiService --> Gateway : Stream(ProductsHandle)
+deactivate RestApiService
+
+Gateway --> Extern : ProductsHandle
+
+deactivate Gateway
+
+
+Extern -> Gateway : PostDraftInvoice
+
+activate Gateway
+
+Gateway -> RestApiService : PostDraftInvoice
+
+activate RestApiService
+
+RestApiService -> HttpClient : PostAsync
+
+activate HttpClient
+HttpClient --> RestApiService : HttpResponseMessage
+deactivate HttpClient
+RestApiService --> Gateway : Stream(DraftInvoice)
+deactivate RestApiService
+
+Gateway --> Extern : DraftInvoice
+
+deactivate Gateway
+
+
+Extern -> Gateway : ReadBookedInvoices
+
+activate Gateway
+
+Gateway -> RestApiService : GetBookedInvoices
+
+activate RestApiService
+
+RestApiService -> HttpClient : GetAsync
+
+activate HttpClient
+HttpClient --> RestApiService : HttpResponseMessage
+deactivate HttpClient
+RestApiService --> Gateway : Stream(BookedInvoicesHandle)
+deactivate RestApiService
+
+Gateway --> Extern : BookedInvoicesHandle
+
+deactivate Gateway
+
+
+Extern -> Gateway : ReadBookedInvoice
+
+activate Gateway
+
+Gateway -> RestApiService : GetBookedInvoice
+
+activate RestApiService
+
+RestApiService -> HttpClient : GetAsync
+
+activate HttpClient
+HttpClient --> RestApiService : HttpResponseMessage
+deactivate HttpClient
+RestApiService --> Gateway : Stream(BookedInvoice)
+deactivate RestApiService
+
+Gateway --> Extern : BookedInvoice
+
+deactivate Gateway
+
+
+Extern -> Gateway : LoadPaymentTermsCache
+
+activate Gateway
+
+Gateway -> Gateway : ReadPaymentTerms - loop
+
+activate Gateway
+deactivate Gateway
+
+Gateway --> Extern : Count_Payment_Terms
+
+deactivate Gateway
+
+
+Extern -> Gateway : ReadPaymentTerms
+
+activate Gateway
+
+Gateway -> RestApiService : GetPaymentTerms
+
+activate RestApiService
+
+RestApiService -> HttpClient : GetAsync
+
+activate HttpClient
+HttpClient --> RestApiService : HttpResponseMessage
+deactivate HttpClient
+RestApiService --> Gateway : Stream(PaymentTermsHandle)
+deactivate RestApiService
+
+Gateway --> Extern : PaymentTermsHandle
+
+deactivate Gateway
+
+
+
+
+deactivate Extern
+@enduml
+
