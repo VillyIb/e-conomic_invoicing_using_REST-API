@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Caches\PaymentTermDtoCache.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Eu.Iamia.ConfigBase\Eu.Iamia.ConfigBase.csproj" />
     <ProjectReference Include="..\Eu.Iamia.Invoicing.Application.Contract\Eu.Iamia.Invoicing.Application.Contract.csproj" />
     <ProjectReference Include="..\Eu.Iamia.Invoicing.E-Conomic.Gateway.V2.Contract\Eu.Iamia.Invoicing.E-Conomic.Gateway.V2.Contract.csproj" />

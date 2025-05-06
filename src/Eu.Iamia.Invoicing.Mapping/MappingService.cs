@@ -62,7 +62,7 @@ public class MappingService : IMappingService
             var customersHandle = await _economicGateway.ReadCustomers(page, 20, cts.Token);
             foreach (var collection in customersHandle.Customers)
             {
-                if (customerGroupsToAccept is not null 
+                if (customerGroupsToAccept is not null
                     &&
                     !customerGroupsToAccept.Any(cg => cg.Equals(collection.customerGroup.customerGroupNumber))
                 )
@@ -108,11 +108,31 @@ public class MappingService : IMappingService
 
     public ReadOnlyCollection<ProductDto> ProductDtoCache => new ReadOnlyCollection<ProductDto>(_productsCache);
 
+    private readonly PaymentTermDtoCache _paymentTermsCache = [];
 
     public async Task<int> LoadPaymentTermCache()
     {
-        return await _economicGateway.LoadPaymentTermsCache();
+        _paymentTermsCache.Clear();
+
+        var cts = new CancellationTokenSource();
+        bool @continue = true;
+        var page = 0;
+        while (@continue)
+        {
+            var paymentTermsHandle = await _economicGateway.ReadPaymentTerms(page, 20, cts.Token);
+            foreach (var collection in paymentTermsHandle.PaymentTerms)
+            {
+                var paymentTermDto = collection.ToPaymentTermDto();
+                _paymentTermsCache.Add(paymentTermDto);
+            }
+            @continue = paymentTermsHandle?.PaymentTerms.Length > 0 == true && page < 100;
+            page++;
+        }
+
+        return _paymentTermsCache.Count;
     }
+
+    public ReadOnlyCollection<PaymentTermDto> PaymentTermDtoCache => new ReadOnlyCollection<PaymentTermDto>(_paymentTermsCache);
 
     /// <summary>
     /// Outgoing CustomerDto, InvoiceDto, ProductDto to RestApi-Invoice.
@@ -130,14 +150,13 @@ public class MappingService : IMappingService
         int layoutNumber
         )
     {
-        var paymentTerm1 = _economicGateway.GetPaymentTerm(invoiceDto.PaymentTerm ?? customerDto.PaymentTerms);
+        var paymentTerm = PaymentTermDtoCache.FirstOrDefault(pt => pt.PaymentTermNumber == customerDto.PaymentTerms.ToString());
 
-        if (paymentTerm1 is null)
+        if (paymentTerm is null)
         {
             throw new ApplicationException($"PaymentTerm: '{customerDto.PaymentTerms}' not found in e-conomic");
         }
 
-        var paymentTerms = paymentTerm1.ToInvoice();
 
         var layout = new Layout() { LayoutNumber = layoutNumber };
 
@@ -187,7 +206,7 @@ public class MappingService : IMappingService
             Notes = notes,
             Recipient = recipient,
             References = references,
-            PaymentTerms = paymentTerms
+            PaymentTerms = paymentTerm.ToPaymentTerms()
         };
 
         foreach (var invoiceLineDto in invoiceDto.InvoiceLines)
@@ -236,9 +255,9 @@ public class MappingService : IMappingService
     }
 
     public async Task<IDraftInvoice?> PushInvoice(
-        Application.Contract.DTO.InvoiceDto invoiceDto, 
-        int layoutNumber, 
-        int sourceFileLineNumber, 
+        Application.Contract.DTO.InvoiceDto invoiceDto,
+        int layoutNumber,
+        int sourceFileLineNumber,
         CancellationToken cancellationToken
     )
     {

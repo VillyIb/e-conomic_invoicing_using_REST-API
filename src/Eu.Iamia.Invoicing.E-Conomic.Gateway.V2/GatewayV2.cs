@@ -31,10 +31,10 @@ public class GatewayV2 : IEconomicGatewayV2
         ICustomerReport report
     )
     {
-        if(restApiGateway == null) throw new ArgumentNullException(nameof(restApiGateway));
-        if(report == null) throw new ArgumentNullException(nameof(report));
+        if (restApiGateway == null) throw new ArgumentNullException(nameof(restApiGateway));
+        if (report == null) throw new ArgumentNullException(nameof(report));
         if (settings == null) throw new ArgumentNullException(nameof(settings));
-       
+
         _settings = settings;
         RestApiGateway = restApiGateway;
         _report = report;
@@ -101,7 +101,7 @@ public class GatewayV2 : IEconomicGatewayV2
 
         var customersHandle = await serializerCustomersHandle.DeserializeAsync(stream, cancellationToken);
 
-        return customersHandle;
+        return customersHandle ?? new();
     }
 
     public async Task<Contract.DTO.Invoices.booked.bookedInvoiceNumber.get.BookedInvoice> ReadBookedInvoice(int invoiceNumber, CancellationToken cancellationToken = default)
@@ -118,29 +118,29 @@ public class GatewayV2 : IEconomicGatewayV2
     private readonly List<PaymentTerm> _paymentTermsCache = [];
 
     // TODO is this placed in right location -> MappingSevice
-    public async Task<int> LoadPaymentTermsCache()
-    {
-        _paymentTermsCache.Clear();
+    //public async Task<int> LoadPaymentTermsCache()
+    //{
+    //    _paymentTermsCache.Clear();
 
-        var cts = new CancellationTokenSource();
-        var @continue = true;
-        var page = 0;
-        while (@continue)
-        {
-            var paymentTermHandle = await ReadPaymentTerms(page, 20, cts.Token) ?? new PaymentTermsHandle();
-            _paymentTermsCache.AddRange(paymentTermHandle.PaymentTerms);
-            @continue = paymentTermHandle.PaymentTerms.Any() && page < 100;
-            page++;
-        }
-        return _paymentTermsCache.Count;
-    }
+    //    var cts = new CancellationTokenSource();
+    //    var @continue = true;
+    //    var page = 0;
+    //    while (@continue)
+    //    {
+    //        var paymentTermHandle = await ReadPaymentTerms(page, 20, cts.Token) ?? new PaymentTermsHandle();
+    //        _paymentTermsCache.AddRange(paymentTermHandle.PaymentTerms);
+    //        @continue = paymentTermHandle.PaymentTerms.Any() && page < 100;
+    //        page++;
+    //    }
+    //    return _paymentTermsCache.Count;
+    //}
 
-    public PaymentTerm? GetPaymentTerm(int paymentTermsNumber)
-    {
-        return _paymentTermsCache.FirstOrDefault(collection => collection.paymentTermsNumber == paymentTermsNumber);
-    }
+    //public PaymentTerm? GetPaymentTerm(int paymentTermsNumber)
+    //{
+    //    return _paymentTermsCache.FirstOrDefault(collection => collection.paymentTermsNumber == paymentTermsNumber);
+    //}
 
-    public async Task<PaymentTermsHandle?> ReadPaymentTerms(int page, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<PaymentTermsHandle> ReadPaymentTerms(int page, int pageSize, CancellationToken cancellationToken = default)
     {
         var stream = await RestApiGateway.GetPaymentTerms(page, pageSize, cancellationToken);
 
@@ -148,6 +148,6 @@ public class GatewayV2 : IEconomicGatewayV2
 
         var paymentTermsHandle = await serializerPaymentTermsHandle.DeserializeAsync(stream, cancellationToken);
 
-        return paymentTermsHandle;
+        return paymentTermsHandle ?? new();
     }
 }

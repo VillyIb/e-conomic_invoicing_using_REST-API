@@ -22,7 +22,7 @@ public interface IEconomicGatewayV2
         CancellationToken cancellationToken = default
     );
 
-    Task<PaymentTermsHandle?> ReadPaymentTerms(
+    Task<PaymentTermsHandle> ReadPaymentTerms(
         int page, 
         int pageSize, 
         CancellationToken cancellationToken = default
@@ -41,14 +41,8 @@ public interface IEconomicGatewayV2
         CancellationToken cancellationToken = default
     );
 
-    Task<Contract.DTO.Invoices.booked.bookedInvoiceNumber.get.BookedInvoice> ReadBookedInvoice(
+    Task<Contract.DTO.Invoices.booked.bookedInvoiceNumber.get.BookedInvoice?> ReadBookedInvoice(
         int invoiceNumber, 
         CancellationToken cancellationToken = default
-    );
-
-    Task<int> LoadPaymentTermsCache();
-
-    PaymentTerm? GetPaymentTerm(
-        int paymentTermsNumber
     );
 }
