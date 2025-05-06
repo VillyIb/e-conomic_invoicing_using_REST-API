@@ -27,6 +27,16 @@ public interface IRestApiGateway
         CancellationToken cancellationToken
     );
 
+    Task<Stream> DeleteDraftInvoice(
+        int invoiceNumber,
+        CancellationToken cancellationToken
+    );
+
+    Task<Stream> PostDraftInvoice(
+        StringContent content,
+        CancellationToken cancellationToken
+    );
+
     Task<Stream> GetBookedInvoices
     (
         int skipPages,
@@ -37,11 +47,6 @@ public interface IRestApiGateway
 
     Task<Stream> GetBookedInvoice(
         int invoiceNumber,
-        CancellationToken cancellationToken
-    );
-
-    Task<Stream> PostDraftInvoice(
-        StringContent content,
         CancellationToken cancellationToken
     );
 
