@@ -1,0 +1,76 @@
+@startuml
+scale 1
+title Mapping
+
+External -> Mapping : LoadCustomerCache
+activate External
+
+activate Mapping
+
+Mapping -> Mapping : loop over pages when reading customers
+activate Mapping
+
+Mapping -> Gateway : ReadCustomers
+activate Gateway
+Gateway --> Mapping : CustomersHandle
+
+deactivate Gateway
+
+deactivate Mapping
+
+Mapping --> External : number of customers
+
+deactivate Mapping
+
+
+External -> Mapping : LoadProductCache
+
+activate Mapping
+
+Mapping -> Mapping : loop over pages when reading products
+activate Mapping
+
+Mapping -> Gateway : ReadProducts
+activate Gateway
+Gateway --> Mapping : ProductsHandle
+
+deactivate Gateway
+
+deactivate Mapping
+
+Mapping --> External : number of products
+
+deactivate Mapping
+
+
+External -> Mapping : LoadPaymentTermCache
+
+activate Mapping
+
+Mapping -> Gateway : ReadPaymentTermCache
+activate Gateway
+Gateway --> Mapping : number of payment terms
+
+deactivate Gateway
+
+Mapping --> External : number of payment terms
+
+deactivate Mapping
+
+
+External -> Mapping : PushInvoice
+activate Mapping
+Mapping -> Mapping : GetCustomer
+Mapping -> Report : SetCustomer
+Mapping -> Mapping : ToRestApiInvoice <converter>
+Mapping -> Gateway : PostDraftInvoice
+activate Gateway
+Gateway --> Mapping : DraftInvoice
+deactivate Gateway
+Mapping --> External : PostDraftInvoice
+deactivate Mapping
+
+
+deactivate External
+
+@enduml
