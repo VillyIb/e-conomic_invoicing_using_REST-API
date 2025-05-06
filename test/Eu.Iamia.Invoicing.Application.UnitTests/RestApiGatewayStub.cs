@@ -256,4 +256,9 @@ public class RestApiGatewayStub : IRestApiGateway
 
         return Task.FromResult<Stream>(new MemoryStream(Encoding.UTF8.GetBytes(dic[productNumber])));
     }
+
+    public Task<Stream> DeleteDraftInvoice(int invoiceNumber, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }
