@@ -8,6 +8,7 @@ using Eu.Iamia.Reporting.Contract;
 
 namespace Eu.Iamia.Invoicing.Mapping;
 
+// TODO is this placed OK ?
 public interface IMappingService
 {
     /// <summary>
@@ -113,29 +114,6 @@ public class MappingService : IMappingService
         return await _economicGateway.LoadPaymentTermsCache();
     }
 
-    //private readonly PaymentTermDtoCache _paymentTermCache = [];
-
-    //public async Task<int> LoadPaymentTermCache()
-    //{
-    //    _paymentTermCache.Clear();
-
-    //    var cts = new CancellationTokenSource();
-    //    bool @continue = true;
-    //    var page = 0;
-    //    while (@continue)
-    //    {
-    //        var paymentTermHandle = await _economicGateway.ReadPaymentTerms(page, 20, cts.Token);
-    //        foreach (var c in paymentTermHandle.Products)
-    //        {
-    //            var paymentDto = c.ToPaymentTermDto();
-    //            _paymentTermCache.Add(paymentDto);
-    //        }
-    //        @continue = paymentTermHandle.Products.Any() && page < 100;
-    //        page++;
-    //    }
-    //    return _paymentTermCache.Count;
-    //}
-
     /// <summary>
     /// Outgoing CustomerDto, InvoiceDto, ProductDto to RestApi-Invoice.
     /// </summary>
@@ -165,9 +143,10 @@ public class MappingService : IMappingService
 
         var notes = new Notes()
         {
-            Heading = $"#{customerDto.CustomerNumber} {customerDto.Name}",
+            // TODO make configurable
+            //Heading = $"#{customerDto.CustomerNumber} {customerDto.Name}",
+            Heading = string.Empty,
             TextLine1 = invoiceDto.Text1
-            //TextLine2 = "Text2.1\nText2.2\nText2.3"
         };
 
         var recipient = new Recipient()
@@ -256,10 +235,13 @@ public class MappingService : IMappingService
         return invoice;
     }
 
-    public async Task<IDraftInvoice?> PushInvoice(Application.Contract.DTO.InvoiceDto invoiceDto, int layoutNumber, int sourceFileLineNumber, CancellationToken cancellationToken)
+    public async Task<IDraftInvoice?> PushInvoice(
+        Application.Contract.DTO.InvoiceDto invoiceDto, 
+        int layoutNumber, 
+        int sourceFileLineNumber, 
+        CancellationToken cancellationToken
+    )
     {
-        const string reference = nameof(PushInvoice);
-
         var customerDto = _customersCache.GetCustomer(invoiceDto.CustomerNumber);
 
         _report.SetCustomer(new CustomerDto
