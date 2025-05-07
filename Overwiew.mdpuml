@@ -5,23 +5,24 @@ Console_App -> InvoicingHandler : LoadInvoices
 activate Console_App
 activate InvoicingHandler
 InvoicingHandler -> InvoicingHandler : ParseCsv
-InvoicingHandler-> MappingService : LoadCustomerCache
-InvoicingHandler-> MappingService : LoadProductCache
-InvoicingHandler-> MappingService : LoadPaymentTermCache
+InvoicingHandler ->> MappingService : LoadCustomerCache
+InvoicingHandler ->> MappingService : LoadProductCache
+InvoicingHandler ->> MappingService : LoadPaymentTermCache
 InvoicingHandler -> InvoicingHandler : Loop over invoices
 activate InvoicingHandler
-InvoicingHandler-> MappingService : PushInvoice
+InvoicingHandler -> MappingService : PushInvoice
 activate MappingService
-MappingService -> Gateway : PostDraftInvoice
+MappingService --> Gateway : PostDraftInvoice
 activate Gateway
 Gateway -> RestApiService : PostDraftInvoice
 RestApiService -> HttpClient : PostAsync
 activate HttpClient
-HttpClient --> RestApiService : HttpResponseMessage
+HttpClient -> RestApiService : HttpResponseMessage
 deactivate HttpClient
-RestApiService --> Gateway : Stream(draftInvoice)
+RestApiService -> Gateway : Stream(draftInvoice)
 Gateway --> MappingService : DraftInvoice
 deactivate Gateway
+MappingService --> InvoicingHandler : DraftInvoice
 deactivate MappingService
 deactivate MappingService
 deactivate InvoicingHandler

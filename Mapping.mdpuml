@@ -2,8 +2,9 @@
 scale 1
 title Mapping
 
+== Load Customer Cache ==
+
 External -> Mapping : LoadCustomerCache
-activate External
 
 activate Mapping
 
@@ -22,6 +23,7 @@ Mapping --> External : number of customers
 
 deactivate Mapping
 
+== Load Product Cache ==
 
 External -> Mapping : LoadProductCache
 
@@ -42,21 +44,27 @@ Mapping --> External : number of products
 
 deactivate Mapping
 
+== Load PaymentTerm Cache ==
 
 External -> Mapping : LoadPaymentTermCache
 
 activate Mapping
 
-Mapping -> Gateway : ReadPaymentTermCache
+Mapping -> Mapping : loop over pages when reading paymet terms
+activate Mapping
+
+Mapping -> Gateway : ReadPaymentTerms
 activate Gateway
-Gateway --> Mapping : number of payment terms
+Gateway --> Mapping : PaymentTermsHandle
 
 deactivate Gateway
 
+deactivate Mapping
 Mapping --> External : number of payment terms
 
 deactivate Mapping
 
+== Push Invoice ==
 
 External -> Mapping : PushInvoice
 activate Mapping
@@ -70,7 +78,5 @@ deactivate Gateway
 Mapping --> External : PostDraftInvoice
 deactivate Mapping
 
-
-deactivate External
 
 @enduml

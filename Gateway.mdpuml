@@ -2,8 +2,9 @@
 scale 0.65
 title Gateway
 
+== Read Customers ==
+
 Extern -> Gateway : ReadCustomers
-activate Extern
 
 activate Gateway
 
@@ -23,6 +24,7 @@ Gateway --> Extern : CustomersHandle
 
 deactivate Gateway
 
+== Read Products ==
 
 Extern -> Gateway : ReadProducts
 
@@ -44,6 +46,7 @@ Gateway --> Extern : ProductsHandle
 
 deactivate Gateway
 
+== Read Draft Invoice ==
 
 Extern -> Gateway : PostDraftInvoice
 
@@ -65,6 +68,7 @@ Gateway --> Extern : DraftInvoice
 
 deactivate Gateway
 
+== Read Booked Invoices ==
 
 Extern -> Gateway : ReadBookedInvoices
 
@@ -86,6 +90,7 @@ Gateway --> Extern : BookedInvoicesHandle
 
 deactivate Gateway
 
+== Read Booked Invoice ==
 
 Extern -> Gateway : ReadBookedInvoice
 
@@ -107,20 +112,7 @@ Gateway --> Extern : BookedInvoice
 
 deactivate Gateway
 
-
-Extern -> Gateway : LoadPaymentTermsCache
-
-activate Gateway
-
-Gateway -> Gateway : ReadPaymentTerms - loop
-
-activate Gateway
-deactivate Gateway
-
-Gateway --> Extern : Count_Payment_Terms
-
-deactivate Gateway
-
+== Read PaymentTerm ==
 
 Extern -> Gateway : ReadPaymentTerms
 
@@ -145,6 +137,5 @@ deactivate Gateway
 
 
 
-deactivate Extern
 @enduml
 
