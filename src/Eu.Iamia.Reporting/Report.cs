@@ -7,9 +7,7 @@ using Eu.Iamia.Utils;
 namespace Eu.Iamia.Reporting;
 
 public abstract class ReportBase
-{
-
-}
+{ }
 
 public class CustomerCustomerReport : ReportBase, ICustomerReport
 {
@@ -47,6 +45,8 @@ public class CustomerCustomerReport : ReportBase, ICustomerReport
 
     internal bool IsOpenForWriting => _report?.BaseStream is not null;
 
+    protected static readonly char[] illegalFilenameChars = Path.GetInvalidFileNameChars();
+
     public ICustomerReport SetCustomer(ICustomer customer)
     {
         if (IsOpenForWriting)
@@ -62,8 +62,17 @@ public class CustomerCustomerReport : ReportBase, ICustomerReport
         }
 
         CustomerNumber = customer.CustomerNumber;
-        CustomerName = customer.Name;
 
+        if (customer.Name != null)
+        {
+            var customerName = customer.Name;
+            foreach (var illegalFilenameChar in illegalFilenameChars.Where(illegalFilenameChar => customerName.Contains(illegalFilenameChar)))
+            {
+                customerName = customerName.Replace(illegalFilenameChar, '-');
+            }
+
+            CustomerName = customerName;
+        }
         return this;
     }
 

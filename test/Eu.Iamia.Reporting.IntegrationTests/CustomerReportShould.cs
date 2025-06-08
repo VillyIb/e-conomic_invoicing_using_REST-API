@@ -30,6 +30,15 @@ public class CustomerReportShould
         };
     }
 
+    private static ICustomer GetCustomerWithIllegalName(char testChar, int id = 9999)
+    {
+        return new MockedCustomer
+        {
+            Name = $"ffffff l{testChar}llll",
+            CustomerNumber = id,
+        };
+    }
+
     private readonly SettingsForReporting _settings;
 
     public CustomerReportShould()
@@ -133,6 +142,44 @@ public class CustomerReportShould
         Assert.True(_sut.Exists(expectedDefaultErrorFilename));
         _sut.DeleteFile(expectedDefaultErrorFilename);
 
+    }
+
+    /// <summary>
+    /// A logfile wher the customer is containing an illegal filename character must replace the illegal character(s) with a '-' (dash).
+    /// </summary>
+    [Theory]
+    [InlineData("/u0000")]
+    [InlineData("/u0001")]
+    [InlineData("/u0002")]
+    [InlineData("/u0003")]
+    [InlineData("/u0004")]
+    [InlineData("/u0005")]
+    [InlineData("/u0006")] // .. 31
+
+    [InlineData("<")]
+    [InlineData(">")]
+    [InlineData("\"")]
+    [InlineData(":")]
+    [InlineData("*")]
+    [InlineData("?")]
+    [InlineData("\\")]
+    [InlineData("/")]
+
+    public void Given_IllegalCustomerName_When_Error_SubstituteIllegalCharacters(string testChar)
+    {
+        var customerId = 31;
+        var illegalCustomePart = GetCustomerWithIllegalName(testChar[0], customerId);
+        _sut.SetCustomer(illegalCustomePart);
+        _sut.Error("Alfa", Alfa);
+        _sut.Close();
+
+        var legalCustomerName = illegalCustomePart.Name?.Replace(testChar[0], '-');
+        var customerPart = $"__{customerId}_ffff-l-ll";
+        var timePart = _sut.GetTimeStamp()!.Value.ToString("yyyy-MM-dd_HH-mm-ss");
+        var expectedDefaultErrorFilename = Path.Combine(_settings.OutputDirectory, $"{customerPart}_{timePart}_E_CustomerReportShould.txt");
+
+        Assert.True(_sut.Exists(expectedDefaultErrorFilename));
+        _sut.DeleteFile(expectedDefaultErrorFilename);
     }
 
     /// <summary>
