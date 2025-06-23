@@ -4,8 +4,10 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+using Refit;
+
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Configuration;
-public  class Setup : IHandlerSetup
+public class Setup : IHandlerSetup
 {
     private readonly IConfiguration _configuration;
 
@@ -16,7 +18,10 @@ public  class Setup : IHandlerSetup
 
     private static void AddHandlers(IServiceCollection services)
     {
-        services.AddTransient<IEconomicGatewayV2, GatewayV2>();
+        var refitSettings = new RefitSettings();
+
+        // TODO move to configuration 
+        services.AddRefitClient<IEconomicGatewayV2>(refitSettings).ConfigureHttpClient(c => c.BaseAddress = new Uri("https://restapi.e-conomic.com"));
     }
 
     private void AddSettings(IServiceCollection services)

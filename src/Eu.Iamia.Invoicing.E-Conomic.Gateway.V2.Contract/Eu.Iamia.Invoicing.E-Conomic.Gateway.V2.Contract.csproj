@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Refit.HttpClientFactory" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Eu.Iamia.Utils.Contract\Eu.Iamia.Utils.Contract.csproj" />
   </ItemGroup>
 

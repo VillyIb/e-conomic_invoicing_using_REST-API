@@ -3,6 +3,11 @@
 
 namespace Eu.Iamia.Invoicing.E_Conomic.RestApiGateway;
 
+//public interface IProduct
+//{
+//    Task<Stream>GetProducts
+//}
+
 public partial class RestApiService
 {
     public virtual async Task<Stream> GetProducts(

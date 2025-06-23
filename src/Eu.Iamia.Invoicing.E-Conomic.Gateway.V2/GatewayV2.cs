@@ -15,8 +15,31 @@ using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers.PaymentTerms.get;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers.Products.get;
 using Eu.Iamia.Utils.Contract;
 
+using Refit;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2;
+
+[Headers("accept: application/json","Authorization: Bearer")]
+public interface IGateway
+{
+    [Get("customers?skippages={skipPages}&pagesize={pageSize}")]
+    Task<CustomersHandle> ReadCustomers(int skipPages, int pageSize);
+
+    [Get("products?skippages={skipPages}&pagesize={pageSize}")]
+    Task<ProductsHandle> ReadProducts(int skipPages, int pageSize);
+    
+    [Post("invoices/drafts")]
+    Task<IDraftInvoice?> PostDraftInvoice(Invoice restApiInvoice);
+
+    [Get("invoices/booked?skippages={skipPages}&pagesize={pageSize}&filter=date$gte:{dateRange.From.To}$and:date$lte:{dateRange.To:yyyy-MM-dd}")]
+    Task<Contract.DTO.Invoices.booked.get.BookedInvoicesHandle> ReadBookedInvoices(int page, int pageSize, IInterval<DateTime> dateRange);
+
+    [Get("invoices/drafts/booked/{invoiceNumbe}")]
+    Task<Contract.DTO.Invoices.booked.bookedInvoiceNumber.get.BookedInvoice> ReadBookedInvoice(int invoiceNumber);
+
+    [Get("payment-terms?skippages={skipPages}&pagesize={pageSize}")]
+    Task<PaymentTermsHandle> ReadPaymentTerms(int skipPages, int pageSize);
+}
 
 public class GatewayV2 : IEconomicGatewayV2
 {

@@ -3,6 +3,7 @@ using Eu.Iamia.ConfigBase;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Refit;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.IntegrationTests.Configuration;
 public class Setup : IHandlerSetup
@@ -19,10 +20,13 @@ public class Setup : IHandlerSetup
         var serviceDescriptor = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(IEconomicGatewayV2));
         if (serviceDescriptor is null)
         {
-            throw new ArgumentException($"Unable to remove standard service for {nameof(IEconomicGatewayV2)} before adding {nameof(GatewayV2TestVariant)}");
+            throw new ArgumentException($"Unable to remove standard service for {nameof(IEconomicGatewayV2)} before adding Refit");
         }
+
+        var refitSettings = new RefitSettings();
+
         services.Remove(serviceDescriptor);
-        services.AddTransient<IEconomicGatewayV2, GatewayV2TestVariant>();
+        services.AddRefitClient<IEconomicGatewayV2>(refitSettings).ConfigureHttpClient(c => c.BaseAddress = new Uri("https://restapi.e-conomic.com"));
     }
 
     private void AddSettings(IServiceCollection services)

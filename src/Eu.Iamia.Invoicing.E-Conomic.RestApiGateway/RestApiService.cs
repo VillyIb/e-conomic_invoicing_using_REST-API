@@ -2,7 +2,11 @@
 using Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.Contract;
 using Microsoft.Extensions.Options;
 
+using Refit;
+
 namespace Eu.Iamia.Invoicing.E_Conomic.RestApiGateway;
+
+// apply to interface [Headers("accept: application/json", "Authorization: Bearer")]
 
 public partial class RestApiService : IRestApiGateway
 {

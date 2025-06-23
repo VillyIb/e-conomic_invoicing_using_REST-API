@@ -15,7 +15,6 @@ public class Setup : SetupBase
         services ??= new ServiceCollection();
         Register(
             services,
-            new Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.Configuration.Setup(configuration),
             new Eu.Iamia.Invoicing.Mapping.Configuration.Setup(configuration),
             new Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Configuration.Setup(configuration),
             new Eu.Iamia.Reporting.Configuration.Setup(configuration)

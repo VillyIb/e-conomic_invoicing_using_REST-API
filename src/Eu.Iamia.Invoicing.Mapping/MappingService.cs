@@ -59,7 +59,7 @@ public class MappingService : IMappingService
         var page = 0;
         while (@continue)
         {
-            var customersHandle = await _economicGateway.ReadCustomers(page, 20, cts.Token);
+            var customersHandle = await _economicGateway.ReadCustomers(page, 20);
             foreach (var collection in customersHandle.Customers)
             {
                 if (customerGroupsToAccept is not null
@@ -93,7 +93,7 @@ public class MappingService : IMappingService
         var page = 0;
         while (@continue)
         {
-            var productsHandle = await _economicGateway.ReadProducts(page, 20, cts.Token);
+            var productsHandle = await _economicGateway.ReadProducts(page, 20);
             foreach (var collection in productsHandle.Products)
             {
                 var productDto = collection.ToProductDto();
@@ -119,7 +119,7 @@ public class MappingService : IMappingService
         var page = 0;
         while (@continue)
         {
-            var paymentTermsHandle = await _economicGateway.ReadPaymentTerms(page, 20, cts.Token);
+            var paymentTermsHandle = await _economicGateway.ReadPaymentTerms(page, 20);
             foreach (var collection in paymentTermsHandle.PaymentTerms)
             {
                 var paymentTermDto = collection.ToPaymentTermDto();
@@ -282,7 +282,7 @@ public class MappingService : IMappingService
              layoutNumber
         );
 
-        var draftInvoice = await _economicGateway.PostDraftInvoice(restApiInvoice, sourceFileLineNumber, cancellationToken);
+        var draftInvoice = await _economicGateway.PostDraftInvoice(restApiInvoice);
 
         return draftInvoice;
     }

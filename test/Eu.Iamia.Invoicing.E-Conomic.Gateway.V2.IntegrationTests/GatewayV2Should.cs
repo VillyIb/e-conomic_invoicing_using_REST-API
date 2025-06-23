@@ -18,17 +18,17 @@ public class GatewayV2Should
     }
 
     // this should be a unit test validating the generated query.
-    [Theory]
-    [InlineData(1, 66, "2024-01-01", "2024-12-31")]
-    public async Task ReadBookedInvoices(int page, int pageSize, string from, string to)
-    {
-        var dateRange = Interval<DateTime>.Create(DateTime.Parse(from), DateTime.Parse(to));
-        var bookedInvoicesHandle = await ((GatewayV2TestVariant)_sut).ReadBookedInvoices(page, pageSize, dateRange, _cts.Token);
+    //[Theory]
+    //[InlineData(1, 66, "2024-01-01", "2024-12-31")]
+    //public async Task ReadBookedInvoices(int page, int pageSize, string from, string to)
+    //{
+    //    var dateRange = Interval<DateTime>.Create(DateTime.Parse(from), DateTime.Parse(to));
+    //    var bookedInvoicesHandle = await ((GatewayV2TestVariant)_sut).ReadBookedInvoices(page, pageSize, dateRange, _cts.Token);
 
-        Assert.NotNull(bookedInvoicesHandle);
-        Assert.True(bookedInvoicesHandle.Invoices.Any());
-        Assert.Equal(pageSize, bookedInvoicesHandle.Invoices.Length);
-    }
+    //    Assert.NotNull(bookedInvoicesHandle);
+    //    Assert.True(bookedInvoicesHandle.Invoices.Any());
+    //    Assert.Equal(pageSize, bookedInvoicesHandle.Invoices.Length);
+    //}
 
     [Theory]
     [InlineData(56, 2024072)]
