@@ -59,24 +59,32 @@ public class MappingService : IMappingService
         var page = 0;
         while (@continue)
         {
-            var customersHandle = await _economicGateway.ReadCustomers(page, 20);
-            foreach (var collection in customersHandle.Customers)
+            try
             {
-                if (customerGroupsToAccept is not null
-                    &&
-                    !customerGroupsToAccept.Any(cg => cg.Equals(collection.customerGroup.customerGroupNumber))
-                )
+                var customersHandle = await _economicGateway.ReadCustomers(page, 20);
+                foreach (var collection in customersHandle.Customers)
                 {
-                    continue;
+                    if (customerGroupsToAccept is not null
+                        &&
+                        !customerGroupsToAccept.Any(cg => cg.Equals(collection.customerGroup.customerGroupNumber))
+                    )
+                    {
+                        continue;
+                    }
+
+                    var customerDto = collection.ToCustomerDto();
+                    _customersCache.Add(customerDto);
                 }
-
-                var customerDto = collection.ToCustomerDto();
-                _customersCache.Add(customerDto);
+                @continue = customersHandle.Customers.Any() && page < 100;
+                page++;
             }
-            @continue = customersHandle.Customers.Any() && page < 100;
-            page++;
+            catch (Exception ex)
+            {
+                // TODO handle ApiException
+                // Debugger.Break();
+                throw new ApplicationException($"Error loading customers: {ex.Message}", ex);
+            }
         }
-
         return _customersCache.Count;
     }
 

@@ -1,0 +1,26 @@
+@startuml
+scale 1
+title Overview
+Console_App -> InvoicingHandler : LoadInvoices
+activate Console_App
+activate InvoicingHandler
+InvoicingHandler -> InvoicingHandler : ParseCsv
+InvoicingHandler ->> MappingService : LoadCustomerCache
+InvoicingHandler ->> MappingService : LoadProductCache
+InvoicingHandler ->> MappingService : LoadPaymentTermCache
+InvoicingHandler -> InvoicingHandler : Loop over invoices
+activate InvoicingHandler
+InvoicingHandler -> MappingService : PushInvoice
+activate MappingService
+MappingService --> Refit : PostDraftInvoice
+activate Refit
+Refit --> MappingService : DraftInvoice
+deactivate Refit
+MappingService --> InvoicingHandler : DraftInvoice
+deactivate MappingService
+deactivate MappingService
+deactivate InvoicingHandler
+InvoicingHandler --> Console_App : Status
+deactivate InvoicingHandler
+deactivate Console_App
+@enduml

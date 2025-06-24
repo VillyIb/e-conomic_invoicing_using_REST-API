@@ -60,6 +60,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Gateway.mdpuml = Gateway.mdpuml
 		Mapping.mdpuml = Mapping.mdpuml
 		Overwiew.mdpuml = Overwiew.mdpuml
+		OverwiewV2.mdpuml = OverwiewV2.mdpuml
 	EndProjectSection
 EndProject
 Global
