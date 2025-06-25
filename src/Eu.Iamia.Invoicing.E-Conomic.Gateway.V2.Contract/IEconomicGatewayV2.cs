@@ -31,41 +31,4 @@ public interface IEconomicGatewayV2
 
     [Get("/payment-terms?skippages={skipPages}&pagesize={pageSize}")]
     Task<PaymentTermsHandle> ReadPaymentTerms(int skipPages, int pageSize);
-
-    //// TODO Consider call it GetCustomers(...)
-    //Task<CustomersHandle> ReadCustomers(
-    //    int page,
-    //    int pageSize,
-    //    CancellationToken cancellationToken = default
-    //);
-
-    //Task<ProductsHandle> ReadProducts(
-    //    int page,
-    //    int pageSize,
-    //    CancellationToken cancellationToken = default
-    //);
-
-    //Task<PaymentTermsHandle> ReadPaymentTerms(
-    //    int page,
-    //    int pageSize,
-    //    CancellationToken cancellationToken = default
-    //);
-
-    //Task<IDraftInvoice?> PostDraftInvoice(
-    //    Invoice restApiInvoice,
-    //    int sourceFileNumber,
-    //    CancellationToken cancellationToken
-    //);
-
-    //Task<Contract.DTO.Invoices.booked.get.BookedInvoicesHandle> ReadBookedInvoices(
-    //    int page,
-    //    int pageSize,
-    //    IInterval<DateTime> dateRange,
-    //    CancellationToken cancellationToken = default
-    //);
-
-    //Task<Contract.DTO.Invoices.booked.bookedInvoiceNumber.get.BookedInvoice?> ReadBookedInvoice(
-    //    int invoiceNumber,
-    //    CancellationToken cancellationToken = default
-    //);
 }
