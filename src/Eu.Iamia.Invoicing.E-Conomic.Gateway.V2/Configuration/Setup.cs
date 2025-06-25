@@ -17,21 +17,18 @@ public static class AuthHeaderHandlerUtil
     }
 }
 
-public class AuthHeaderHandler : DelegatingHandler
-{
-    private readonly Func<string> _secretToken;
-    private readonly Func<string> _grantToken;
+public record EConomicAuthentication(string X_appSecretToken, string X_agreementGrantToken);
 
-    public AuthHeaderHandler(Func<string> secretToken, Func<string> grantToken)
-    {
-        _secretToken = secretToken;
-        _grantToken = grantToken;
-    }
+public class AuthHeaderHandler(Func<EConomicAuthentication> authSettingDelegate) : DelegatingHandler
+{
+    private readonly Func<EConomicAuthentication> _authSettingDelegate = authSettingDelegate;
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        request.Headers.Replace("X-AppSecretToken", _secretToken()); // TODO move name ...
-        request.Headers.Replace("X-AgreementGrantToken", _grantToken()); // TODO move name ...
+        EConomicAuthentication authSetting = _authSettingDelegate();
+
+        request.Headers.Replace("X-AppSecretToken", authSetting.X_appSecretToken);
+        request.Headers.Replace("X-AgreementGrantToken", authSetting.X_agreementGrantToken);
 
         return await base.SendAsync(request, cancellationToken);
     }
@@ -46,9 +43,32 @@ public class Setup : IHandlerSetup
         _configuration = configuration;
     }
 
-    public Func<string> GetTokenAsync(string key)
+    private void CheckForNullOrWhitespace(Func<string> name, string? value)
     {
-        return () => _configuration.GetSection(SettingsForEConomicGatewayV2.SectionName).GetValue<string>(key) ?? $"Value for Key: '{key}' not found";
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            throw new NullReferenceException($"appsettings[{_configuration.GetSection("COMPUTERNAME").Value}].json: '{SettingsForEConomicGatewayV2.SectionName}.{name()}' is null or whitespace");
+        }
+    }
+
+    private Func<EConomicAuthentication> GetAuthentication()
+    {
+        SettingsForEConomicGatewayV2 economicGatewaySettings = new();
+        _configuration.GetSection(SettingsForEConomicGatewayV2.SectionName).Bind(economicGatewaySettings);
+
+        CheckForNullOrWhitespace(
+            () => nameof(economicGatewaySettings.X_AppSecretToken),
+            economicGatewaySettings.X_AppSecretToken
+        );
+        CheckForNullOrWhitespace(
+            () => nameof(economicGatewaySettings.X_AgreementGrantToken),
+            economicGatewaySettings.X_AgreementGrantToken
+        );
+
+        return () => new EConomicAuthentication(
+            economicGatewaySettings.X_AppSecretToken,
+            economicGatewaySettings.X_AgreementGrantToken
+        );
     }
 
     private void AddHandlers(IServiceCollection services)
@@ -59,8 +79,7 @@ public class Setup : IHandlerSetup
             .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://restapi.e-conomic.com")) // TODO move ...
             .AddHttpMessageHandler(
                 () => new AuthHeaderHandler(
-                    GetTokenAsync(nameof(SettingsForEConomicGatewayV2.X_AppSecretToken)),
-                    GetTokenAsync(nameof(SettingsForEConomicGatewayV2.X_AgreementGrantToken))
+                    GetAuthentication()
                 )
             )
         ;
