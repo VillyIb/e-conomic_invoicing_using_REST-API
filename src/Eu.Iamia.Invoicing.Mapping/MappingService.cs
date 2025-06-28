@@ -80,6 +80,7 @@ public class MappingService : IMappingService
             }
             catch (Exception ex)
             {
+                var exType = ex.GetType();
                 // TODO handle ApiException
                 // Debugger.Break();
                 throw new ApplicationException($"Error loading customers: {ex.Message}", ex);
