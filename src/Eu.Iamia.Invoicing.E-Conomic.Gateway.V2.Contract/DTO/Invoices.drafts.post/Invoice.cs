@@ -3,11 +3,8 @@ using System.Text.Json.Serialization;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts.post;
 
-/// <summary>
-/// 
-/// </summary>
-/// <see cref="https://restapi.e-conomic.com/schema/invoices.drafts.post.schema.json"/>
-/// see:https://restdocs.e-conomic.com/#post-invoices-drafts
+// <see cref="https://restapi.e-conomic.com/schema/invoices.drafts.post.schema.json"/>
+
 public class Invoice : ValueObject<Invoice>
 {
     /// <summary>

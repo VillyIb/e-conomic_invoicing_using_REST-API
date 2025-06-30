@@ -77,8 +77,6 @@ public class GatewayV2Should
     [InlineData(517, true)] // Assume invoice 517 exists in the test environment.
     public async Task GetDraftInvoice(int invoiceNo, bool expectFound)
     {
-
-
         if (expectFound)
         {
             var draftInvoice = await _sut.GetDraftInvoice(invoiceNo);

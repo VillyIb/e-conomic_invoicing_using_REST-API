@@ -6,7 +6,6 @@ using System.Text.Json.Serialization;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Customers.get;
 
-// see:https://restdocs.e-conomic.com/#get-customers
 // see: https://restapi.e-conomic.com/schema/customers.get.schema.json
 
 public class Customer
