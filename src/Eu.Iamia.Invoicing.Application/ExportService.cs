@@ -62,7 +62,7 @@ public class ExportService : IExportService
         var page = 0;
         while (@continue)
         {
-            var bookedInvoicesHandle = await _economicGateway.ReadBookedInvoices(page, 20, dateInterval);
+            var bookedInvoicesHandle = await _economicGateway.GetBookedInvoices(page, 20, dateInterval);
 
             foreach (var inv in bookedInvoicesHandle.Invoices)
             {

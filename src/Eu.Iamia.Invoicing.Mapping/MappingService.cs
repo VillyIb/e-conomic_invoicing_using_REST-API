@@ -102,7 +102,7 @@ public class MappingService : IMappingService
         var page = 0;
         while (@continue)
         {
-            var productsHandle = await _economicGateway.ReadProducts(page, 20);
+            var productsHandle = await _economicGateway.GetProducts(page, 20);
             foreach (var collection in productsHandle.Products)
             {
                 var productDto = collection.ToProductDto();
@@ -128,7 +128,7 @@ public class MappingService : IMappingService
         var page = 0;
         while (@continue)
         {
-            var paymentTermsHandle = await _economicGateway.ReadPaymentTerms(page, 20);
+            var paymentTermsHandle = await _economicGateway.GetPaymentTerms(page, 20);
             foreach (var collection in paymentTermsHandle.PaymentTerms)
             {
                 var paymentTermDto = collection.ToPaymentTermDto();

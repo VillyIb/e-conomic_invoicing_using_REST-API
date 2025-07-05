@@ -16,7 +16,7 @@ public partial interface IEconomicGatewayV2
     /// <seealso cref="https://restdocs.e-conomic.com/#get-payment-terms"/>>
     /// <seealso cref="https://restapi.e-conomic.com/schema/payment-terms.get.schema.json"/>>
     [Get("/payment-terms?skippages={skipPages}&pagesize={pageSize}")]
-    Task<DTO.PaymentTerms.get.PaymentTermsHandle> ReadPaymentTerms(int skipPages, int pageSize);
+    Task<DTO.PaymentTerms.get.PaymentTermsHandle> GetPaymentTerms(int skipPages, int pageSize);
 
 
     /// <summary>
@@ -42,7 +42,7 @@ public partial interface IEconomicGatewayV2
     /// <seealso cref="https://restdocs.e-conomic.com/#get-products"/>>
     /// <seealso cref="https://restapi.e-conomic.com/schema/products.get.schema.json"/>>
     [Get("/products?skippages={skipPages}&pagesize={pageSize}")]
-    Task<DTO.Products.get.ProductsHandle> ReadProducts(int skipPages, int pageSize);
+    Task<DTO.Products.get.ProductsHandle> GetProducts(int skipPages, int pageSize);
 
 
     /// <summary>
@@ -83,7 +83,7 @@ public partial interface IEconomicGatewayV2
 
 
     /// <summary>
-    /// Read Booked-Invoices with paging and filtering by from-dat and to-date
+    /// Read Booked-Invoices with paging and filtering by from-date and to-date
     /// </summary>
     /// <param name="skipPages"></param>
     /// <param name="pageSize"></param>
@@ -94,17 +94,17 @@ public partial interface IEconomicGatewayV2
     /// <seealso cref="https://restdocs.e-conomic.com/#get-invoices-booked"/>>
     /// <seealso cref="https://restapi.e-conomic.com/schema/invoices.booked.get.schema.json"/>>
     [Get("/invoices/booked?skippages={skipPages}&pagesize={pageSize}&filter=date$gte:{dateFrom}$and:date$lte:{dateTo}")]
-    Task<DTO.Invoices.booked.get.BookedInvoicesHandle> ReadBookedInvoices(int skipPages, int pageSize, string dateFrom, string dateTo);
+    Task<DTO.Invoices.booked.get.BookedInvoicesHandle> GetBookedInvoices(int skipPages, int pageSize, string dateFrom, string dateTo);
 
     /// <summary>
     /// Read Booked-Invoices with paging and filtering by Interval<DateTime>
     /// </summary>
     /// <param name="skipPages"></param>
     /// <param name="pageSize"></param>
-    /// <param name="daterange"></param>
+    /// <param name="dateInterval"></param>
     /// <returns></returns>
-    Task<DTO.Invoices.booked.get.BookedInvoicesHandle> ReadBookedInvoices(int skipPages, int pageSize, IInterval<DateTime> daterange)
-            => ReadBookedInvoices(skipPages, pageSize, daterange.From.ToEconomicDate(), daterange.To.ToEconomicDate());
+    Task<DTO.Invoices.booked.get.BookedInvoicesHandle> GetBookedInvoices(int skipPages, int pageSize, IInterval<DateTime> dateInterval)
+            => GetBookedInvoices(skipPages, pageSize, dateInterval.From.ToEconomicDate(), dateInterval.To.ToEconomicDate());
 
     /// <summary>
     /// Read Booked-Invoice by the specified <em>invoiceNumber</em>
