@@ -255,8 +255,9 @@ public class Recipient : ValueObject<Recipient>
     public static Recipient NullRecipient => new();
     protected override IEnumerable<object?> GetEqualityComponents()
     {
-        yield return Name ?? string.Empty;
+        yield return Address ?? string.Empty;
         yield return City ?? string.Empty;
+        yield return Name ?? string.Empty;
         yield return VatZone ?? VatZone.NullVatZone;
         yield return Zip ?? string.Empty;
     }
@@ -280,9 +281,9 @@ public class VatZone : ValueObject<VatZone>
 
     protected override IEnumerable<object?> GetEqualityComponents()
     {
-        yield return Name ?? string.Empty;
         yield return EnabledForCustomer;
         yield return EnabledForSupplier;
+        yield return Name ?? string.Empty;
         yield return VatZoneNumber;
     }
 }
@@ -414,10 +415,10 @@ public class Line : ValueObject<Line>
         yield return Product ?? Product.NullProduct;
         yield return Quantity;
         yield return SortKey;
+        yield return TotalNetAmount;
         yield return Unit ?? Unit.NullUnit;
         yield return UnitCostPrice ?? 0.0;
         yield return UnitNetPrice ?? 0.0;
-        yield return TotalNetAmount;
     }
 }
 
@@ -443,8 +444,8 @@ public class Unit : ValueObject<Unit>
 
     protected override IEnumerable<object?> GetEqualityComponents()
     {
-        yield return UnitNumber;
         yield return Name ?? string.Empty;
+        yield return UnitNumber;
     }
 }
 

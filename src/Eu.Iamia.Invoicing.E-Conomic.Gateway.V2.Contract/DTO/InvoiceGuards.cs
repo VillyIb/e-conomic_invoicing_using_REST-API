@@ -34,6 +34,7 @@ public static class InvoiceGuards
         if (city.Length <= maxNumberOfCharacters) { return; }
         throw new ArgumentOutOfRangeException(nameof(city), city, $"Valid number of characters 0..{maxNumberOfCharacters}");
     }
+
     public static void DeliveryCountry(string? country)
     {
         const int maxNumberOfCharacters = 50;
