@@ -29,7 +29,7 @@ public partial interface IEconomicGatewayV2
     /// <seealso cref="https://restdocs.e-conomic.com/#get-customers"/>>
     /// <seealso cref="https://restapi.e-conomic.com/schema/customers.get.schema.json"/>>
     [Get("/customers?skippages={skipPages}&pagesize={pageSize}")]
-    Task<DTO.Customers.get.CustomersHandle> ReadCustomers(int skipPages, int pageSize);
+    Task<DTO.Customers.get.CustomersHandle> GetCustomers(int skipPages, int pageSize);
 
 
     /// <summary>
@@ -55,7 +55,7 @@ public partial interface IEconomicGatewayV2
     /// <seealso cref="https://restdocs.e-conomic.com/#get-invoices-drafts"/>>
     /// <seealso cref="https://restapi.e-conomic.com/schema/invoices.drafts.get.schema.json"/>>
     [Get("/invoices/drafts")]
-    Task<DTO.Invoices.drafts.get.DraftInvoicesHandle> ReadDraftInvoices(int skipPages, int pageSize);
+    Task<DTO.Invoices.drafts.get.DraftInvoicesHandle> GetDraftInvoices(int skipPages, int pageSize);
 
 
     /// <summary>
@@ -115,6 +115,6 @@ public partial interface IEconomicGatewayV2
     /// <seealso cref="https://restdocs.e-conomic.com/#get-invoices-booked-bookedinvoicenumber"/>>
     /// <seealso cref="https://restapi.e-conomic.com/schema/invoices.booked.bookedInvoiceNumber.get.schema.json"/>>
     [Get("/invoices/booked/{invoiceNumber}")]
-    Task<DTO.Invoices.booked.bookedInvoiceNumber.get.BookedInvoice> ReadBookedInvoice(int invoiceNumber);
+    Task<DTO.Invoices.booked.bookedInvoiceNumber.get.BookedInvoice> GetBookedInvoice(int invoiceNumber);
 
 }

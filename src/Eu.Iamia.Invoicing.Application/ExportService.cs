@@ -66,7 +66,7 @@ public class ExportService : IExportService
 
             foreach (var inv in bookedInvoicesHandle.Invoices)
             {
-                var bi = await _economicGateway.ReadBookedInvoice(inv.bookedInvoiceNumber);
+                var bi = await _economicGateway.GetBookedInvoice(inv.bookedInvoiceNumber);
                 foreach (var line in bi.lines)
                 {
                     Console.Write(".");

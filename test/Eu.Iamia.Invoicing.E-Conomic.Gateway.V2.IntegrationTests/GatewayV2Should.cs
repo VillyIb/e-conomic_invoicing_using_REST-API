@@ -33,32 +33,50 @@ public class GatewayV2Should
     //}
 
     [Theory]
-    [InlineData(56, 2024072)]
-    public async Task ReadBookedInvoice(int customerNumber, int invoiceNumber)
+    [InlineData(2024072, true)]
+    [InlineData(9999999, false)]
+    public async Task GetBookedInvoice(int invoiceNumber, bool expetFound)
     {
-        var bookedInvoice = await _sut.ReadBookedInvoice(invoiceNumber);
-        Assert.NotNull(bookedInvoice);
-        Assert.Equal(customerNumber, bookedInvoice.customer.customerNumber);
+        if(expetFound)
+        {
+            var bookedInvoice = await _sut.GetBookedInvoice(invoiceNumber);
+            Assert.NotNull(bookedInvoice);
+            Assert.NotNull(bookedInvoice.customer);
+            Assert.Equal(invoiceNumber, bookedInvoice.bookedInvoiceNumber);
+        }
+        else
+        {
+            ApiException ex = await Assert.ThrowsAsync<ApiException>(async () => await _sut.GetBookedInvoice(invoiceNumber));
+            Assert.Equal(HttpStatusCode.NotFound, ex.StatusCode);
+        }
     }
 
     [Theory]
-    [InlineData(0, 20)] // test environment only contains 5 customers no. 1..5
-    [InlineData(1, 20)]
-    public async Task ReadCustomers(int page, int pageSize)
+    [InlineData(0, 20, true)] // test environment only contains 5 customers no. 1..5
+    [InlineData(99, 20, false)]
+    public async Task GetCustomers(int page, int pageSize, bool expectCustomers)
     {
-        var customersHandle = await _sut.ReadCustomers(page, pageSize);
+        
+        var customersHandle = await _sut.GetCustomers(page, pageSize);
 
         Assert.NotNull(customersHandle);
-        Assert.True(customersHandle.Customers.Any());
+        if (expectCustomers)
+        {
+            Assert.True(customersHandle.Customers.Any());
+        }
+        else
+        {
+            Assert.False(customersHandle.Customers.Any());
+        }
     }
 
     [Theory]
     //[Theory(Skip = "no draft invoices")]
     [InlineData(0, 20, true)] // Assume some draft invoices exist in the test environment.
     [InlineData(1, 20, false)] // Assume no draft invoices exist in the test environment.
-    public async Task ReadDraftInvoices(int page, int pageSize, bool expectInvoices)
+    public async Task GetDraftInvoices(int page, int pageSize, bool expectInvoices)
     {
-        var draftInvoicesHandle = await _sut.ReadDraftInvoices(page, pageSize);
+        var draftInvoicesHandle = await _sut.GetDraftInvoices(page, pageSize);
 
         Assert.NotNull(draftInvoicesHandle);
         if (expectInvoices)

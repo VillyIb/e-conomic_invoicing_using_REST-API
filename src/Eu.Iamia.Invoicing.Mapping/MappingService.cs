@@ -61,7 +61,7 @@ public class MappingService : IMappingService
         {
             try
             {
-                var customersHandle = await _economicGateway.ReadCustomers(page, 20);
+                var customersHandle = await _economicGateway.GetCustomers(page, 20);
                 foreach (var collection in customersHandle.Customers)
                 {
                     if (customerGroupsToAccept is not null
