@@ -1,47 +1,61 @@
-﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Customers.get;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts.draftInvoiceNumber.lines.post;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts.post;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.PaymentTerms.get;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Products.get;
-using Eu.Iamia.Utils.Contract;
+﻿using Eu.Iamia.Utils.Contract;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract;
 
 public interface IEconomicGatewayV2
 {
-    // TODO Consider call it GetCustomers(...)
-    Task<CustomersHandle> ReadCustomers(
+    // TODO  GetCustomers(...)
+    Task<DTO.Customers.get.CustomersHandle?> ReadCustomers(
         int page,
         int pageSize,
         CancellationToken cancellationToken = default
     );
 
-    Task<ProductsHandle> ReadProducts(
+    // TODO GetProducts
+    Task<DTO.Products.get.ProductsHandle> ReadProducts(
         int page,
         int pageSize,
         CancellationToken cancellationToken = default
     );
 
-    Task<PaymentTermsHandle> ReadPaymentTerms(
+    // TODO GetPaymentTerms
+    Task<DTO.PaymentTerms.get.PaymentTermsHandle> ReadPaymentTerms(
         int page,
         int pageSize,
         CancellationToken cancellationToken = default
     );
 
-    Task<IDraftInvoice?> PostDraftInvoice(
-        Invoice restApiInvoice,
+    Task<DTO.Invoices.drafts.draftInvoiceNumber.lines.post.IDraftInvoice?> PostDraftInvoice(
+        DTO.Invoices.drafts.post.Invoice restApiInvoice,
         int sourceFileNumber,
-        CancellationToken cancellationToken
+        CancellationToken cancellationToken = default
     );
 
-    Task<Contract.DTO.Invoices.booked.get.BookedInvoicesHandle> ReadBookedInvoices(
+    Task<DTO.Invoices.drafts.draftInvoiceNumber.lines.post.IDraftInvoice?> PostDraftInvoice(
+        DTO.Invoices.drafts.post.Invoice draftInvoice
+    );
+
+    Task<DTO.Invoices.drafts.get.DraftInvoicesHandle> GetDraftInvoices(
+        int skipPages, 
+        int pageSize,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<DTO.Invoices.drafts.draftInvoiceNumber.get.DraftInvoice?> GetDraftInvoice(
+        int draftInvoiceNumber,
+        CancellationToken cancellationToken = default
+    );
+
+    // TODO GetBookedInvoices
+    Task<DTO.Invoices.booked.get.BookedInvoicesHandle> ReadBookedInvoices(
         int page,
         int pageSize,
         IInterval<DateTime> dateRange,
         CancellationToken cancellationToken = default
     );
 
-    Task<Contract.DTO.Invoices.booked.bookedInvoiceNumber.get.BookedInvoice?> ReadBookedInvoice(
+    // TODO GetBookedInvoice
+    Task<DTO.Invoices.booked.bookedInvoiceNumber.get.BookedInvoice?> ReadBookedInvoice(
         int invoiceNumber,
         CancellationToken cancellationToken = default
     );

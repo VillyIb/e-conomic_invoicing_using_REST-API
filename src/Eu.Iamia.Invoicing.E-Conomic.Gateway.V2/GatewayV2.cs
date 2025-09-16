@@ -1,24 +1,15 @@
 ﻿using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Configuration;
-using Eu.Iamia.Reporting.Contract;
-using Microsoft.Extensions.Options;
-using Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.Contract;
-using System.Text;
 using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Customers.get;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts.draftInvoiceNumber.lines.post;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Invoices.drafts.post;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.PaymentTerms.get;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO.Products.get;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers.Customers.get;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers.Invoices.drafts.draftInvoiceNumber.lines.post;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers.PaymentTerms.get;
-using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers.Products.get;
+using Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Serializers;
+using Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.Contract;
+using Eu.Iamia.Reporting.Contract;
 using Eu.Iamia.Utils.Contract;
-
+using Microsoft.Extensions.Options;
+using System.Text;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2;
 
-public class GatewayV2 : IEconomicGatewayV2
+public partial class GatewayV2 : IEconomicGatewayV2
 {
     // ReSharper disable once NotAccessedField.Local
     private readonly SettingsForEConomicGatewayV2 _settings; // TODO review unused local
@@ -47,48 +38,33 @@ public class GatewayV2 : IEconomicGatewayV2
     ) : this(settings.Value, restApiGateway, report)
     { }
 
-
-    public async Task<CustomersHandle> ReadCustomers(int page, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<Contract.DTO.Customers.get.CustomersHandle?> ReadCustomers(int page, int pageSize, CancellationToken cancellationToken = default)
     {
         var stream = await RestApiGateway.GetCustomers(page, pageSize, cancellationToken);
 
-        var serializerCustomersHandle = new SerializerCustomersHandle();
-
-        var customersHandle = await serializerCustomersHandle.DeserializeAsync(stream, cancellationToken);
+        var customersHandle = await GenericSerializer<Contract.DTO.Customers.get.CustomersHandle>.DeserializeAsync(stream, cancellationToken);
 
         return customersHandle;
     }
 
-    public async Task<ProductsHandle> ReadProducts(int page, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<Contract.DTO.Products.get.ProductsHandle> ReadProducts(int page, int pageSize, CancellationToken cancellationToken = default)
     {
         var stream = await RestApiGateway.GetProducts(page, pageSize, cancellationToken);
 
-        var serializerProductsHandle = new SerializerProductsHandle();
+        var productsHandle = await GenericSerializer<Contract.DTO.Products.get.ProductsHandle>.DeserializeAsync(stream, cancellationToken);
 
-        var productsHandle = await serializerProductsHandle.DeserializeAsync(stream, cancellationToken);
-
-        return productsHandle;
+        return productsHandle ?? new Contract.DTO.Products.get.ProductsHandle() { Products = new List<Contract.DTO.Products.get.Product>(0)};
     }
 
-    public async Task<IDraftInvoice?> PostDraftInvoice(Invoice restApiInvoice, int sourceFileNumber, CancellationToken cancellationToken)
+    public async Task<Contract.DTO.Invoices.drafts.draftInvoiceNumber.lines.post.IDraftInvoice?> PostDraftInvoice(Contract.DTO.Invoices.drafts.post.Invoice restApiInvoice, int sourceFileNumber, CancellationToken cancellationToken)
     {
-        const string reference = nameof(PostDraftInvoice);
-
-        var json = restApiInvoice.ToJson();
+        var json = Contract.DTO.Invoices.drafts.post.InvoiceExtension.ToJson(restApiInvoice);
 
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
         var stream = await RestApiGateway.PostDraftInvoice(content, cancellationToken);
 
-        var serializerDraftInvoice = new SerializerDraftInvoice();
-
-        var draftInvoice = await serializerDraftInvoice.DeserializeAsync(stream, cancellationToken);
-
-        stream.Position = 0;
-        using var streamReader = new StreamReader(stream);
-        var htmlBody = await streamReader.ReadToEndAsync(cancellationToken);
-        _report.Info(reference, htmlBody);
-        _report.Close();
+        var draftInvoice = await GenericSerializer<Contract.DTO.Invoices.drafts.draftInvoiceNumber.lines.post.DraftInvoice>.DeserializeAsync(stream, cancellationToken);
 
         return draftInvoice;
     }
@@ -97,34 +73,45 @@ public class GatewayV2 : IEconomicGatewayV2
     {
         var stream = await RestApiGateway.GetBookedInvoices(page, pageSize, dateRange, cancellationToken);
 
-        var serializerCustomersHandle = new Serializers.Invoices.booked.get.SerializerBookedInvoicesHandle();
-
-        var customersHandle = await serializerCustomersHandle.DeserializeAsync(stream, cancellationToken);
+        var customersHandle = await GenericSerializer<Contract.DTO.Invoices.booked.get.BookedInvoicesHandle>.DeserializeAsync(stream, cancellationToken);
 
         return customersHandle ?? new();
     }
 
-    public async Task<Contract.DTO.Invoices.booked.bookedInvoiceNumber.get.BookedInvoice> ReadBookedInvoice(int invoiceNumber, CancellationToken cancellationToken = default)
+    public async Task<Contract.DTO.Invoices.booked.bookedInvoiceNumber.get.BookedInvoice?> ReadBookedInvoice(int invoiceNumber, CancellationToken cancellationToken = default)
     {
         var stream = await RestApiGateway.GetBookedInvoice(invoiceNumber, cancellationToken);
 
-        var serializerCustomersHandle = new Serializers.Invoices.booked.bookedInvoiceNumber.get.SerializerBookedInvoice();
-
-        var bookedInvoice = await serializerCustomersHandle.DeserializeAsync(stream, cancellationToken);
+        var bookedInvoice = await GenericSerializer<Contract.DTO.Invoices.booked.bookedInvoiceNumber.get.BookedInvoice>.DeserializeAsync(stream, cancellationToken);
 
         return bookedInvoice;
     }
 
-    private readonly List<PaymentTerm> _paymentTermsCache = [];
+    private readonly List<Contract.DTO.PaymentTerms.get.PaymentTerm> _paymentTermsCache = [];
 
-    public async Task<PaymentTermsHandle> ReadPaymentTerms(int page, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<Contract.DTO.PaymentTerms.get.PaymentTermsHandle> ReadPaymentTerms(int page, int pageSize, CancellationToken cancellationToken = default)
     {
         var stream = await RestApiGateway.GetPaymentTerms(page, pageSize, cancellationToken);
 
-        var serializerPaymentTermsHandle = new SerializerPaymentTermsHandle();
+        var paymentTermsHandle = await GenericSerializer<Contract.DTO.PaymentTerms.get.PaymentTermsHandle>.DeserializeAsync(stream, cancellationToken);
 
-        var paymentTermsHandle = await serializerPaymentTermsHandle.DeserializeAsync(stream, cancellationToken);
-
-        return paymentTermsHandle ?? new();
+        return paymentTermsHandle ?? new() { PaymentTerms = Array.Empty<Contract.DTO.PaymentTerms.get.PaymentTerm>()};
     }
+
+    public async Task<Contract.DTO.Invoices.drafts.draftInvoiceNumber.lines.post.IDraftInvoice?> PostDraftInvoice(Contract.DTO.Invoices.drafts.post.Invoice draftInvoice)
+    {
+       
+
+        throw new NotImplementedException();
+    }
+
+    public async Task<Contract.DTO.Invoices.drafts.get.DraftInvoicesHandle> GetDraftInvoices(int page, int pageSize, CancellationToken cancellationToken = default)
+    {
+        var stream = await RestApiGateway.GetDraftInvoices(page, pageSize, cancellationToken);
+
+        var customersHandle = await GenericSerializer<Contract.DTO.Invoices.drafts.get.DraftInvoicesHandle>.DeserializeAsync(stream, cancellationToken);
+
+        return customersHandle ?? new() { Invoices = Array.Empty<Contract.DTO.Invoices.drafts.get.DraftInvoice>() };
+    }
+
 }
