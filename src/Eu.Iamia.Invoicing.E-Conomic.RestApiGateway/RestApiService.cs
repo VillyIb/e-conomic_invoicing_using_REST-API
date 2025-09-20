@@ -1,8 +1,9 @@
-﻿using Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.Configuration;
-using Eu.Iamia.Invoicing.E_Conomic.RestApiGateway.Contract;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.RestApiGateway;
+
+using Configuration;
+using Contract;
 
 public partial class RestApiService : IRestApiGateway
 {
@@ -68,4 +69,5 @@ public partial class RestApiService : IRestApiGateway
 
         return await PostProcessing(response, cancellationToken);
     }
+
 }

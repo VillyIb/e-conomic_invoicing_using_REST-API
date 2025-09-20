@@ -1,5 +1,4 @@
-﻿
-// ReSharper disable StringLiteralTypo
+﻿// ReSharper disable StringLiteralTypo
 
 namespace Eu.Iamia.Invoicing.E_Conomic.RestApiGateway;
 
