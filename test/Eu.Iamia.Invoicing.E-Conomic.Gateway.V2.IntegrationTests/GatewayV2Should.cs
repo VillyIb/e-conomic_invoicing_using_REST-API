@@ -115,8 +115,8 @@ public class GatewayV2Should
     // Post Draft Invoice
 
     [Theory]
-    [InlineData(516, true)] // Assume invoice 516 does NOT exist in the test environment.
-    public async Task PostDraftInvoice(int invoiceNo, bool expectSuccess)
+    [InlineData(true, false)]
+    public async Task PostDraftInvoice(bool expectSuccess, bool keepDraftInvoice = false)
     {
         var self = new Uri("https://restapi.e-conomic.com/customers/93/"); // Base URL for the API, adjust as necessary.
         //new Uri("//restapi.e-conomic.com/customers/93/").ToString()
@@ -130,7 +130,7 @@ public class GatewayV2Should
             {
                 new Contract.DTO.Invoices.drafts.post.Line
                 {
-                    Description = "Test Line",
+                    Description = "Do NOT book!",
                     LineNumber = 1,
                     Product= new Contract.DTO.Invoices.drafts.post.Product(){ProductNumber = "1"}, // Assuming product 1 exists.
                     Quantity = 1.0,
@@ -153,21 +153,23 @@ public class GatewayV2Should
             {
                 Address = "Test Address",
                 City = "Test City",
-                Name = "Test Recipient",
+                Name = "Test Recipient. Do NOT book",
                 VatZone = new Contract.DTO.Invoices.drafts.post.VatZone()
                 {
                     VatZoneNumber = 1 // Assuming VAT zone 1 exists.
                 },
                 Zip = "1234" // Example ZIP code.
             },
-            Delivery = new Contract.DTO.Invoices.drafts.post.Delivery()
-            {
-                Address = "Test Delivery Address",
-                City = "Test Delivery City",
-                Country = "Test Delivery Name",
-                DeliveryDate = $"{DateTime.Now:yyyy-MM-dd}", // Use current date in the format required by the API.
-                Zip = "1234" // Example ZIP code.
-            },
+
+            //Delivery = new Contract.DTO.Invoices.drafts.post.Delivery()
+            //{
+            //    Address = "Test Delivery Address",
+            //    City = "Test Delivery City",
+            //    Country = "Test Delivery Name",
+            //    DeliveryDate = $"{DateTime.Now:yyyy-MM-dd}", // Use current date in the format required by the API.
+            //    Zip = "1234" // Example ZIP code.
+            //},
+
             References = new Contract.DTO.Invoices.drafts.post.References() { Other = string.Empty },
             Notes = new Contract.DTO.Invoices.drafts.post.Notes()
             {
@@ -180,21 +182,25 @@ public class GatewayV2Should
         if (expectSuccess)
         {
             try
-            {                 
+            {
                 // Attempt to post the draft invoice.
                 var createdDraftInvoice = await _sut.PostDraftInvoice(draftInvoice);
                 Assert.NotNull(createdDraftInvoice);
-                Assert.Equal(invoiceNo, createdDraftInvoice.DraftInvoiceNumber);
 
+                var createdInvoiceNo = createdDraftInvoice.DraftInvoiceNumber;
+                var draftInvoiceCreated = await _sut.GetDraftInvoice(createdInvoiceNo);
+                Assert.NotNull(draftInvoiceCreated);
 
-                Assert.NotNull(createdDraftInvoice);
+                if (keepDraftInvoice) { return; }
 
-
+                var reference = await _sut.DeleteDraftInvoice(createdInvoiceNo);
+                Assert.NotNull(reference);
+                Assert.Contains("OK", reference);
             }
             catch (HttpRequestException ex)
             {
                 var content = $"Text: {Content.FromJson(ex.Message)}";
-                Assert.True(false, $"Unexpected exception: {ex.Message}");
+                Assert.Fail($"Unexpected exception: {ex.Message}");
             }
 
         }

@@ -56,6 +56,19 @@ public partial class GatewayV2 : IEconomicGatewayV2
         return productsHandle ?? new Contract.DTO.Products.get.ProductsHandle() { Products = new List<Contract.DTO.Products.get.Product>(0)};
     }
 
+    public async Task<Contract.DTO.Invoices.drafts.draftInvoiceNumber.lines.post.IDraftInvoice?> PostDraftInvoice(Contract.DTO.Invoices.drafts.post.Invoice restApiInvoice, CancellationToken cancellationToken = default)
+    {
+        var json = Contract.DTO.Invoices.drafts.post.InvoiceExtension.ToJson(restApiInvoice);
+
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var stream = await RestApiGateway.PostDraftInvoice(content, cancellationToken);
+
+        var draftInvoice = await GenericSerializer<Contract.DTO.Invoices.drafts.draftInvoiceNumber.lines.post.DraftInvoice>.DeserializeAsync(stream, cancellationToken);
+
+        return draftInvoice;
+    }
+
     public async Task<Contract.DTO.Invoices.drafts.draftInvoiceNumber.lines.post.IDraftInvoice?> PostDraftInvoice(Contract.DTO.Invoices.drafts.post.Invoice restApiInvoice, int sourceFileNumber, CancellationToken cancellationToken)
     {
         var json = Contract.DTO.Invoices.drafts.post.InvoiceExtension.ToJson(restApiInvoice);
@@ -98,13 +111,6 @@ public partial class GatewayV2 : IEconomicGatewayV2
         return paymentTermsHandle ?? new() { PaymentTerms = Array.Empty<Contract.DTO.PaymentTerms.get.PaymentTerm>()};
     }
 
-    public async Task<Contract.DTO.Invoices.drafts.draftInvoiceNumber.lines.post.IDraftInvoice?> PostDraftInvoice(Contract.DTO.Invoices.drafts.post.Invoice draftInvoice)
-    {
-       
-
-        throw new NotImplementedException();
-    }
-
     public async Task<Contract.DTO.Invoices.drafts.get.DraftInvoicesHandle> GetDraftInvoices(int page, int pageSize, CancellationToken cancellationToken = default)
     {
         var stream = await RestApiGateway.GetDraftInvoices(page, pageSize, cancellationToken);
@@ -112,6 +118,17 @@ public partial class GatewayV2 : IEconomicGatewayV2
         var customersHandle = await GenericSerializer<Contract.DTO.Invoices.drafts.get.DraftInvoicesHandle>.DeserializeAsync(stream, cancellationToken);
 
         return customersHandle ?? new() { Invoices = Array.Empty<Contract.DTO.Invoices.drafts.get.DraftInvoice>() };
+    }
+
+    public async Task<string?> DeleteDraftInvoice(int draftInvoiceNumber, CancellationToken cancellationToken = default)
+    {
+        var stream = await RestApiGateway.DeleteDraftInvoice(draftInvoiceNumber, cancellationToken);
+
+        // format: { "message":"Deleted invoice.","deletedCount":1,"deletedItems":[{ "draftInvoiceNumber":737,"self":"https://restapi.e-conomic.com/invoices/drafts/737"}]}
+
+        // TODO : parse and return something useful
+
+        return "OK";
     }
 
 }

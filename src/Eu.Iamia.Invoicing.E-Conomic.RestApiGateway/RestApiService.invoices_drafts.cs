@@ -42,7 +42,7 @@ public partial class RestApiService
 
     public async Task<Stream> DeleteDraftInvoice(
         int invoiceNumber,
-        CancellationToken cancellationToken
+        CancellationToken cancellationToken = default
     )
     {
         // see: https://restdocs.e-conomic.com/#delete-invoices-drafts

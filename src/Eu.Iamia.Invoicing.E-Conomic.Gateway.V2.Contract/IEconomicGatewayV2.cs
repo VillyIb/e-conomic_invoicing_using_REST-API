@@ -32,7 +32,8 @@ public interface IEconomicGatewayV2
     );
 
     Task<DTO.Invoices.drafts.draftInvoiceNumber.lines.post.IDraftInvoice?> PostDraftInvoice(
-        DTO.Invoices.drafts.post.Invoice draftInvoice
+        DTO.Invoices.drafts.post.Invoice draftInvoice,
+        CancellationToken cancellationToken = default
     );
 
     Task<DTO.Invoices.drafts.get.DraftInvoicesHandle> GetDraftInvoices(
@@ -42,6 +43,11 @@ public interface IEconomicGatewayV2
     );
 
     Task<DTO.Invoices.drafts.draftInvoiceNumber.get.DraftInvoice?> GetDraftInvoice(
+        int draftInvoiceNumber,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<string?> DeleteDraftInvoice(
         int draftInvoiceNumber,
         CancellationToken cancellationToken = default
     );
