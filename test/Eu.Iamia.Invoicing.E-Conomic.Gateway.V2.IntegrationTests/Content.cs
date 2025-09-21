@@ -3,16 +3,18 @@ using System.Text.Json;
 
 namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.IntegrationTests;
 
-    public class Content
-    {
-        public string message { get; set; }
-        public string errorCode { get; set; }
-        public string developerHint { get; set; }
-        public string logId { get; set; }
-        public int httpStatusCode { get; set; }
-        public string[] errors { get; set; }
-        public DateTime logTime { get; set; }
-        public string schemaPath { get; set; }
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+
+public class Content
+{
+    public string message { get; set; }
+    public string errorCode { get; set; }
+    public string developerHint { get; set; }
+    public string logId { get; set; }
+    public int httpStatusCode { get; set; }
+    public string[] errors { get; set; }
+    public DateTime logTime { get; set; }
+    public string schemaPath { get; set; }
 
     public static Content? FromJson(string json)
     {

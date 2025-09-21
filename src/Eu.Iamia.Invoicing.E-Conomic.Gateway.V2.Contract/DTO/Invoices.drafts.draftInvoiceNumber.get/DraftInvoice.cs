@@ -2,33 +2,35 @@
 
 // see: https://restapi.e-conomic.com/schema/invoices.drafts.draftInvoiceNumber.get.schema.json
 
-    public class DraftInvoice
-    {
-        public int          draftInvoiceNumber       { get; set; }
-        public int          orderNumber               { get; set; }
-        public string       date                      { get; set; }
-        public string       currency                  { get; set; }
-        public float        exchangeRate              { get; set; }
-        public float        netAmount                 { get; set; }
-        public float        netAmountInBaseCurrency   { get; set; }
-        public float        grossAmount               { get; set; }
-        public float        grossAmountInBaseCurrency { get; set; }
-        public float        vatAmount                 { get; set; }
-        public float        roundingAmount            { get; set; }
-        public float        remainder                 { get; set; }
-        public float        remainderInBaseCurrency   { get; set; }
-        public string       dueDate                   { get; set; }
-        public Paymentterms paymentTerms              { get; set; }
-        public Customer     customer                  { get; set; }
-        public Recipient    recipient                 { get; set; }
-        public Notes        notes                     { get; set; }
-        public Layout       layout                    { get; set; }
-        public Pdf          pdf                       { get; set; }
-        public string       sent                      { get; set; }
-        public string       self                      { get; set; }
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
-        public static readonly DraftInvoice NullDraftInvoice = new();
-    }
+public class DraftInvoice
+{
+    public int draftInvoiceNumber { get; set; }
+    public int orderNumber { get; set; }
+    public string date { get; set; }
+    public string currency { get; set; }
+    public float exchangeRate { get; set; }
+    public float netAmount { get; set; }
+    public float netAmountInBaseCurrency { get; set; }
+    public float grossAmount { get; set; }
+    public float grossAmountInBaseCurrency { get; set; }
+    public float vatAmount { get; set; }
+    public float roundingAmount { get; set; }
+    public float remainder { get; set; }
+    public float remainderInBaseCurrency { get; set; }
+    public string dueDate { get; set; }
+    public Paymentterms paymentTerms { get; set; }
+    public Customer customer { get; set; }
+    public Recipient recipient { get; set; }
+    public Notes notes { get; set; }
+    public Layout layout { get; set; }
+    public Pdf pdf { get; set; }
+    public string sent { get; set; }
+    public string self { get; set; }
+
+    public static readonly DraftInvoice NullDraftInvoice = new();
+}
 
 public class Paymentterms
 {

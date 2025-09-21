@@ -9,6 +9,8 @@ using Microsoft.Extensions.Options;
 
 namespace Eu.Iamia.Invoicing.Application;
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+
 public interface IExportService
 {
     Task<ExecutionStatus> ExportBookedInvoices(

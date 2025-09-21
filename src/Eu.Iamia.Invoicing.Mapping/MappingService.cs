@@ -8,6 +8,8 @@ using Eu.Iamia.Reporting.Contract;
 
 namespace Eu.Iamia.Invoicing.Mapping;
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+
 // TODO is this placed OK ?
 public interface IMappingService
 {

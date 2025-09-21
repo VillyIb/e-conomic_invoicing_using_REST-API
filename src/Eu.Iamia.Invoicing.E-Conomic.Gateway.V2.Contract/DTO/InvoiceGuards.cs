@@ -1,5 +1,7 @@
 ﻿namespace Eu.Iamia.Invoicing.E_Conomic.Gateway.V2.Contract.DTO;
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+
 public static class InvoiceGuards
 {
     public static void CustomerNumber(int customerNumber)

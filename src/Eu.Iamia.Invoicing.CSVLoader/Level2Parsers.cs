@@ -1,5 +1,7 @@
 ﻿using System.Globalization;
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+
 namespace Eu.Iamia.Invoicing.CSVLoader
 {
     public class Level2Parsers : ILevel2Parsers
